@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="memory-artifact-base" content="../artifacts/article-01.2/" />
+    <meta
+      name="description"
+      content="Inspect a memory failure, a bounded policy change, and the evidence behind a simulated promotion recommendation."
+    />
+    <title>Memory Improvement Loop Explorer · Edge of Context</title>
+    <link rel="stylesheet" href="style.css" />
+    <script type="module" src="app.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <header class="masthead wrap">
+      <span class="brand"
+        >Edge of Context<span class="brand-dot" aria-hidden="true"
+          >.</span
+        ></span
+      >
+      <span class="eyebrow">Lab 01 / Memory improvement</span>
+      <span class="badge">Article draft · frozen evidence</span>
+    </header>
+    <main id="main-content" class="wrap" tabindex="-1">
+      <section class="hero" aria-labelledby="page-title">
+        <p class="eyebrow accent">Closed-loop AI systems / 01</p>
+        <h1 id="page-title">Can this memory change<br />earn a promotion?</h1>
+        <p class="intro">
+          Start with a memory failure. Inspect one proposed change, compare its
+          frozen evidence, and see what still requires human review.
+        </p>
+        <div class="badges" aria-label="Experiment disclosures">
+          <span class="badge">Synthetic scenarios</span>
+          <span class="badge">Frozen Python results</span>
+          <span class="badge">No model calls</span>
+        </div>
+        <p class="disclosure">
+          This is a small teaching experiment, not production evidence.
+          Candidates are assistant-proposed fixtures. A policy recommendation is
+          not a human approval.
+        </p>
+      </section>
+
+      <nav
+        id="loop-nav"
+        class="loop"
+        aria-label="Follow the improvement loop"
+        hidden
+      >
+        <a href="#evidence"><span>01</span> Observe a failure</a>
+        <a href="#proposal"><span>02</span> Inspect the change</a>
+        <a href="#comparison"><span>03</span> Compare evidence</a>
+        <a href="#decision"><span>04</span> Review the decision</a>
+      </nav>
+
+      <section
+        id="fallback"
+        class="panel fallback"
+        aria-labelledby="fallback-title"
+      >
+        <h2 id="fallback-title">Read the frozen experiment</h2>
+        <p id="load-message" role="status">
+          The interactive explorer is loading. The generated report below works
+          without JavaScript.
+        </p>
+        <p>
+          <a href="../artifacts/article-01.2/report.html"
+            >Open the complete report</a
+          >
+          ·
+          <a href="../artifacts/article-01.2/manifest.json"
+            >Inspect the manifest</a
+          >
+        </p>
+        <iframe
+          title="Frozen experiment comparison and review decisions"
+          src="../artifacts/article-01.2/report.html"
+          loading="lazy"
+        ></iframe>
+        <noscript
+          ><p>
+            JavaScript is disabled. The report contains the baseline, candidate
+            comparisons, constraints, and review status.
+          </p></noscript
+        >
+      </section>
+
+      <div id="explorer" hidden>
+        <section class="controls panel" aria-label="Choose an experiment">
+          <div>
+            <label for="candidate">Proposed change</label
+            ><select id="candidate"></select>
+          </div>
+          <div>
+            <label for="family">Task family</label
+            ><select id="family"></select>
+          </div>
+          <div>
+            <label for="scenario">Recorded scenario</label
+            ><select id="scenario"></select>
+          </div>
+          <button id="share" type="button">Copy this view</button>
+        </section>
+        <p
+          id="view-status"
+          class="view-status"
+          role="status"
+          aria-live="polite"
+        ></p>
+
+        <div class="overview-grid">
+          <section id="proposal" class="panel" aria-labelledby="proposal-title">
+            <p class="eyebrow">02 / Bounded proposal</p>
+            <h2 id="proposal-title"></h2>
+            <p id="hypothesis" class="lead"></p>
+            <h3>Predicted effect</h3>
+            <p id="predicted"></p>
+            <h3>Change from the parent</h3>
+            <div id="patch"></div>
+            <details>
+              <summary>Proposer &amp; experiment budget</summary>
+              <div id="proposal-meta"></div>
+            </details>
+            <h3>Candidate lineage</h3>
+            <div id="lineage" class="lineage"></div>
+          </section>
+
+          <section id="evidence" class="panel" aria-labelledby="evidence-title">
+            <p class="eyebrow">01 / Recorded evidence</p>
+            <h2 id="evidence-title"></h2>
+            <p id="scenario-description"></p>
+            <div id="scenario-meta" class="badges"></div>
+            <div class="result-pair">
+              <div>
+                <h3>Baseline outcome</h3>
+                <div id="baseline-outcome"></div>
+              </div>
+              <div>
+                <h3>Selected outcome</h3>
+                <div id="candidate-outcome"></div>
+              </div>
+            </div>
+            <div class="callout">
+              <strong>What counts as correct?</strong>
+              <p id="expected"></p>
+            </div>
+            <p class="small muted">
+              This panel shows one recorded scenario. The comparison next to it
+              covers the full experiment.
+            </p>
+            <a href="#trace-section"
+              >Inspect both traces <span aria-hidden="true">↓</span></a
+            >
+          </section>
+
+          <section id="decision" class="panel" aria-labelledby="decision-title">
+            <p class="eyebrow">04 / Review gate</p>
+            <h2 id="decision-title">Does the evidence support it?</h2>
+            <div id="recommendation"></div>
+            <div id="human-decision" class="callout"></div>
+            <h3>Hard constraints</h3>
+            <div id="constraints"></div>
+            <p class="small muted">
+              A better score cannot override a failed hard constraint. These
+              checks cover only this fixture suite.
+            </p>
+            <a href="#comparison"
+              >Read the complete comparison <span aria-hidden="true">↓</span></a
+            >
+          </section>
+        </div>
+
+        <section
+          id="comparison"
+          class="panel section"
+          aria-labelledby="comparison-title"
+        >
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">03 / Whole-experiment evidence</p>
+              <h2 id="comparison-title">
+                What improved, and what did it cost?
+              </h2>
+            </div>
+            <p id="sample-size" class="small muted"></p>
+          </div>
+          <p class="muted">
+            Every value below is computed by Python and read from the bundle.
+            Repeated synthetic runs measure this experiment; they do not
+            establish real-world reliability.
+          </p>
+          <div class="reference-control">
+            <label for="reference">Compare selected candidate with</label>
+            <select id="reference">
+              <option value="parent">Its parent · promotion reference</option>
+              <option value="baseline">
+                Original baseline · cumulative effect
+              </option>
+            </select>
+          </div>
+          <p class="small muted">
+            Policy recommendations compare with the candidate's parent. The
+            original baseline traces remain visible below.
+          </p>
+          <div
+            class="table-scroll"
+            tabindex="0"
+            role="region"
+            aria-label="Metric comparison table"
+          >
+            <table>
+              <caption>
+                Reference and selected candidate across all recorded tasks
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col">Metric</th>
+                  <th scope="col" id="metric-reference-label">Reference</th>
+                  <th scope="col" id="metric-candidate-label">Selected</th>
+                  <th scope="col">Meaning</th>
+                </tr>
+              </thead>
+              <tbody id="metrics"></tbody>
+            </table>
+          </div>
+          <details>
+            <summary>Paired comparison &amp; uncertainty</summary>
+            <div id="uncertainty"></div>
+          </details>
+        </section>
+
+        <section
+          id="trace-section"
+          class="section"
+          aria-labelledby="trace-title"
+        >
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Inside the selected scenario</p>
+              <h2 id="trace-title">Follow the recorded trace</h2>
+            </div>
+            <span class="badge">Recorded step-through · no re-execution</span>
+          </div>
+          <p class="muted">
+            Advance through the saved events. The browser reveals Python's
+            recorded states; it does not run a second memory implementation.
+          </p>
+          <div class="replay-controls panel">
+            <button id="previous-step" type="button">← Previous step</button>
+            <p id="step-status" role="status" aria-live="polite"></p>
+            <button id="next-step" type="button">Next step →</button
+            ><button id="all-steps" type="button">Show full trace</button>
+          </div>
+          <div class="trace-grid">
+            <section class="panel" aria-labelledby="baseline-trace-title">
+              <h3 id="baseline-trace-title">Original baseline trace</h3>
+              <ol id="baseline-trace" class="trace"></ol>
+            </section>
+            <section class="panel" aria-labelledby="candidate-trace-title">
+              <h3 id="candidate-trace-title">Selected candidate trace</h3>
+              <ol id="candidate-trace" class="trace"></ol>
+            </section>
+          </div>
+        </section>
+
+        <section
+          id="state-section"
+          class="panel section"
+          aria-labelledby="state-title"
+        >
+          <p class="eyebrow">Stored state / selected candidate</p>
+          <h2 id="state-title">What did memory actually keep?</h2>
+          <p class="muted">
+            Final scenario states and the exported structured diff. Inspect
+            individual trace steps above for intermediate states and retrieval.
+          </p>
+          <div class="state-grid">
+            <div>
+              <h3>Before the scenario</h3>
+              <div id="state-before"></div>
+            </div>
+            <div>
+              <h3>After the scenario</h3>
+              <div id="state-after"></div>
+            </div>
+          </div>
+          <h3>Structured change</h3>
+          <div id="state-diff"></div>
+        </section>
+
+        <section class="panel section" aria-labelledby="limits-title">
+          <p class="eyebrow">Read the boundary</p>
+          <h2 id="limits-title">What this experiment cannot tell you</h2>
+          <ul id="limitations"></ul>
+          <details>
+            <summary>Rejected proposal attempts</summary>
+            <div id="blocked-proposals"></div>
+          </details>
+        </section>
+        <section
+          id="reproduce"
+          class="panel section"
+          aria-labelledby="reproduce-title"
+        >
+          <p class="eyebrow">Inspect / reproduce</p>
+          <h2 id="reproduce-title">The evidence travels with the code.</h2>
+          <p>
+            From the demo repository root, regenerate the artifacts with the
+            command below.
+          </p>
+          <pre><code id="reproduction-command"></code></pre>
+          <div id="artifact-links" class="artifact-links"></div>
+          <details>
+            <summary>Release &amp; provenance</summary>
+            <div id="provenance"></div>
+          </details>
+          <p class="small muted">
+            The companion article remains a draft. Frozen bundles retain their
+            recorded publication metadata.
+          </p>
+        </section>
+      </div>
+    </main>
+    <footer class="wrap footer">
+      <span>Edge of Context / Closed-loop AI systems</span
+      ><a href="https://github.com/slavadubrov/closed-loop-ai-lab"
+        >Source on GitHub</a
+      ><span>Inspect the change. Keep the evidence. Review the decision.</span>
+    </footer>
+  </body>
+</html>

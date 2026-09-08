@@ -1,0 +1,36 @@
+{
+  "version": "memory-v1",
+  "mutable_surface": {
+    "min_confidence": [
+      0,
+      1
+    ],
+    "filter_entity": "boolean",
+    "time_aware": "boolean",
+    "deduplicate": "boolean",
+    "top_k": [
+      1,
+      8
+    ]
+  },
+  "immutable": [
+    "target source",
+    "dataset and evaluator",
+    "tenant and user isolation",
+    "delete-all-versions behavior",
+    "write key/source/kind admission",
+    "context word budget",
+    "run budget",
+    "promotion authority"
+  ],
+  "max_candidates": 8,
+  "max_scenarios": 64,
+  "max_events_per_scenario": 64,
+  "max_repeats": 5,
+  "max_wall_seconds": 30,
+  "default_repeats": 3,
+  "context_word_budget": 64,
+  "provider_calls": 0,
+  "provider_spend_usd": 0,
+  "exposure": "All task roles are public regression or validation cases; none is blind held-out."
+}

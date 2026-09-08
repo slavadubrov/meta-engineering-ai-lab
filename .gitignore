@@ -1,0 +1,11 @@
+.venv/
+.uv-cache/
+.ruff_cache/
+__pycache__/
+artifacts/local-*/
+decisions/
+site/
+.env
+.env.*
+.DS_Store
+node_modules/
