@@ -1,0 +1,34 @@
+{
+  "added": [
+    {
+      "tenant": "north",
+      "user": "ada",
+      "entity": "account",
+      "key": "language",
+      "value": "German",
+      "valid_from": "2026-01-03",
+      "confidence": 0.95,
+      "source": "user",
+      "id": "m003",
+      "valid_to": null,
+      "observed_at": "2026-01-03",
+      "source_event_id": "selective-deletion:event-3"
+    },
+    {
+      "tenant": "north",
+      "user": "ada",
+      "entity": "office",
+      "key": "city",
+      "value": "Oslo",
+      "valid_from": "2026-01-04",
+      "confidence": 0.95,
+      "source": "user",
+      "id": "m004",
+      "valid_to": null,
+      "observed_at": "2026-01-04",
+      "source_event_id": "selective-deletion:event-4"
+    }
+  ],
+  "removed": [],
+  "changed": []
+}
