@@ -151,7 +151,7 @@ async function start() {
       ) ?? defaultCandidate;
     const families = [...new Set(bundle.scenarios.map((item) => item.family))];
     const requestedScenario = fromUrl
-      ? query.get("scenario")
+      ? (query.get("scenario") ?? "future-move")
       : $("scenario").value;
     const requestedFamily = fromUrl ? query.get("family") : $("family").value;
     const preferredScenario = bundle.scenarios.find(
@@ -333,7 +333,7 @@ async function start() {
             element("span", label(name)),
             element(
               "strong",
-              `${result.passed ? "PASS" : "FAIL"} · ${result.violations}/${result.checks} violations`,
+              `${result.violations} failed checks out of ${result.checks}`,
               result.passed ? "pass" : "fail",
             ),
           );
@@ -342,7 +342,7 @@ async function start() {
       ),
     );
     $("sample-size").textContent =
-      `${candidate.summary.task_count} tasks · ${candidate.summary.repeat_count} repeats`;
+      `${candidate.summary.task_count} distinct scenarios · ${candidate.summary.repeat_count} identical-answer repeats`;
     $("metric-candidate-label").textContent = candidate.label;
     $("metric-reference-label").textContent = reference.label;
     $("metrics").replaceChildren(

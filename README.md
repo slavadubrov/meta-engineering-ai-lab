@@ -1,16 +1,185 @@
 # Closed-Loop AI Lab
 
-A small, runnable memory experiment: turn a recorded failure into a bounded
-configuration change, rerun the target, inspect the evidence, and leave the
-promotion decision to a person.
+Why does a memory system answer **Paris** when the user still lives in **Berlin**?
+This small Python experiment reproduces that mistake, changes the memory rules,
+and checks whether the fix helps across 20 scenarios. A browser page lets you
+compare the saved answers and inspect how each answer was produced.
 
-The Python engine produces the results. A plain JavaScript explorer displays
-the frozen artifacts. There is no model key, runtime API bill, database, build
-step, or application server.
+This is one example of **closed-loop AI engineering**: observe a failure → propose
+a limited change → evaluate it against the previous version → review the evidence
+before accepting the change. Here the change is a memory configuration. The
+experiment uses ordinary Python rules throughout, so you can follow every step
+without an LLM, API key, or paid service.
 
-Source: [slavadubrov/closed-loop-ai-lab](https://github.com/slavadubrov/closed-loop-ai-lab).
-The companion article remains an unpublished draft. The repository and its
-frozen experiment are available independently of article publication.
+[Source on GitHub](https://github.com/slavadubrov/closed-loop-ai-lab) ·
+[Run locally](#run-it) · [Deployment guide](DEPLOYMENT.md).
+The companion article is awaiting publication; this walkthrough stands on its own.
+
+## Start with the city example
+
+Imagine an assistant remembering Ada's account details. These sentences explain
+the test inputs; the program actually receives JSON, shown below.
+
+| Event      | What Ada reports or asks         | What should happen                                                 |
+| ---------- | -------------------------------- | ------------------------------------------------------------------ |
+| January 1  | “My city is Berlin.”             | Store Berlin, effective January 1.                                 |
+| January 3  | “I move to Paris on January 10.” | Store the future change without making Paris the current city yet. |
+| January 5  | “What is my city today?”         | Answer **Berlin**.                                                 |
+| January 12 | “What is my city today?”         | Answer **Paris**.                                                  |
+
+After both writes, the program has these two records:
+
+| Subject       | Property | Value  | Recorded on | Valid from | Valid until          |
+| ------------- | -------- | ------ | ----------- | ---------- | -------------------- |
+| Ada's account | city     | Berlin | January 1   | January 1  | January 10, excluded |
+| Ada's account | city     | Paris  | January 3   | January 10 | No end date          |
+
+The **baseline** stores this history, but does not check the validity date when
+retrieving it. Both city records match the query, and the more recently recorded
+Paris comes first. The answer function takes the first matching city record.
+It therefore answers `["Paris", "Paris"]` to the two questions.
+
+The **Scoped history** candidate filters records by the requested subject and
+date before ranking them. On January 5 only Berlin is valid; on January 12 only
+Paris is valid. It answers `["Berlin", "Paris"]`. The stored facts did not change;
+the rule for selecting them did.
+
+### What exactly goes into the program?
+
+The input file is [data/scenarios.json](data/scenarios.json). Each scenario is a
+sequence of `write`, `query`, and sometimes `delete` events. The Python runner
+feeds those events into the memory program, called the **target** in the reports.
+There is no chat-to-JSON extraction step in this demo.
+
+This is the complete January 3 write event from `future-move`:
+
+```json
+{
+  "action": "write",
+  "at": "2026-01-03",
+  "tenant": "north",
+  "user": "ada",
+  "should_retain": true,
+  "fact": {
+    "tenant": "north",
+    "user": "ada",
+    "entity": "account",
+    "key": "city",
+    "value": "Paris",
+    "confidence": 0.95,
+    "valid_from": "2026-01-10",
+    "source": "user",
+    "kind": "fact"
+  }
+}
+```
+
+Read `fact` as a request to save **Ada's account city = Paris, effective January
+10**. It is a proposal because the writer can reject it before storing it.
+
+| Field              | Meaning in this event                                                                                                                      |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| `tenant`, `user`   | The owner: Ada in the fictional `north` workspace. The writer checks that the fact's owner matches the request's owner.                    |
+| `entity`           | Which subject the property belongs to: `account`. Other scenarios distinguish `home` from `work`.                                          |
+| `key`, `value`     | The property `city` and its proposed value `Paris`.                                                                                        |
+| `at`, `valid_from` | Received January 3; becomes true January 10. These dates serve different purposes.                                                         |
+| `confidence`       | A hand-authored input score. The baseline admits scores of at least `0.7`; this score is `0.95`. It is not a calibrated model probability. |
+| `source`, `kind`   | Labels checked by the writer's fixed admission rules: a user-supplied fact.                                                                |
+| `should_retain`    | The evaluator's label: this is a useful proposal that should be kept. The target ignores this field.                                       |
+
+The January 5 query is another event:
+
+```json
+{
+  "action": "query",
+  "at": "2026-01-05",
+  "tenant": "north",
+  "user": "ada",
+  "entity": "account",
+  "key": "city",
+  "as_of": "2026-01-05",
+  "text": "city",
+  "expected": "Berlin"
+}
+```
+
+This asks for Ada's account city **as of January 5**. The target retrieves records,
+packs them within a small word budget, and returns the first packed record with
+`key: "city"`. If none matches, it returns `null`, meaning no answer.
+The evaluator then compares the returned value with `expected`.
+
+The fixture includes `expected` and `should_retain` for scoring. The fixed target
+ignores both fields, although the runner passes the complete event into it.
+These public fixtures are not a hidden test set.
+
+## What are the four candidates?
+
+A candidate is a **configuration of the same memory program**, not a different
+model or agent. Its **parent** is the configuration it starts from. Each candidate
+receives the same events, with fresh memory at the start of each scenario.
+
+| Browser label / configuration ID           | Starts from           | What changes, with an example                                                                                                                                | Scenarios passing |
+| ------------------------------------------ | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------: |
+| Baseline / `baseline`                      | Initial configuration | Accept confidence ≥ `0.7`; retrieve matching records without filtering their subject or validity date. This returns Paris too early.                         |             13/20 |
+| Scoped history / `scoped-history`          | Baseline              | Enable subject and date filters. Select Berlin for January 5, and avoid answering a question about `home` with the city stored for `work`.                   |             19/20 |
+| Deduplicate confirmations / `deduplicated` | Scoped history        | Keep one active record when the same fact is confirmed again. Three confirmations of `language = German` use one row instead of three, with the same answer. |             19/20 |
+| Write more / `broad-writes`                | Scoped history        | Lower the admission threshold from `0.7` to `0.2`. A speculative `delivery = courier` scored `0.4` can replace confirmed `pickup`, making the answer wrong.  |             16/20 |
+
+The last two are separate branches from Scoped history. Write more does **not**
+inherit deduplication. Scoped history changes two filters together, so its score
+measures that combined change.
+
+Why include a worse candidate? Write more retains all 38 useful proposals per
+repeat, compared with its parent's 37, but also admits four unnecessary ones.
+It fixes one scenario and breaks four: success falls from 19/20 to 16/20.
+**Keeping more useful facts does not necessarily produce better answers.**
+
+Codex authored the original candidates during development with access to all
+scenarios. Running this repository replays those configurations; it does not
+ask a model to invent new ones.
+
+## What are we measuring?
+
+The main outcome is **scenario success**: every answer must equal its expected
+answer, and every performed hard-constraint check must pass. The city scenario
+has two questions but counts as one scenario. `19/20` means 19 complete scenarios
+passed.
+
+The report also explains _why_ the result changed:
+
+| Measure                         | Question it answers                                                                                                   |
+| ------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| Useful-write precision / recall | Of the proposals kept, how many were labelled useful? Of all useful proposals, how many were kept?                    |
+| Relevant-memory recall          | Did retrieval include the needed fact? Finding Berlin somewhere in the list is weaker than actually answering Berlin. |
+| Distracting-memory rate         | How many retrieved records were irrelevant to the expected answer, subject, or date?                                  |
+| Stored records / bytes          | How much memory remained at the end of each scenario? Deduplication can reduce this without improving answers.        |
+| Context words                   | How many whitespace-separated words were packed for the answer function? This is not a model-token count.             |
+| Local p50 / p95 time            | Median and slower-end Python scenario durations, including tracing and scoring work. No model latency is measured.    |
+
+A **violation** is a failed hard-constraint check. These rules are fixed across
+all candidates:
+
+| Check             | Concrete example                                                                                                      | Recorded failures / checks per candidate |
+| ----------------- | --------------------------------------------------------------------------------------------------------------------- | ---------------------------------------: |
+| Owner isolation   | Ada's query must not retrieve another user's records; a write claiming a different owner must leave memory unchanged. |                                   0 / 84 |
+| Deletion          | Deleting Ada's `account/city` removes every version in that scope; those deleted record IDs must not reappear later.  |                                   0 / 33 |
+| Prohibited writes | A proposal with a disallowed key, source, or kind must be rejected without changing memory.                           |                                    0 / 6 |
+
+These counts cover event-level checks across three repeats, not that many
+independent scenarios. Deletion checks concern the target's memory; saved traces
+still contain earlier states. The structured admission rules are not a general
+secret or prompt-injection detector.
+
+The frozen experiment contains **20 scenarios × 4 configurations × 3 repeats =
+240 scenario-runs**. Repeats reproduce the same answers; they do not add new test
+cases. All four configurations pass the implemented hard checks, so their answer
+quality still needs a separate comparison.
+
+The evaluator recommends accept or reject based on the results. Every human
+review is still pending. A recommendation neither approves nor deploys a change.
+See the [readable comparison report](artifacts/article-01.2/report.md) and
+[exact counts in bundle.json](artifacts/article-01.2/bundle.json) under each
+candidate’s `summary.counts`.
 
 ## Run it
 
@@ -32,48 +201,33 @@ downloads the pinned Ruff development tool. After setup, the experiment itself
 uses only the standard library and performs no network calls. To omit developer
 tools, use `uv run --frozen --no-dev python -m lab run`.
 
-Open the **frozen article evidence** in the local explorer:
+Open the **saved experiment** in the browser:
 
 ```sh
 uv run --frozen python -m lab serve
 ```
 
 Visit [http://127.0.0.1:8000/web/](http://127.0.0.1:8000/web/). It serves on
-loopback only. The explorer initially uses `artifacts/article-01.2/`, the exact
-evidence packaged with the draft. Fresh runs keep their own directories; open
+loopback only. The explorer initially uses `artifacts/article-01.2/`, the evidence explained above. Fresh runs keep their own directories; open
 their `report.html` through the same server to inspect their results. Stop the
 server with Ctrl+C.
 
-## What the experiment actually does
+### What to do on the page
 
-The target receives **structured fact proposals**, such as an account city and
-its effective date. Their confidence values are hand-authored fixture scores,
-not calibrated model probabilities. This deliberately starts after natural
-language extraction. A frozen consumer returns the first packed record with
-the requested key; it makes retrieval failures easy to inspect.
+1. Read the city example at the top. The explorer opens **Scoped history** on
+   **future-move**, the same example.
+2. Compare the original answers `["Paris", "Paris"]` with the selected answers
+   `["Berlin", "Paris"]`. They correspond to January 5 and January 12.
+3. Use **Show full trace** and **Inspect stored state & retrieval** to see the
+   inputs, selected records, and answer for each event.
+4. Choose **Write more**, the **Conflict** group, and **Do not promote an uncertain
+   contradiction** to inspect the `pickup` → `courier` regression. The full metric
+   table compares this candidate with its parent, Scoped history.
 
-For example, a user reports a move to Paris on January 3, effective January 10.
-On January 5, the baseline retrieves the newest report and answers Paris.
-The history candidate filters by the requested entity and the validity interval,
-so it answers Berlin. Both versions retain the same underlying history.
-
-| Candidate | Change from parent | Observed downstream success | Interpretation |
-| --- | --- | ---: | --- |
-| `baseline` | Frozen initial configuration | 13/20 | Comparator with recorded failures |
-| `scoped-history` | Entity and validity filters | 19/20 | Six recovered scenarios; two switches tested together |
-| `deduplicated` | Deduplicate identical active confirmations | 19/20 | Neutral answers, lower stored row count |
-| `broad-writes` | Confidence threshold 0.7 → 0.2 | 16/20 | Useful-write recall improves, but four uncertain writes cause failures |
-
-The broader writer improves useful-write recall from 37/38 to 38/38 while
-downstream success falls from 19/20 to 16/20 relative to its parent. Local
-metrics and downstream outcomes answer different questions. See the generated
-[evidence report](artifacts/article-01.2/report.md) for denominators, timing,
-storage, context size, constraint checks, and paired comparisons.
-
-All original candidates were authored by **Codex during development**, with
-access to the public fixtures. The engine does not fabricate human-authored
-baselines, model calls, or completed human review. Every promotion decision is
-`pending_human_review`; accept/reject recommendations are not authorizations.
+The selectors only switch between **saved results**. They do not edit memory,
+run Python, or call a model. To produce a new experiment, use `lab run` or the
+candidate workflow below. The browser is plain HTML, CSS, and JavaScript, with
+no frontend build step or runtime application server.
 
 ## Run the improvement loop
 
@@ -132,8 +286,8 @@ uv run --frozen python -m lab decision \
 Use `--verdict reject` for rejection. These are explicit operator declarations,
 not independently authenticated identities. The command only appends a review
 record under `decisions/`; it never deploys, changes the running target, or
-rewrites the original bundle. The browser's decision rehearsal is a local
-simulation and does not invoke this command.
+rewrites the original bundle. The browser displays the saved recommendation and pending review status; it
+does not record a decision.
 
 ## Verify it
 
@@ -180,17 +334,17 @@ source project. Referenced papers and external projects retain their own terms.
 
 ## Files and responsibility
 
-| Path | Responsibility |
-| --- | --- |
-| `lab/memory.py` | Writer, version history, immutable gates, retrieval, fixed consumer |
-| `lab/runner.py` | Candidate validation, isolated evaluations, metrics, evidence export |
-| `lab/__main__.py` | CLI, trace diagnosis, proposal packets, explicit review records |
-| `data/scenarios.json` | Original public normalized events and expected answers |
-| `experiments/` | Baseline, candidate lineage, mutation and budget contract |
-| `tests/test_lab.py` | Runnable regression and invariant checks |
-| `artifacts/article-01.2/` | Frozen measured evidence used by the draft and explorer |
-| `web/` | Small static presentation; no second implementation of the evaluator |
-| `docs/` | Research and the public artifact contract |
+| Path                      | Responsibility                                                       |
+| ------------------------- | -------------------------------------------------------------------- |
+| `lab/memory.py`           | Writer, version history, immutable gates, retrieval, fixed consumer  |
+| `lab/runner.py`           | Candidate validation, isolated evaluations, metrics, evidence export |
+| `lab/__main__.py`         | CLI, trace diagnosis, proposal packets, explicit review records      |
+| `data/scenarios.json`     | Original public normalized events and expected answers               |
+| `experiments/`            | Baseline, candidate lineage, mutation and budget contract            |
+| `tests/test_lab.py`       | Runnable regression and invariant checks                             |
+| `artifacts/article-01.2/` | Frozen measured evidence used by the draft and explorer              |
+| `web/`                    | Small static presentation; no second implementation of the evaluator |
+| `docs/`                   | Research and the public artifact contract                            |
 
 ## What these results do not establish
 

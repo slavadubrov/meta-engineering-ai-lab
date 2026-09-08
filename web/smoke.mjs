@@ -25,6 +25,38 @@ try {
   ]);
   await page.goto(url, { waitUntil: "networkidle0" });
   await page.waitForSelector("#explorer:not([hidden])");
+  assert.equal(
+    await page.$eval("#scenario", (node) => node.value),
+    "future-move",
+    "The first visit opens the example explained above the controls",
+  );
+  assert.equal(
+    await page.$eval("#candidate", (node) => node.value),
+    "scoped-history",
+  );
+  assert.deepEqual(
+    await page.$eval("#baseline-outcome code", (node) =>
+      JSON.parse(node.textContent),
+    ),
+    ["Paris", "Paris"],
+  );
+  assert.deepEqual(
+    await page.$eval("#candidate-outcome code", (node) =>
+      JSON.parse(node.textContent),
+    ),
+    ["Berlin", "Paris"],
+  );
+  assert(
+    await page.evaluate(() =>
+      Boolean(
+        document
+          .querySelector("#lab-guide")
+          .compareDocumentPosition(document.querySelector(".controls")) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+      ),
+    ),
+    "Explanation precedes controls",
+  );
   const bundle = await page.evaluate(async () => {
     const root = new URL(
       document.querySelector('meta[name="memory-artifact-base"]').content,
@@ -142,12 +174,20 @@ try {
   await page.setViewport({ width: 390, height: 844 });
   await page.$eval(".controls", (node) => node.scrollIntoView());
   await page.screenshot({ path: join(screenshots, "mobile.png") });
+  await page.evaluate(() => scrollTo(0, 0));
+  await page.screenshot({ path: join(screenshots, "mobile-opening.png") });
   assert.deepEqual(errors, [], "No browser runtime errors");
 
   const noJs = await browser.newPage();
   await noJs.setJavaScriptEnabled(false);
   await noJs.goto(url, { waitUntil: "networkidle0" });
   assert.equal(await noJs.$eval("#fallback", (node) => node.hidden), false);
+  assert(
+    (await noJs.$eval("#lab-guide", (node) => node.textContent)).includes(
+      "Berlin",
+    ),
+    "The guide remains readable without JavaScript",
+  );
   assert.equal(await noJs.$eval("#loop-nav", (node) => node.hidden), true);
   const report = await (await noJs.$("iframe")).contentFrame();
   assert(
