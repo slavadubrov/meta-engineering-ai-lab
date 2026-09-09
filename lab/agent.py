@@ -20,7 +20,7 @@ PRICING_SOURCE = "https://developers.openai.com/api/docs/models/gpt-5.6-luna"
 INSTRUCTIONS = """You are the outer improvement agent for a small memory tool.
 Inspect the supplied recorded tests and prior experiment feedback, then propose
 one bounded configuration change or stop. Return the required SGR decision record:
-observations tied to supplied scenario/step IDs, a concise hypothesis, an expected
+observations tied only to scenario/step IDs in the current evidence array, a concise hypothesis, an expected
 effect, and the patch. These fields are an inspectable decision summary.
 
 Your permissions: change only min_confidence, filter_entity, time_aware,
@@ -80,8 +80,13 @@ def validate_proposal(value: dict, context: dict) -> tuple[Proposal, dict]:
     proposal = Proposal.model_validate(value)
     patch = proposal.patch.model_dump(exclude_none=True)
     known = {(r["scenario_id"], e["step"]) for r in context["evidence"] for e in r["trace"]}
-    if any((o.scenario_id, o.step) not in known for o in proposal.observations):
-        raise ValueError("Observation must cite an event supplied in this request")
+    unknown = [
+        (o.scenario_id, o.step)
+        for o in proposal.observations
+        if (o.scenario_id, o.step) not in known
+    ]
+    if unknown:
+        raise ValueError(f"Observation references not present in current evidence: {unknown}")
     if proposal.action == "stop":
         if patch:
             raise ValueError("Stop cannot contain a configuration change")

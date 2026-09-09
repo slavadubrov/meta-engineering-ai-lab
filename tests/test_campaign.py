@@ -5,13 +5,14 @@ import tempfile
 import unittest
 from pathlib import Path
 from types import SimpleNamespace
+from unittest.mock import patch as mock_patch
 
 from pydantic import ValidationError
 
 from lab.__main__ import export_site
 from lab.agent import Proposal, request_for, usage_cost, validate_proposal
 from lab.campaign import context_for, run_campaigns
-from lab.runner import ROOT, build_bundle, read_json, sha256
+from lab.runner import ROOT, build_bundle, read_json, run_scenario, sha256
 
 
 def decision(patch=None, action="propose"):
@@ -88,7 +89,9 @@ class CampaignTests(unittest.TestCase):
         )
         with tempfile.TemporaryDirectory() as d:
             root = Path(d) / "campaign"
-            result = run_campaigns(root, 1, 3, client=client)
+            with mock_patch("lab.runner.run_scenario", wraps=run_scenario) as run:
+                result = run_campaigns(root, 1, 3, client=client)
+                self.assertEqual(run.call_count, 80)
             self.assertEqual(result["campaigns"][0]["scenario_executions"], 80)
             rows = result["campaigns"][0]["iterations"]
             self.assertEqual([r["status"] for r in rows], ["evaluated"] * 3)
@@ -103,6 +106,18 @@ class CampaignTests(unittest.TestCase):
             self.assertIn("./artifacts/campaign/", (Path(d) / "site/index.html").read_text())
             manifest = read_json(root / "manifest.json")
             self.assertTrue(all(sha256(root / f["path"]) == f["sha256"] for f in manifest["files"]))
+
+    def test_invalid_output_and_specific_error_return_to_the_agent(self):
+        wrong = decision({"time_aware": True})
+        wrong["observations"][0]["scenario_id"] = "not-a-scenario"
+        client = ScriptedClient([wrong, decision({"time_aware": True})])
+        with tempfile.TemporaryDirectory() as d:
+            result = run_campaigns(Path(d) / "feedback", 1, 2, client=client)
+            history = json.loads(client.requests[1]["input"])["previous_iterations"]
+            self.assertEqual(json.loads(history[0]["rejected_output"]), wrong)
+            self.assertIn("not-a-scenario", history[0]["rejection"])
+            self.assertEqual(result["campaigns"][0]["iterations"][0]["status"], "invalid_proposal")
+            self.assertEqual(result["campaigns"][0]["iterations"][1]["status"], "evaluated")
 
     def test_budget_and_errors_are_recorded_without_silent_retries(self):
         with tempfile.TemporaryDirectory() as d:

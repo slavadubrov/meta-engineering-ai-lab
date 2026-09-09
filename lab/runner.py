@@ -565,7 +565,7 @@ def build_bundle(
             raise AssertionError("Unsafe proposal unexpectedly passed validation")
     return {
         "schema_version": "1.0",
-        "release_id": "article-01.4",
+        "release_id": "article-01.5",
         "parent_release": (
             {
                 "release_id": parent_manifest["release_id"],

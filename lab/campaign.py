@@ -180,10 +180,11 @@ def run_campaigns(
                 if cost is not None:
                     experiment["estimated_cost_usd"] += cost
                     experiment["charged_or_reserved_usd"] += cost - reservation
+                phase = "proposal"
+                returned_text = ""
                 try:
-                    proposal, patch = validate_proposal(
-                        json.loads(response_text(response)), context
-                    )
+                    returned_text = response_text(response)
+                    proposal, patch = validate_proposal(json.loads(returned_text), context)
                     dump(step / "proposal.json", proposal.model_dump())
                     if proposal.action == "stop":
                         record.update(status="agent_stopped", reason=proposal.hypothesis)
@@ -206,6 +207,7 @@ def run_campaigns(
                         ),
                     )
                     dump(step / "candidate.json", candidate)
+                    phase = "evaluation"
                     next_bundle, next_runs = build_bundle(extra=candidate, parent_release=release)
                     campaign["scenario_executions"] += len(next_bundle["scenarios"])
                     evaluated = next_bundle["candidates"][-1]
@@ -232,8 +234,19 @@ def run_campaigns(
                         }
                     )
                 except (ValueError, TypeError, KeyError) as error:
+                    if phase == "evaluation":
+                        record.update(status="evaluation_error", reason=str(error)[:1500])
+                        campaign["status"] = "evaluation_error"
+                        dump(step / "result.json", record)
+                        break
                     record.update(status="invalid_proposal", reason=str(error)[:1500])
-                    history.append({"iteration": iteration, "rejection": record["reason"]})
+                    history.append(
+                        {
+                            "iteration": iteration,
+                            "rejected_output": returned_text,
+                            "rejection": record["reason"],
+                        }
+                    )
                 dump(step / "result.json", record)
                 dump(output / "campaigns.json", experiment)
                 if cost is None:
@@ -248,7 +261,7 @@ def run_campaigns(
         experiment["status"] = (
             "completed_with_errors"
             if any(
-                c["status"] in {"provider_error", "usage_unavailable"}
+                c["status"] in {"provider_error", "usage_unavailable", "evaluation_error"}
                 for c in experiment["campaigns"]
             )
             else "completed"
