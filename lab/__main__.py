@@ -163,9 +163,23 @@ def main() -> int:
     command = sub.add_parser("site", help="Export a portable static explorer and verified evidence")
     command.add_argument("--release", type=Path, default=DEFAULT_RELEASE)
     command.add_argument("--output", type=Path, required=True)
+    command = sub.add_parser("campaign", help="Run the live outer LLM improvement agent")
+    command.add_argument(
+        "--live", action="store_true", required=True, help="Explicitly authorize API calls"
+    )
+    command.add_argument("--output", type=Path, required=True)
+    command.add_argument("--campaigns", type=int, default=3)
+    command.add_argument("--iterations", type=int, default=4)
+    command.add_argument("--budget-usd", type=float, default=0.5)
     args = parser.parse_args()
     try:
-        if args.command in {"run", "evaluate"}:
+        if args.command == "campaign":
+            from .campaign import run_campaigns
+
+            result = run_campaigns(args.output, args.campaigns, args.iterations, args.budget_usd)
+            print(f"Recorded {len(result['campaigns'])} campaigns in {args.output}")
+            print(f"Estimated model cost: ${result['estimated_cost_usd']:.6f}")
+        elif args.command in {"run", "evaluate"}:
             output = args.output or ROOT / f"artifacts/local-{stamp()}"
             if output.exists():
                 raise ValueError(f"Refusing to overwrite an existing release: {output}")

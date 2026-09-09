@@ -437,16 +437,21 @@ def provenance() -> dict:
 
 
 def build_bundle(
-    repeats: int = 1, extra: dict | None = None, parent_release: Path | None = None
+    repeats: int = 1,
+    extra: dict | None = None,
+    parent_release: Path | None = None,
+    *,
+    lineage: list[dict] | None = None,
 ) -> tuple[dict, list[dict]]:
     if type(repeats) is not int or not 1 <= repeats <= MAX_REPEATS:
         raise ValueError(f"Repeats must be between 1 and {MAX_REPEATS}")
     scenarios = read_json(ROOT / "data/scenarios.json")
     validate_scenarios(scenarios)
     parent_manifest = verify_source(parent_release) if parent_release is not None else None
-    lineage = (
-        read_json(parent_release / "inputs/candidates.json") if parent_release is not None else None
-    )
+    if parent_release is not None:
+        if lineage is not None:
+            raise ValueError("Use a parent release or an initial lineage, not both")
+        lineage = read_json(parent_release / "inputs/candidates.json")
     candidates = load_candidates(extra, lineage)
     deadline = time.monotonic() + MAX_WALL_SECONDS
     all_runs, by_id = [], {}
