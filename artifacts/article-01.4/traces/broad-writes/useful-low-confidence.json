@@ -1,0 +1,139 @@
+[
+  {
+    "step": 1,
+    "action": "write",
+    "detail": {
+      "action": "write",
+      "at": "2026-01-01",
+      "tenant": "north",
+      "user": "ada",
+      "should_retain": true,
+      "fact": {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "account",
+        "key": "language",
+        "value": "Portuguese",
+        "confidence": 0.6,
+        "valid_from": "2026-01-01",
+        "source": "user",
+        "kind": "fact"
+      },
+      "source_event_id": "useful-low-confidence:event-1"
+    },
+    "result": {
+      "status": "stored",
+      "reason": "admitted",
+      "retained": true,
+      "record_id": "m001"
+    },
+    "before": [],
+    "after": [
+      {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "account",
+        "key": "language",
+        "value": "Portuguese",
+        "valid_from": "2026-01-01",
+        "confidence": 0.6,
+        "source": "user",
+        "id": "m001",
+        "valid_to": null,
+        "observed_at": "2026-01-01",
+        "source_event_id": "useful-low-confidence:event-1"
+      }
+    ],
+    "state_diff": {
+      "added": [
+        {
+          "tenant": "north",
+          "user": "ada",
+          "entity": "account",
+          "key": "language",
+          "value": "Portuguese",
+          "valid_from": "2026-01-01",
+          "confidence": 0.6,
+          "source": "user",
+          "id": "m001",
+          "valid_to": null,
+          "observed_at": "2026-01-01",
+          "source_event_id": "useful-low-confidence:event-1"
+        }
+      ],
+      "removed": [],
+      "changed": []
+    }
+  },
+  {
+    "step": 2,
+    "action": "query",
+    "detail": {
+      "action": "query",
+      "at": "2026-01-02",
+      "tenant": "north",
+      "user": "ada",
+      "entity": "account",
+      "key": "language",
+      "as_of": "2026-01-02",
+      "text": "language",
+      "expected": "Portuguese",
+      "source_event_id": "useful-low-confidence:event-2"
+    },
+    "result": {
+      "answer": "Portuguese",
+      "answer_record_id": "m001",
+      "retrieved_ids": [
+        "m001"
+      ],
+      "packed_ids": [
+        "m001"
+      ],
+      "context_words": 3
+    },
+    "before": [
+      {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "account",
+        "key": "language",
+        "value": "Portuguese",
+        "valid_from": "2026-01-01",
+        "confidence": 0.6,
+        "source": "user",
+        "id": "m001",
+        "valid_to": null,
+        "observed_at": "2026-01-01",
+        "source_event_id": "useful-low-confidence:event-1"
+      }
+    ],
+    "after": [
+      {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "account",
+        "key": "language",
+        "value": "Portuguese",
+        "valid_from": "2026-01-01",
+        "confidence": 0.6,
+        "source": "user",
+        "id": "m001",
+        "valid_to": null,
+        "observed_at": "2026-01-01",
+        "source_event_id": "useful-low-confidence:event-1"
+      }
+    ],
+    "state_diff": {
+      "added": [],
+      "removed": [],
+      "changed": []
+    },
+    "retrieved_ids": [
+      "m001"
+    ],
+    "packed_ids": [
+      "m001"
+    ],
+    "answer": "Portuguese"
+  }
+]

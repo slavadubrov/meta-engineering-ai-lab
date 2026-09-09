@@ -1,0 +1,34 @@
+{
+  "observations": [
+    {
+      "scenario_id": "entity-grounding",
+      "step": 3,
+      "observation": "Query requested entity home, but retrieval returned work/Paris first and answered incorrectly."
+    },
+    {
+      "scenario_id": "historical-address",
+      "step": 3,
+      "observation": "As-of 2026-01-05 query returned Paris despite Berlin being valid at that date."
+    },
+    {
+      "scenario_id": "future-move",
+      "step": 3,
+      "observation": "As-of 2026-01-05 query returned a future-effective Paris record instead of Berlin."
+    },
+    {
+      "scenario_id": "distractor-retrieval",
+      "step": 9,
+      "observation": "Query for entity primary returned a newer project-6/Bath record instead of primary/Berlin."
+    }
+  ],
+  "hypothesis": "Enabling entity filtering and time-aware retrieval will remove cross-entity distractors and exclude records outside the requested validity interval, improving complete-scenario success.",
+  "predicted_effect": "Entity-grounding and distractor cases should select the requested entity, while historical and future-effective queries should return the record valid at the requested as-of date. Storage and write behavior should remain unchanged.",
+  "action": "propose",
+  "patch": {
+    "min_confidence": null,
+    "filter_entity": true,
+    "time_aware": true,
+    "deduplicate": null,
+    "top_k": null
+  }
+}

@@ -1,6 +1,12 @@
+# Two kinds of recorded evidence
+
+The primary page reads `artifacts/agent-study-02/campaigns.json`. This ledger records independent campaigns, every model decision, cost/usage, selected configurations, and links to exact requests, responses, and evaluation releases. Each model request includes the full SGR JSON Schema and instructions. `manifest.json` covers the whole directory and the source-file identities.
+
+Each evaluation nested under a campaign uses the memory-component format below. Parent evidence is reused after verification because this target is deterministic; a new configuration is executed once per scenario. Existing `repeat_count` fields still support explicit low-level reruns and do not measure agent search variability.
+
 # Public artifact contract, version 1.0
 
-Python is authoritative. The browser reads `../artifacts/article-01.3/bundle.json`
+Python is authoritative. The browser reads `../artifacts/article-01.5/bundle.json`
 from `web/index.html`; it filters recorded evidence, never evaluates a target.
 `report.html` is a semantic, standalone no-JavaScript comparison; `report.md`
 contains the same conclusions. `manifest.json` hashes every public artifact.

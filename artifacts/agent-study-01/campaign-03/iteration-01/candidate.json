@@ -1,0 +1,18 @@
+{
+  "id": "agent-01",
+  "label": "Agent proposal 1",
+  "parent_id": "baseline",
+  "hypothesis": "Enabling entity and as-of-date filtering will prevent cross-entity distractors and exclude records outside the requested validity interval, improving complete-scenario task success without changing admission or ownership behavior.",
+  "predicted_effect": "Entity-grounding and distractor-retrieval should select the requested entity; historical-address, future-move, and history-boundary should select the record valid at the requested as-of date. Hard-constraint behavior should remain unchanged.",
+  "patch": {
+    "filter_entity": true,
+    "time_aware": true
+  },
+  "proposer": {
+    "type": "llm",
+    "name": "OpenAI",
+    "model": "gpt-5.6-luna",
+    "prompt_version": "memory-improver-sgr-v1",
+    "response_id": "resp_0c6e23cc513b5fa2016aa1b9884ff487d2966aafddcb499929"
+  }
+}

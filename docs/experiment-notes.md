@@ -1,0 +1,10 @@
+# Recorded experiments
+
+- `agent-pilot-01`: one Luna call used to verify API access, Structured Outputs, and evaluation. The model enabled subject/date filtering and reached 19/20. Its provisional cost calculation omitted the cache-write surcharge. Recomputed from preserved usage at the published rates, its estimate is $0.00535395, rather than the earlier $0.0043716. The original request, response, and report are unchanged.
+- `agent-study-01`: three development campaigns before rejection feedback included the complete rejected output. The source includes corrected cache-write cost accounting. Cost estimate: $0.036043. No pilot discovery is provided as a ready-made candidate to these campaigns; each starts from the baseline. This is a development study using the same public task suite, not a blind confirmatory experiment.
+- `agent-study-02`: the final study described in the article, using complete rejection feedback and an explicit current-evidence reference instruction. Three campaigns used 4, 4, and 3 calls; eight proposals were evaluated and each agent then stopped. Cost estimate: $0.03412255. The report rounds this to $0.034123.
+- Combined token-cost estimate for all 24 live calls in this work: $0.0755195, ignoring cache-read discounts. Historical artifacts are never overwritten.
+- `article-01.5`: the four hand-prepared teaching configurations evaluated with the current source. It explains memory behavior separately from the agent study.
+- `article-01.1` through `article-01.4`: earlier deterministic component experiments, preserved with their original source metadata and repeat counts. Use their matching Git tags when checking those historical files against source.
+
+The study manifest records a dirty Git working tree because earlier untracked experiment folders were present. Its source-file hashes identify the tested implementation; `lab verify artifacts/agent-study-02 --source` compares those hashes with the current source. The versioned source commit is also recorded.

@@ -1,0 +1,17 @@
+{
+  "id": "agent-03",
+  "label": "Agent proposal 3",
+  "parent_id": "agent-02",
+  "hypothesis": "Lowering min_confidence to 0.6 will admit the demonstrated useful fact while continuing to reject the 0.3 and 0.4 low-quality facts.",
+  "predicted_effect": "Improve complete-scenario success by recovering Portuguese in useful-low-confidence, with no expected change to the demonstrated clean-abstention or uncertain-conflict outcomes. Hard constraints and deduplication behavior should remain unaffected.",
+  "patch": {
+    "min_confidence": 0.6
+  },
+  "proposer": {
+    "type": "llm",
+    "name": "OpenAI",
+    "model": "gpt-5.6-luna",
+    "prompt_version": "memory-improver-sgr-v1",
+    "response_id": "resp_014b8fab677bd44b016aa1bc890e6487d289fdec7f9cd4e9f0"
+  }
+}

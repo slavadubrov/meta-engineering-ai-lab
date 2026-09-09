@@ -1,0 +1,39 @@
+{
+  "observations": [
+    {
+      "scenario_id": "entity-grounding",
+      "step": 3,
+      "observation": "The query requested entity home, but retrieval included work and the fixed consumer returned Paris instead of expected Berlin."
+    },
+    {
+      "scenario_id": "distractor-retrieval",
+      "step": 9,
+      "observation": "The query requested entity primary, but retrieval returned newer project entities and the answer was Bath instead of Berlin."
+    },
+    {
+      "scenario_id": "historical-address",
+      "step": 3,
+      "observation": "An as-of 2026-01-05 query returned the later Paris record instead of Berlin."
+    },
+    {
+      "scenario_id": "future-move",
+      "step": 3,
+      "observation": "An as-of 2026-01-05 query returned a future-effective Paris record instead of Berlin."
+    },
+    {
+      "scenario_id": "duplicate-confirmation",
+      "step": 4,
+      "observation": "Three identical active-value records were retrieved, increasing context and storage without improving the answer."
+    }
+  ],
+  "hypothesis": "Applying entity and validity-date filtering will remove cross-entity and temporally invalid candidates before ranking, fixing the demonstrated retrieval failures; deduplication is deferred because the primary errors are filtering errors and only two settings may change.",
+  "predicted_effect": "Increase complete-scenario success by selecting the requested entity and records valid at the requested as-of date, while preserving owner isolation and write behavior. The change may also reduce distracting retrieval, but it is not expected to fix low-confidence admission.",
+  "action": "propose",
+  "patch": {
+    "min_confidence": null,
+    "filter_entity": true,
+    "time_aware": true,
+    "deduplicate": null,
+    "top_k": null
+  }
+}

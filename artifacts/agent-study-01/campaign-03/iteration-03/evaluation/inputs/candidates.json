@@ -1,0 +1,69 @@
+[
+  {
+    "id": "baseline",
+    "label": "Baseline",
+    "parent_id": null,
+    "hypothesis": "Freeze the original thresholded writer and recency-based retrieval.",
+    "predicted_effect": "Useful direct facts work; entity and temporal ambiguity remain visible.",
+    "patch": {},
+    "proposer": {
+      "type": "coding_agent",
+      "name": "Codex",
+      "model": "not exposed to this task",
+      "prompt_version": "article-01-authoring-v1",
+      "attribution": "Authored by Codex while building this demo, with public access to all scenarios; no runtime provider call."
+    }
+  },
+  {
+    "id": "agent-01",
+    "label": "Agent proposal 1",
+    "parent_id": "baseline",
+    "hypothesis": "Enabling entity and as-of-date filtering will prevent cross-entity distractors and exclude records outside the requested validity interval, improving complete-scenario task success without changing admission or ownership behavior.",
+    "predicted_effect": "Entity-grounding and distractor-retrieval should select the requested entity; historical-address, future-move, and history-boundary should select the record valid at the requested as-of date. Hard-constraint behavior should remain unchanged.",
+    "patch": {
+      "filter_entity": true,
+      "time_aware": true
+    },
+    "proposer": {
+      "type": "llm",
+      "name": "OpenAI",
+      "model": "gpt-5.6-luna",
+      "prompt_version": "memory-improver-sgr-v1",
+      "response_id": "resp_0c6e23cc513b5fa2016aa1b9884ff487d2966aafddcb499929"
+    }
+  },
+  {
+    "id": "agent-02",
+    "label": "Agent proposal 2",
+    "parent_id": "agent-01",
+    "hypothesis": "Enabling deduplication will reuse identical active values, reducing stored records and duplicate retrieval distraction while preserving answers and hard-constraint behavior.",
+    "predicted_effect": "Duplicate-confirmation should retain the correct German answer with fewer records; overall task success and write precision should remain unchanged or improve, while storage_records and likely distraction decrease.",
+    "patch": {
+      "deduplicate": true
+    },
+    "proposer": {
+      "type": "llm",
+      "name": "OpenAI",
+      "model": "gpt-5.6-luna",
+      "prompt_version": "memory-improver-sgr-v1",
+      "response_id": "resp_0ffed4e6f2b562cb016aa1b98cb9f087d2b9ffc76742bee9aa"
+    }
+  },
+  {
+    "id": "agent-03",
+    "label": "Agent proposal 3",
+    "parent_id": "agent-02",
+    "hypothesis": "Lowering min_confidence from 0.7 to 0.6 will admit the demonstrated useful low-confidence fact while preserving abstention for the 0.3 and 0.4 cases, improving complete-scenario success without changing retrieval isolation or deduplication behavior.",
+    "predicted_effect": "The useful-low-confidence scenario should answer Portuguese rather than null. Clean abstention and uncertain-conflict should remain unchanged, with no expected hard-constraint impact; storage may increase only for genuinely admitted 0.6-scored facts.",
+    "patch": {
+      "min_confidence": 0.6
+    },
+    "proposer": {
+      "type": "llm",
+      "name": "OpenAI",
+      "model": "gpt-5.6-luna",
+      "prompt_version": "memory-improver-sgr-v1",
+      "response_id": "resp_05a27133981cb642016aa1b991965887d2849d3a65541297d4"
+    }
+  }
+]

@@ -1,0 +1,17 @@
+{
+  "id": "agent-02",
+  "label": "Agent proposal 2",
+  "parent_id": "agent-01",
+  "hypothesis": "Enabling deduplication will reuse identical active values instead of appending redundant records, preserving successful retrieval while reducing storage records and bytes.",
+  "predicted_effect": "Maintain complete-scenario success and write correctness on the observed duplicate case while reducing stored records and storage size; no hard-constraint behavior should change.",
+  "patch": {
+    "deduplicate": true
+  },
+  "proposer": {
+    "type": "llm",
+    "name": "OpenAI",
+    "model": "gpt-5.6-luna",
+    "prompt_version": "memory-improver-sgr-v1",
+    "response_id": "resp_055be46427dc1e7d016aa1bc68db9887d2b02ce23649abe390"
+  }
+}

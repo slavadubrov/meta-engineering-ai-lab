@@ -1,0 +1,39 @@
+{
+  "observations": [
+    {
+      "scenario_id": "entity-grounding",
+      "step": 3,
+      "observation": "Query requested entity home, but retrieval returned work entity Paris first and answered incorrectly; entity filtering is disabled."
+    },
+    {
+      "scenario_id": "distractor-retrieval",
+      "step": 9,
+      "observation": "Query requested entity primary, but retrieval returned project-6 Bath first instead of primary Berlin."
+    },
+    {
+      "scenario_id": "historical-address",
+      "step": 3,
+      "observation": "As-of 2026-01-05 returned future/current Paris rather than Berlin, showing that temporal filtering is disabled."
+    },
+    {
+      "scenario_id": "future-move",
+      "step": 3,
+      "observation": "As-of 2026-01-05 returned Paris whose valid_from is 2026-01-10, rather than Berlin."
+    },
+    {
+      "scenario_id": "duplicate-confirmation",
+      "step": 4,
+      "observation": "Three identical historical records were retrieved, indicating avoidable retrieval distraction, though deduplication is not being changed in this proposal."
+    }
+  ],
+  "hypothesis": "Enabling entity and as-of-date filtering will prevent cross-entity distractors and exclude records outside the requested validity interval, improving complete-scenario task success without changing admission or ownership behavior.",
+  "predicted_effect": "Entity-grounding and distractor-retrieval should select the requested entity; historical-address, future-move, and history-boundary should select the record valid at the requested as-of date. Hard-constraint behavior should remain unchanged.",
+  "action": "propose",
+  "patch": {
+    "min_confidence": null,
+    "filter_entity": true,
+    "time_aware": true,
+    "deduplicate": null,
+    "top_k": null
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "observations": [
+    {
+      "scenario_id": "useful-low-confidence",
+      "step": 1,
+      "observation": "A useful Portuguese fact scored 0.6 but was abstained because the current min_confidence is 0.7."
+    },
+    {
+      "scenario_id": "useful-low-confidence",
+      "step": 2,
+      "observation": "The resulting query returned null instead of the expected Portuguese value because the fact was not stored."
+    },
+    {
+      "scenario_id": "clean-abstention",
+      "step": 1,
+      "observation": "A clearly unnecessary fact scored 0.3 and was correctly abstained, leaving room to lower the threshold to 0.6 without admitting this observed case."
+    }
+  ],
+  "hypothesis": "Lowering min_confidence from 0.7 to 0.6 will admit the observed useful borderline fact while continuing to reject the observed low-confidence unnecessary fact.",
+  "predicted_effect": "Improve complete-scenario success on the useful-low-confidence case, with no expected change to retrieval filtering, deduplication, or hard-constraint behavior on the supplied evidence.",
+  "action": "propose",
+  "patch": {
+    "min_confidence": 0.6,
+    "filter_entity": null,
+    "time_aware": null,
+    "deduplicate": null,
+    "top_k": null
+  }
+}

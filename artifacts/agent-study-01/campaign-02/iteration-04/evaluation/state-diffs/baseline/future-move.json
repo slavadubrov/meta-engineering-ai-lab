@@ -1,0 +1,34 @@
+{
+  "added": [
+    {
+      "tenant": "north",
+      "user": "ada",
+      "entity": "account",
+      "key": "city",
+      "value": "Berlin",
+      "valid_from": "2026-01-01",
+      "confidence": 0.95,
+      "source": "user",
+      "id": "m001",
+      "valid_to": "2026-01-10",
+      "observed_at": "2026-01-01",
+      "source_event_id": "future-move:event-1"
+    },
+    {
+      "tenant": "north",
+      "user": "ada",
+      "entity": "account",
+      "key": "city",
+      "value": "Paris",
+      "valid_from": "2026-01-10",
+      "confidence": 0.95,
+      "source": "user",
+      "id": "m002",
+      "valid_to": null,
+      "observed_at": "2026-01-03",
+      "source_event_id": "future-move:event-2"
+    }
+  ],
+  "removed": [],
+  "changed": []
+}

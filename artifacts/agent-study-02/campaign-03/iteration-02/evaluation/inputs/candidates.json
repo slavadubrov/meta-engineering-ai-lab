@@ -1,0 +1,53 @@
+[
+  {
+    "id": "baseline",
+    "label": "Baseline",
+    "parent_id": null,
+    "hypothesis": "Freeze the original thresholded writer and recency-based retrieval.",
+    "predicted_effect": "Useful direct facts work; entity and temporal ambiguity remain visible.",
+    "patch": {},
+    "proposer": {
+      "type": "coding_agent",
+      "name": "Codex",
+      "model": "not exposed to this task",
+      "prompt_version": "article-01-authoring-v1",
+      "attribution": "Authored by Codex while building this demo, with public access to all scenarios; no runtime provider call."
+    }
+  },
+  {
+    "id": "agent-01",
+    "label": "Agent proposal 1",
+    "parent_id": "baseline",
+    "hypothesis": "Enabling entity filtering and time-aware retrieval will remove cross-entity distractors and exclude records outside the requested validity interval, improving complete-scenario success.",
+    "predicted_effect": "Entity-grounding and distractor cases should select the requested entity, while historical and future-effective queries should return the record valid at the requested as-of date. Storage and write behavior should remain unchanged.",
+    "patch": {
+      "filter_entity": true,
+      "time_aware": true
+    },
+    "proposer": {
+      "type": "llm",
+      "name": "OpenAI",
+      "model": "gpt-5.6-luna",
+      "prompt_version": "memory-improver-sgr-v1",
+      "response_id": "resp_08467ac5bcd3c1f0016aa1bc96644c87d2b1f35567b547097a"
+    }
+  },
+  {
+    "id": "agent-02",
+    "label": "Agent proposal 2",
+    "parent_id": "agent-01",
+    "hypothesis": "Lowering the confidence threshold to 0.6 will retain the demonstrated useful low-confidence fact, while enabling deduplication will prevent repeated identical confirmations from creating extra active-history records without changing their answer.",
+    "predicted_effect": "Complete-scenario success should improve on the useful-low-confidence case, and storage records should decrease for repeated identical confirmations. The existing abstentions at 0.3-0.4 should remain rejected.",
+    "patch": {
+      "min_confidence": 0.6,
+      "deduplicate": true
+    },
+    "proposer": {
+      "type": "llm",
+      "name": "OpenAI",
+      "model": "gpt-5.6-luna",
+      "prompt_version": "memory-improver-sgr-v1",
+      "response_id": "resp_07fbe05ba98f7b37016aa1bc9c755887d2874ffbe815893f50"
+    }
+  }
+]

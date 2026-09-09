@@ -1,0 +1,39 @@
+{
+  "observations": [
+    {
+      "scenario_id": "entity-grounding",
+      "step": 3,
+      "observation": "The query requested entity home, but retrieval included work and the fixed consumer returned Paris instead of expected Berlin."
+    },
+    {
+      "scenario_id": "distractor-retrieval",
+      "step": 9,
+      "observation": "The query requested entity primary, but retrieval returned newer project records and the consumer returned Bath instead of Berlin."
+    },
+    {
+      "scenario_id": "historical-address",
+      "step": 3,
+      "observation": "An as-of query for 2026-01-05 returned the later Paris record rather than Berlin."
+    },
+    {
+      "scenario_id": "future-move",
+      "step": 3,
+      "observation": "An as-of query before the future move returned Paris even though Berlin was valid on that date."
+    },
+    {
+      "scenario_id": "history-boundary",
+      "step": 3,
+      "observation": "An as-of query for 2026-01-09 returned Paris rather than the then-valid Berlin record."
+    }
+  ],
+  "hypothesis": "Enabling entity filtering will exclude same-key records belonging to other entities, while time-aware filtering will restrict results to records valid at the requested as-of date; together these should correct the observed grounding, historical, and future-date failures without changing writes or hard constraints.",
+  "predicted_effect": "Increase complete-scenario task success and relevant-memory precision, reduce distracting and stale retrieval, and avoid cross-entity leakage. Storage and write precision should remain unchanged.",
+  "action": "propose",
+  "patch": {
+    "min_confidence": null,
+    "filter_entity": true,
+    "time_aware": true,
+    "deduplicate": null,
+    "top_k": null
+  }
+}

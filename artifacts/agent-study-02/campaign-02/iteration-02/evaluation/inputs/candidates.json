@@ -1,0 +1,52 @@
+[
+  {
+    "id": "baseline",
+    "label": "Baseline",
+    "parent_id": null,
+    "hypothesis": "Freeze the original thresholded writer and recency-based retrieval.",
+    "predicted_effect": "Useful direct facts work; entity and temporal ambiguity remain visible.",
+    "patch": {},
+    "proposer": {
+      "type": "coding_agent",
+      "name": "Codex",
+      "model": "not exposed to this task",
+      "prompt_version": "article-01-authoring-v1",
+      "attribution": "Authored by Codex while building this demo, with public access to all scenarios; no runtime provider call."
+    }
+  },
+  {
+    "id": "agent-01",
+    "label": "Agent proposal 1",
+    "parent_id": "baseline",
+    "hypothesis": "Applying entity and validity-date filtering will remove cross-entity and temporally invalid candidates before ranking, fixing the demonstrated retrieval failures; deduplication is deferred because the primary errors are filtering errors and only two settings may change.",
+    "predicted_effect": "Increase complete-scenario success by selecting the requested entity and records valid at the requested as-of date, while preserving owner isolation and write behavior. The change may also reduce distracting retrieval, but it is not expected to fix low-confidence admission.",
+    "patch": {
+      "filter_entity": true,
+      "time_aware": true
+    },
+    "proposer": {
+      "type": "llm",
+      "name": "OpenAI",
+      "model": "gpt-5.6-luna",
+      "prompt_version": "memory-improver-sgr-v1",
+      "response_id": "resp_0f11eda1fec6bea3016aa1bc7c981487d293f0fb4ed8dd06bd"
+    }
+  },
+  {
+    "id": "agent-02",
+    "label": "Agent proposal 2",
+    "parent_id": "agent-01",
+    "hypothesis": "Enabling deduplication will reuse identical active values, preserving correct retrieval while reducing redundant stored records.",
+    "predicted_effect": "Complete-scenario success should remain unchanged, while storage records and bytes decrease on repeated identical updates; owner isolation, deletion, and admission behavior should be unaffected.",
+    "patch": {
+      "deduplicate": true
+    },
+    "proposer": {
+      "type": "llm",
+      "name": "OpenAI",
+      "model": "gpt-5.6-luna",
+      "prompt_version": "memory-improver-sgr-v1",
+      "response_id": "resp_025af9fd9bc983ee016aa1bc833fb487d2b01eeb5da8e17f08"
+    }
+  }
+]

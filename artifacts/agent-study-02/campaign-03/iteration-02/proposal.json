@@ -1,0 +1,29 @@
+{
+  "observations": [
+    {
+      "scenario_id": "useful-low-confidence",
+      "step": 1,
+      "observation": "A useful Portuguese fact scored 0.6 but was rejected below the current 0.7 threshold, causing the subsequent query to return null instead of Portuguese."
+    },
+    {
+      "scenario_id": "duplicate-confirmation",
+      "step": 2,
+      "observation": "An identical German fact was stored as a second record rather than reusing the active value."
+    },
+    {
+      "scenario_id": "duplicate-confirmation",
+      "step": 3,
+      "observation": "A third identical German fact was stored, leaving three records for the same unchanged value."
+    }
+  ],
+  "hypothesis": "Lowering the confidence threshold to 0.6 will retain the demonstrated useful low-confidence fact, while enabling deduplication will prevent repeated identical confirmations from creating extra active-history records without changing their answer.",
+  "predicted_effect": "Complete-scenario success should improve on the useful-low-confidence case, and storage records should decrease for repeated identical confirmations. The existing abstentions at 0.3-0.4 should remain rejected.",
+  "action": "propose",
+  "patch": {
+    "min_confidence": 0.6,
+    "filter_entity": null,
+    "time_aware": null,
+    "deduplicate": true,
+    "top_k": null
+  }
+}

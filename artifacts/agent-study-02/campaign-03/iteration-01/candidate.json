@@ -1,0 +1,18 @@
+{
+  "id": "agent-01",
+  "label": "Agent proposal 1",
+  "parent_id": "baseline",
+  "hypothesis": "Enabling entity filtering and time-aware retrieval will remove cross-entity distractors and exclude records outside the requested validity interval, improving complete-scenario success.",
+  "predicted_effect": "Entity-grounding and distractor cases should select the requested entity, while historical and future-effective queries should return the record valid at the requested as-of date. Storage and write behavior should remain unchanged.",
+  "patch": {
+    "filter_entity": true,
+    "time_aware": true
+  },
+  "proposer": {
+    "type": "llm",
+    "name": "OpenAI",
+    "model": "gpt-5.6-luna",
+    "prompt_version": "memory-improver-sgr-v1",
+    "response_id": "resp_08467ac5bcd3c1f0016aa1bc96644c87d2b1f35567b547097a"
+  }
+}

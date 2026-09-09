@@ -1,0 +1,34 @@
+{
+  "observations": [
+    {
+      "scenario_id": "useful-low-confidence",
+      "step": 1,
+      "observation": "A useful Portuguese fact scored 0.6 and was rejected because the current min_confidence is 0.7."
+    },
+    {
+      "scenario_id": "useful-low-confidence",
+      "step": 2,
+      "observation": "Because the useful fact was rejected, the subsequent language query returned null instead of Portuguese."
+    },
+    {
+      "scenario_id": "clean-abstention",
+      "step": 1,
+      "observation": "An undesirable orange fact scored 0.3 and was correctly rejected at the current threshold."
+    },
+    {
+      "scenario_id": "uncertain-conflict",
+      "step": 2,
+      "observation": "An uncertain courier update scored 0.4 and was correctly rejected, preserving the pickup answer."
+    }
+  ],
+  "hypothesis": "Lowering min_confidence to 0.6 will admit the demonstrated useful fact while continuing to reject the 0.3 and 0.4 low-quality facts.",
+  "predicted_effect": "Improve complete-scenario success by recovering Portuguese in useful-low-confidence, with no expected change to the demonstrated clean-abstention or uncertain-conflict outcomes. Hard constraints and deduplication behavior should remain unaffected.",
+  "action": "propose",
+  "patch": {
+    "min_confidence": 0.6,
+    "filter_entity": null,
+    "time_aware": null,
+    "deduplicate": null,
+    "top_k": null
+  }
+}

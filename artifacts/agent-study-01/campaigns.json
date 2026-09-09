@@ -1,0 +1,1115 @@
+{
+  "schema_version": "agent-campaign-v1",
+  "generated_at": "2026-09-09T19:54:09.312717+00:00",
+  "model": "gpt-5.6-luna",
+  "prompt_version": "memory-improver-sgr-v1",
+  "source": {
+    "target_version": "structured-memory-v1",
+    "evaluator_version": "exact-state-v1",
+    "dataset_version": "original-synthetic-v1",
+    "consumer_version": "first-key-match-v1",
+    "source_sha256": "7539cf5b28925c0842fd322b563426c27338150d4c585d98f18ba26836fe953e",
+    "source_files": {
+      ".python-version": "7b55f8e67b5623c4bef3fa691288da9437d79d3aba156de48d481db32ac7d16d",
+      "data/scenarios.json": "1eae82e424a313c1d3c567126ac99e07f20f960c69c9029e557ff3228d4daa52",
+      "experiments/candidates.json": "bf957a3c6b6cc3f66c172d1a731ac077bc40059267c97fdb9caec273a7dfd0cb",
+      "experiments/contract.json": "7a8e596fa0f7cddc2ac051da46b523d0f12564b2c0cb5d57ab5387117812864b",
+      "lab/__init__.py": "c22745adb5a4d1f0a38795f3cad7c897e7da4481791449e1deb3d6cd20558b7b",
+      "lab/__main__.py": "6e7c01cee92b0023dbec31625c16118fafcdaec5cead776455c172b264fdc5e5",
+      "lab/agent.py": "6a85352485b3f0766ac27232542bec48e777517786d87464142653671bfad0bf",
+      "lab/campaign.py": "46154d864fbbce94342c7b16c0bbba82b3d55482a74fcc68755e1d7a2b63fafe",
+      "lab/memory.py": "17e4f52a4fa378c245fa2652c96b26df47ffc0764a6a37a48900f9889c3fa4cb",
+      "lab/runner.py": "32af54ea3fb23853c299ac122b4886a8a5e807f1058af12ef4dca11dad8e4ac6",
+      "pyproject.toml": "d4cd0f7330fa10f64933e8f1f1a4f94398ff9f556f21d6d7d9b0ecd7a0df6d55",
+      "tests/test_campaign.py": "1326ad1957ca9f5d42328fd2af0aa37d89371b3ddd88ffaf24a08ff7540b99aa",
+      "tests/test_lab.py": "21fad495d271434be63fc12d0ac5eef5fc37f1d0e3e3e31595e7280badbc35ba",
+      "uv.lock": "d818ce021b983115d85edb857154df34cd0c3683743edec09f416e84be50765e"
+    },
+    "python": "3.12.10 (main, Apr  9 2025, 03:49:38) [Clang 20.1.0 ]",
+    "platform": "macOS-27.0-arm64-arm-64bit",
+    "model": "none; deterministic structured target",
+    "prompt": "none at runtime",
+    "randomness": "none; seeds do not apply",
+    "git": {
+      "commit": "cd499edfb8f76ef0a2a57d72938824f0d1d0db1d",
+      "dirty": true
+    }
+  },
+  "planned_campaigns": 3,
+  "max_iterations": 4,
+  "budget_usd": 0.5,
+  "estimated_cost_usd": 0.036043000000000006,
+  "charged_or_reserved_usd": 0.036043,
+  "pricing_source": "https://developers.openai.com/api/docs/models/gpt-5.6-luna",
+  "pricing_checked": "2026-09-09",
+  "status": "completed",
+  "campaigns": [
+    {
+      "id": "campaign-01",
+      "status": "iteration_limit",
+      "iterations": [
+        {
+          "iteration": 1,
+          "parent_id": "baseline",
+          "status": "evaluated",
+          "path": "campaign-01/iteration-01",
+          "reserved_usd": 0.0217767,
+          "latency_seconds": 5.5103010419989005,
+          "usage": {
+            "input_tokens": 19650,
+            "input_tokens_details": {
+              "cached_tokens": 0,
+              "cache_write_tokens": 19647
+            },
+            "output_tokens": 418,
+            "output_tokens_details": {
+              "reasoning_tokens": 58
+            },
+            "total_tokens": 20068
+          },
+          "estimated_cost_usd": 0.005413950000000001,
+          "response_model": "gpt-5.6-luna",
+          "patch": {
+            "filter_entity": true,
+            "time_aware": true
+          },
+          "feedback": {
+            "id": "agent-01",
+            "config": {
+              "min_confidence": 0.7,
+              "filter_entity": true,
+              "time_aware": true,
+              "deduplicate": false,
+              "top_k": 3
+            },
+            "metrics": {
+              "task_success": 0.95,
+              "useful_write_precision": 1.0,
+              "useful_write_recall": 0.9736842105263158,
+              "unnecessary_write_rate": 0.0,
+              "relevant_memory_recall": 0.9523809523809523,
+              "distracting_memory_rate": 0.047619047619047616,
+              "stale_fact_rate": 0.0,
+              "update_correctness": 1.0,
+              "context_words": 2.3333333333333335,
+              "storage_records": 1.7,
+              "storage_bytes": 416.35,
+              "latency_p50_ms": 0.045792,
+              "latency_p95_ms": 0.301917,
+              "provider_cost_usd": 0,
+              "model_tokens": 0,
+              "success_repeat_stddev": null
+            },
+            "hard_constraints": {
+              "owner_isolation": {
+                "passed": true,
+                "checks": 28,
+                "violations": 0
+              },
+              "deletion": {
+                "passed": true,
+                "checks": 11,
+                "violations": 0
+              },
+              "prohibited_writes": {
+                "passed": true,
+                "checks": 2,
+                "violations": 0
+              }
+            },
+            "recommendation": {
+              "status": "recommend_accept",
+              "rationale": "Higher downstream success on these public checks, with no hard-constraint violation. Human review is still required."
+            }
+          },
+          "selected_for_next_iteration": true
+        },
+        {
+          "iteration": 2,
+          "parent_id": "agent-01",
+          "status": "invalid_proposal",
+          "path": "campaign-01/iteration-02",
+          "reserved_usd": 0.0115067,
+          "latency_seconds": 3.925363458984066,
+          "usage": {
+            "input_tokens": 6834,
+            "input_tokens_details": {
+              "cached_tokens": 0,
+              "cache_write_tokens": 6831
+            },
+            "output_tokens": 341,
+            "output_tokens_details": {
+              "reasoning_tokens": 83
+            },
+            "total_tokens": 7175
+          },
+          "estimated_cost_usd": 0.00211755,
+          "response_model": "gpt-5.6-luna",
+          "reason": "Observation must cite an event supplied in this request"
+        },
+        {
+          "iteration": 3,
+          "parent_id": "agent-01",
+          "status": "evaluated",
+          "path": "campaign-01/iteration-03",
+          "reserved_usd": 0.011530700000000001,
+          "latency_seconds": 4.383711749978829,
+          "usage": {
+            "input_tokens": 6856,
+            "input_tokens_details": {
+              "cached_tokens": 0,
+              "cache_write_tokens": 6853
+            },
+            "output_tokens": 296,
+            "output_tokens_details": {
+              "reasoning_tokens": 61
+            },
+            "total_tokens": 7152
+          },
+          "estimated_cost_usd": 0.0020690500000000002,
+          "response_model": "gpt-5.6-luna",
+          "patch": {
+            "deduplicate": true
+          },
+          "feedback": {
+            "id": "agent-03",
+            "config": {
+              "min_confidence": 0.7,
+              "filter_entity": true,
+              "time_aware": true,
+              "deduplicate": true,
+              "top_k": 3
+            },
+            "metrics": {
+              "task_success": 0.95,
+              "useful_write_precision": 1.0,
+              "useful_write_recall": 0.9736842105263158,
+              "unnecessary_write_rate": 0.0,
+              "relevant_memory_recall": 0.9523809523809523,
+              "distracting_memory_rate": 0.047619047619047616,
+              "stale_fact_rate": 0.0,
+              "update_correctness": 1.0,
+              "context_words": 2.3333333333333335,
+              "storage_records": 1.6,
+              "storage_bytes": 390.45,
+              "latency_p50_ms": 0.055583,
+              "latency_p95_ms": 0.268541,
+              "provider_cost_usd": 0,
+              "model_tokens": 0,
+              "success_repeat_stddev": null
+            },
+            "hard_constraints": {
+              "owner_isolation": {
+                "passed": true,
+                "checks": 28,
+                "violations": 0
+              },
+              "deletion": {
+                "passed": true,
+                "checks": 11,
+                "violations": 0
+              },
+              "prohibited_writes": {
+                "passed": true,
+                "checks": 2,
+                "violations": 0
+              }
+            },
+            "recommendation": {
+              "status": "recommend_accept",
+              "rationale": "Downstream success is unchanged; duplicate removal lowers stored rows on these fixtures. This is an efficiency recommendation, not a quality gain."
+            }
+          },
+          "selected_for_next_iteration": true
+        },
+        {
+          "iteration": 4,
+          "parent_id": "agent-03",
+          "status": "evaluated",
+          "path": "campaign-01/iteration-04",
+          "reserved_usd": 0.0120017,
+          "latency_seconds": 5.263726582983509,
+          "usage": {
+            "input_tokens": 7305,
+            "input_tokens_details": {
+              "cached_tokens": 0,
+              "cache_write_tokens": 7302
+            },
+            "output_tokens": 434,
+            "output_tokens_details": {
+              "reasoning_tokens": 118
+            },
+            "total_tokens": 7739
+          },
+          "estimated_cost_usd": 0.0023468999999999994,
+          "response_model": "gpt-5.6-luna",
+          "patch": {
+            "min_confidence": 0.6
+          },
+          "feedback": {
+            "id": "agent-04",
+            "config": {
+              "min_confidence": 0.6,
+              "filter_entity": true,
+              "time_aware": true,
+              "deduplicate": true,
+              "top_k": 3
+            },
+            "metrics": {
+              "task_success": 1.0,
+              "useful_write_precision": 1.0,
+              "useful_write_recall": 1.0,
+              "unnecessary_write_rate": 0.0,
+              "relevant_memory_recall": 1.0,
+              "distracting_memory_rate": 0.045454545454545456,
+              "stale_fact_rate": 0.0,
+              "update_correctness": 1.0,
+              "context_words": 2.4444444444444446,
+              "storage_records": 1.65,
+              "storage_bytes": 403.05,
+              "latency_p50_ms": 0.053292,
+              "latency_p95_ms": 0.203125,
+              "provider_cost_usd": 0,
+              "model_tokens": 0,
+              "success_repeat_stddev": null
+            },
+            "hard_constraints": {
+              "owner_isolation": {
+                "passed": true,
+                "checks": 28,
+                "violations": 0
+              },
+              "deletion": {
+                "passed": true,
+                "checks": 11,
+                "violations": 0
+              },
+              "prohibited_writes": {
+                "passed": true,
+                "checks": 2,
+                "violations": 0
+              }
+            },
+            "recommendation": {
+              "status": "recommend_accept",
+              "rationale": "Higher downstream success on these public checks, with no hard-constraint violation. Human review is still required."
+            }
+          },
+          "selected_for_next_iteration": true
+        }
+      ],
+      "baseline": {
+        "id": "baseline",
+        "config": {
+          "min_confidence": 0.7,
+          "filter_entity": false,
+          "time_aware": false,
+          "deduplicate": false,
+          "top_k": 3
+        },
+        "metrics": {
+          "task_success": 0.65,
+          "useful_write_precision": 1.0,
+          "useful_write_recall": 0.9736842105263158,
+          "unnecessary_write_rate": 0.0,
+          "relevant_memory_recall": 0.9047619047619048,
+          "distracting_memory_rate": 0.4864864864864865,
+          "stale_fact_rate": 0.14814814814814814,
+          "update_correctness": 1.0,
+          "context_words": 4.111111111111111,
+          "storage_records": 1.7,
+          "storage_bytes": 416.35,
+          "latency_p50_ms": 0.046792,
+          "latency_p95_ms": 0.207458,
+          "provider_cost_usd": 0,
+          "model_tokens": 0,
+          "success_repeat_stddev": null
+        },
+        "hard_constraints": {
+          "owner_isolation": {
+            "passed": true,
+            "checks": 28,
+            "violations": 0
+          },
+          "deletion": {
+            "passed": true,
+            "checks": 11,
+            "violations": 0
+          },
+          "prohibited_writes": {
+            "passed": true,
+            "checks": 2,
+            "violations": 0
+          }
+        },
+        "recommendation": {
+          "status": "retain_baseline",
+          "rationale": "Frozen comparator; remaining failures are recorded."
+        }
+      },
+      "scenario_executions": 80,
+      "selected": {
+        "id": "agent-04",
+        "config": {
+          "min_confidence": 0.6,
+          "filter_entity": true,
+          "time_aware": true,
+          "deduplicate": true,
+          "top_k": 3
+        },
+        "metrics": {
+          "task_success": 1.0,
+          "useful_write_precision": 1.0,
+          "useful_write_recall": 1.0,
+          "unnecessary_write_rate": 0.0,
+          "relevant_memory_recall": 1.0,
+          "distracting_memory_rate": 0.045454545454545456,
+          "stale_fact_rate": 0.0,
+          "update_correctness": 1.0,
+          "context_words": 2.4444444444444446,
+          "storage_records": 1.65,
+          "storage_bytes": 403.05,
+          "latency_p50_ms": 0.053292,
+          "latency_p95_ms": 0.203125,
+          "provider_cost_usd": 0,
+          "model_tokens": 0,
+          "success_repeat_stddev": null
+        },
+        "hard_constraints": {
+          "owner_isolation": {
+            "passed": true,
+            "checks": 28,
+            "violations": 0
+          },
+          "deletion": {
+            "passed": true,
+            "checks": 11,
+            "violations": 0
+          },
+          "prohibited_writes": {
+            "passed": true,
+            "checks": 2,
+            "violations": 0
+          }
+        },
+        "recommendation": {
+          "status": "recommend_accept",
+          "rationale": "Higher downstream success on these public checks, with no hard-constraint violation. Human review is still required."
+        }
+      },
+      "final_release": "campaign-01/iteration-04/evaluation"
+    },
+    {
+      "id": "campaign-02",
+      "status": "iteration_limit",
+      "iterations": [
+        {
+          "iteration": 1,
+          "parent_id": "baseline",
+          "status": "evaluated",
+          "path": "campaign-02/iteration-01",
+          "reserved_usd": 0.0217762,
+          "latency_seconds": 5.131128917040769,
+          "usage": {
+            "input_tokens": 19650,
+            "input_tokens_details": {
+              "cached_tokens": 0,
+              "cache_write_tokens": 19647
+            },
+            "output_tokens": 447,
+            "output_tokens_details": {
+              "reasoning_tokens": 90
+            },
+            "total_tokens": 20097
+          },
+          "estimated_cost_usd": 0.00544875,
+          "response_model": "gpt-5.6-luna",
+          "patch": {
+            "filter_entity": true,
+            "time_aware": true
+          },
+          "feedback": {
+            "id": "agent-01",
+            "config": {
+              "min_confidence": 0.7,
+              "filter_entity": true,
+              "time_aware": true,
+              "deduplicate": false,
+              "top_k": 3
+            },
+            "metrics": {
+              "task_success": 0.95,
+              "useful_write_precision": 1.0,
+              "useful_write_recall": 0.9736842105263158,
+              "unnecessary_write_rate": 0.0,
+              "relevant_memory_recall": 0.9523809523809523,
+              "distracting_memory_rate": 0.047619047619047616,
+              "stale_fact_rate": 0.0,
+              "update_correctness": 1.0,
+              "context_words": 2.3333333333333335,
+              "storage_records": 1.7,
+              "storage_bytes": 416.35,
+              "latency_p50_ms": 0.060125,
+              "latency_p95_ms": 0.248625,
+              "provider_cost_usd": 0,
+              "model_tokens": 0,
+              "success_repeat_stddev": null
+            },
+            "hard_constraints": {
+              "owner_isolation": {
+                "passed": true,
+                "checks": 28,
+                "violations": 0
+              },
+              "deletion": {
+                "passed": true,
+                "checks": 11,
+                "violations": 0
+              },
+              "prohibited_writes": {
+                "passed": true,
+                "checks": 2,
+                "violations": 0
+              }
+            },
+            "recommendation": {
+              "status": "recommend_accept",
+              "rationale": "Higher downstream success on these public checks, with no hard-constraint violation. Human review is still required."
+            }
+          },
+          "selected_for_next_iteration": true
+        },
+        {
+          "iteration": 2,
+          "parent_id": "agent-01",
+          "status": "invalid_proposal",
+          "path": "campaign-02/iteration-02",
+          "reserved_usd": 0.011507950000000001,
+          "latency_seconds": 4.043617416988127,
+          "usage": {
+            "input_tokens": 6831,
+            "input_tokens_details": {
+              "cached_tokens": 0,
+              "cache_write_tokens": 6828
+            },
+            "output_tokens": 305,
+            "output_tokens_details": {
+              "reasoning_tokens": 57
+            },
+            "total_tokens": 7136
+          },
+          "estimated_cost_usd": 0.0020736000000000005,
+          "response_model": "gpt-5.6-luna",
+          "reason": "Observation must cite an event supplied in this request"
+        },
+        {
+          "iteration": 3,
+          "parent_id": "agent-01",
+          "status": "evaluated",
+          "path": "campaign-02/iteration-03",
+          "reserved_usd": 0.011531950000000001,
+          "latency_seconds": 3.6899454580270685,
+          "usage": {
+            "input_tokens": 6853,
+            "input_tokens_details": {
+              "cached_tokens": 0,
+              "cache_write_tokens": 6850
+            },
+            "output_tokens": 305,
+            "output_tokens_details": {
+              "reasoning_tokens": 99
+            },
+            "total_tokens": 7158
+          },
+          "estimated_cost_usd": 0.0020791000000000004,
+          "response_model": "gpt-5.6-luna",
+          "patch": {
+            "deduplicate": true
+          },
+          "feedback": {
+            "id": "agent-03",
+            "config": {
+              "min_confidence": 0.7,
+              "filter_entity": true,
+              "time_aware": true,
+              "deduplicate": true,
+              "top_k": 3
+            },
+            "metrics": {
+              "task_success": 0.95,
+              "useful_write_precision": 1.0,
+              "useful_write_recall": 0.9736842105263158,
+              "unnecessary_write_rate": 0.0,
+              "relevant_memory_recall": 0.9523809523809523,
+              "distracting_memory_rate": 0.047619047619047616,
+              "stale_fact_rate": 0.0,
+              "update_correctness": 1.0,
+              "context_words": 2.3333333333333335,
+              "storage_records": 1.6,
+              "storage_bytes": 390.45,
+              "latency_p50_ms": 0.058125,
+              "latency_p95_ms": 0.223417,
+              "provider_cost_usd": 0,
+              "model_tokens": 0,
+              "success_repeat_stddev": null
+            },
+            "hard_constraints": {
+              "owner_isolation": {
+                "passed": true,
+                "checks": 28,
+                "violations": 0
+              },
+              "deletion": {
+                "passed": true,
+                "checks": 11,
+                "violations": 0
+              },
+              "prohibited_writes": {
+                "passed": true,
+                "checks": 2,
+                "violations": 0
+              }
+            },
+            "recommendation": {
+              "status": "recommend_accept",
+              "rationale": "Downstream success is unchanged; duplicate removal lowers stored rows on these fixtures. This is an efficiency recommendation, not a quality gain."
+            }
+          },
+          "selected_for_next_iteration": true
+        },
+        {
+          "iteration": 4,
+          "parent_id": "agent-03",
+          "status": "evaluated",
+          "path": "campaign-02/iteration-04",
+          "reserved_usd": 0.01197595,
+          "latency_seconds": 5.513084083038848,
+          "usage": {
+            "input_tokens": 7273,
+            "input_tokens_details": {
+              "cached_tokens": 0,
+              "cache_write_tokens": 7270
+            },
+            "output_tokens": 392,
+            "output_tokens_details": {
+              "reasoning_tokens": 116
+            },
+            "total_tokens": 7665
+          },
+          "estimated_cost_usd": 0.0022885,
+          "response_model": "gpt-5.6-luna",
+          "patch": {
+            "min_confidence": 0.6
+          },
+          "feedback": {
+            "id": "agent-04",
+            "config": {
+              "min_confidence": 0.6,
+              "filter_entity": true,
+              "time_aware": true,
+              "deduplicate": true,
+              "top_k": 3
+            },
+            "metrics": {
+              "task_success": 1.0,
+              "useful_write_precision": 1.0,
+              "useful_write_recall": 1.0,
+              "unnecessary_write_rate": 0.0,
+              "relevant_memory_recall": 1.0,
+              "distracting_memory_rate": 0.045454545454545456,
+              "stale_fact_rate": 0.0,
+              "update_correctness": 1.0,
+              "context_words": 2.4444444444444446,
+              "storage_records": 1.65,
+              "storage_bytes": 403.05,
+              "latency_p50_ms": 0.054709,
+              "latency_p95_ms": 0.198125,
+              "provider_cost_usd": 0,
+              "model_tokens": 0,
+              "success_repeat_stddev": null
+            },
+            "hard_constraints": {
+              "owner_isolation": {
+                "passed": true,
+                "checks": 28,
+                "violations": 0
+              },
+              "deletion": {
+                "passed": true,
+                "checks": 11,
+                "violations": 0
+              },
+              "prohibited_writes": {
+                "passed": true,
+                "checks": 2,
+                "violations": 0
+              }
+            },
+            "recommendation": {
+              "status": "recommend_accept",
+              "rationale": "Higher downstream success on these public checks, with no hard-constraint violation. Human review is still required."
+            }
+          },
+          "selected_for_next_iteration": true
+        }
+      ],
+      "baseline": {
+        "id": "baseline",
+        "config": {
+          "min_confidence": 0.7,
+          "filter_entity": false,
+          "time_aware": false,
+          "deduplicate": false,
+          "top_k": 3
+        },
+        "metrics": {
+          "task_success": 0.65,
+          "useful_write_precision": 1.0,
+          "useful_write_recall": 0.9736842105263158,
+          "unnecessary_write_rate": 0.0,
+          "relevant_memory_recall": 0.9047619047619048,
+          "distracting_memory_rate": 0.4864864864864865,
+          "stale_fact_rate": 0.14814814814814814,
+          "update_correctness": 1.0,
+          "context_words": 4.111111111111111,
+          "storage_records": 1.7,
+          "storage_bytes": 416.35,
+          "latency_p50_ms": 0.042833,
+          "latency_p95_ms": 0.1765,
+          "provider_cost_usd": 0,
+          "model_tokens": 0,
+          "success_repeat_stddev": null
+        },
+        "hard_constraints": {
+          "owner_isolation": {
+            "passed": true,
+            "checks": 28,
+            "violations": 0
+          },
+          "deletion": {
+            "passed": true,
+            "checks": 11,
+            "violations": 0
+          },
+          "prohibited_writes": {
+            "passed": true,
+            "checks": 2,
+            "violations": 0
+          }
+        },
+        "recommendation": {
+          "status": "retain_baseline",
+          "rationale": "Frozen comparator; remaining failures are recorded."
+        }
+      },
+      "scenario_executions": 80,
+      "selected": {
+        "id": "agent-04",
+        "config": {
+          "min_confidence": 0.6,
+          "filter_entity": true,
+          "time_aware": true,
+          "deduplicate": true,
+          "top_k": 3
+        },
+        "metrics": {
+          "task_success": 1.0,
+          "useful_write_precision": 1.0,
+          "useful_write_recall": 1.0,
+          "unnecessary_write_rate": 0.0,
+          "relevant_memory_recall": 1.0,
+          "distracting_memory_rate": 0.045454545454545456,
+          "stale_fact_rate": 0.0,
+          "update_correctness": 1.0,
+          "context_words": 2.4444444444444446,
+          "storage_records": 1.65,
+          "storage_bytes": 403.05,
+          "latency_p50_ms": 0.054709,
+          "latency_p95_ms": 0.198125,
+          "provider_cost_usd": 0,
+          "model_tokens": 0,
+          "success_repeat_stddev": null
+        },
+        "hard_constraints": {
+          "owner_isolation": {
+            "passed": true,
+            "checks": 28,
+            "violations": 0
+          },
+          "deletion": {
+            "passed": true,
+            "checks": 11,
+            "violations": 0
+          },
+          "prohibited_writes": {
+            "passed": true,
+            "checks": 2,
+            "violations": 0
+          }
+        },
+        "recommendation": {
+          "status": "recommend_accept",
+          "rationale": "Higher downstream success on these public checks, with no hard-constraint violation. Human review is still required."
+        }
+      },
+      "final_release": "campaign-02/iteration-04/evaluation"
+    },
+    {
+      "id": "campaign-03",
+      "status": "iteration_limit",
+      "iterations": [
+        {
+          "iteration": 1,
+          "parent_id": "baseline",
+          "status": "evaluated",
+          "path": "campaign-03/iteration-01",
+          "reserved_usd": 0.0217762,
+          "latency_seconds": 4.19202633301029,
+          "usage": {
+            "input_tokens": 19650,
+            "input_tokens_details": {
+              "cached_tokens": 0,
+              "cache_write_tokens": 19647
+            },
+            "output_tokens": 392,
+            "output_tokens_details": {
+              "reasoning_tokens": 58
+            },
+            "total_tokens": 20042
+          },
+          "estimated_cost_usd": 0.00538275,
+          "response_model": "gpt-5.6-luna",
+          "patch": {
+            "filter_entity": true,
+            "time_aware": true
+          },
+          "feedback": {
+            "id": "agent-01",
+            "config": {
+              "min_confidence": 0.7,
+              "filter_entity": true,
+              "time_aware": true,
+              "deduplicate": false,
+              "top_k": 3
+            },
+            "metrics": {
+              "task_success": 0.95,
+              "useful_write_precision": 1.0,
+              "useful_write_recall": 0.9736842105263158,
+              "unnecessary_write_rate": 0.0,
+              "relevant_memory_recall": 0.9523809523809523,
+              "distracting_memory_rate": 0.047619047619047616,
+              "stale_fact_rate": 0.0,
+              "update_correctness": 1.0,
+              "context_words": 2.3333333333333335,
+              "storage_records": 1.7,
+              "storage_bytes": 416.35,
+              "latency_p50_ms": 0.059292,
+              "latency_p95_ms": 0.229292,
+              "provider_cost_usd": 0,
+              "model_tokens": 0,
+              "success_repeat_stddev": null
+            },
+            "hard_constraints": {
+              "owner_isolation": {
+                "passed": true,
+                "checks": 28,
+                "violations": 0
+              },
+              "deletion": {
+                "passed": true,
+                "checks": 11,
+                "violations": 0
+              },
+              "prohibited_writes": {
+                "passed": true,
+                "checks": 2,
+                "violations": 0
+              }
+            },
+            "recommendation": {
+              "status": "recommend_accept",
+              "rationale": "Higher downstream success on these public checks, with no hard-constraint violation. Human review is still required."
+            }
+          },
+          "selected_for_next_iteration": true
+        },
+        {
+          "iteration": 2,
+          "parent_id": "agent-01",
+          "status": "evaluated",
+          "path": "campaign-03/iteration-02",
+          "reserved_usd": 0.0114827,
+          "latency_seconds": 4.718214208027348,
+          "usage": {
+            "input_tokens": 6808,
+            "input_tokens_details": {
+              "cached_tokens": 0,
+              "cache_write_tokens": 6805
+            },
+            "output_tokens": 306,
+            "output_tokens_details": {
+              "reasoning_tokens": 76
+            },
+            "total_tokens": 7114
+          },
+          "estimated_cost_usd": 0.0020690500000000002,
+          "response_model": "gpt-5.6-luna",
+          "patch": {
+            "deduplicate": true
+          },
+          "feedback": {
+            "id": "agent-02",
+            "config": {
+              "min_confidence": 0.7,
+              "filter_entity": true,
+              "time_aware": true,
+              "deduplicate": true,
+              "top_k": 3
+            },
+            "metrics": {
+              "task_success": 0.95,
+              "useful_write_precision": 1.0,
+              "useful_write_recall": 0.9736842105263158,
+              "unnecessary_write_rate": 0.0,
+              "relevant_memory_recall": 0.9523809523809523,
+              "distracting_memory_rate": 0.047619047619047616,
+              "stale_fact_rate": 0.0,
+              "update_correctness": 1.0,
+              "context_words": 2.3333333333333335,
+              "storage_records": 1.6,
+              "storage_bytes": 390.45,
+              "latency_p50_ms": 0.053541,
+              "latency_p95_ms": 0.206167,
+              "provider_cost_usd": 0,
+              "model_tokens": 0,
+              "success_repeat_stddev": null
+            },
+            "hard_constraints": {
+              "owner_isolation": {
+                "passed": true,
+                "checks": 28,
+                "violations": 0
+              },
+              "deletion": {
+                "passed": true,
+                "checks": 11,
+                "violations": 0
+              },
+              "prohibited_writes": {
+                "passed": true,
+                "checks": 2,
+                "violations": 0
+              }
+            },
+            "recommendation": {
+              "status": "recommend_accept",
+              "rationale": "Downstream success is unchanged; duplicate removal lowers stored rows on these fixtures. This is an efficiency recommendation, not a quality gain."
+            }
+          },
+          "selected_for_next_iteration": true
+        },
+        {
+          "iteration": 3,
+          "parent_id": "agent-02",
+          "status": "evaluated",
+          "path": "campaign-03/iteration-03",
+          "reserved_usd": 0.01197545,
+          "latency_seconds": 5.232242917001713,
+          "usage": {
+            "input_tokens": 7259,
+            "input_tokens_details": {
+              "cached_tokens": 0,
+              "cache_write_tokens": 7256
+            },
+            "output_tokens": 424,
+            "output_tokens_details": {
+              "reasoning_tokens": 119
+            },
+            "total_tokens": 7683
+          },
+          "estimated_cost_usd": 0.0023234,
+          "response_model": "gpt-5.6-luna",
+          "patch": {
+            "min_confidence": 0.6
+          },
+          "feedback": {
+            "id": "agent-03",
+            "config": {
+              "min_confidence": 0.6,
+              "filter_entity": true,
+              "time_aware": true,
+              "deduplicate": true,
+              "top_k": 3
+            },
+            "metrics": {
+              "task_success": 1.0,
+              "useful_write_precision": 1.0,
+              "useful_write_recall": 1.0,
+              "unnecessary_write_rate": 0.0,
+              "relevant_memory_recall": 1.0,
+              "distracting_memory_rate": 0.045454545454545456,
+              "stale_fact_rate": 0.0,
+              "update_correctness": 1.0,
+              "context_words": 2.4444444444444446,
+              "storage_records": 1.65,
+              "storage_bytes": 403.05,
+              "latency_p50_ms": 0.05475,
+              "latency_p95_ms": 0.215583,
+              "provider_cost_usd": 0,
+              "model_tokens": 0,
+              "success_repeat_stddev": null
+            },
+            "hard_constraints": {
+              "owner_isolation": {
+                "passed": true,
+                "checks": 28,
+                "violations": 0
+              },
+              "deletion": {
+                "passed": true,
+                "checks": 11,
+                "violations": 0
+              },
+              "prohibited_writes": {
+                "passed": true,
+                "checks": 2,
+                "violations": 0
+              }
+            },
+            "recommendation": {
+              "status": "recommend_accept",
+              "rationale": "Higher downstream success on these public checks, with no hard-constraint violation. Human review is still required."
+            }
+          },
+          "selected_for_next_iteration": true
+        },
+        {
+          "iteration": 4,
+          "parent_id": "agent-03",
+          "status": "invalid_proposal",
+          "path": "campaign-03/iteration-04",
+          "reserved_usd": 0.012609700000000001,
+          "latency_seconds": 4.5606762079987675,
+          "usage": {
+            "input_tokens": 7951,
+            "input_tokens_details": {
+              "cached_tokens": 0,
+              "cache_write_tokens": 7948
+            },
+            "output_tokens": 369,
+            "output_tokens_details": {
+              "reasoning_tokens": 116
+            },
+            "total_tokens": 8320
+          },
+          "estimated_cost_usd": 0.0024304,
+          "response_model": "gpt-5.6-luna",
+          "reason": "Observation must cite an event supplied in this request"
+        }
+      ],
+      "baseline": {
+        "id": "baseline",
+        "config": {
+          "min_confidence": 0.7,
+          "filter_entity": false,
+          "time_aware": false,
+          "deduplicate": false,
+          "top_k": 3
+        },
+        "metrics": {
+          "task_success": 0.65,
+          "useful_write_precision": 1.0,
+          "useful_write_recall": 0.9736842105263158,
+          "unnecessary_write_rate": 0.0,
+          "relevant_memory_recall": 0.9047619047619048,
+          "distracting_memory_rate": 0.4864864864864865,
+          "stale_fact_rate": 0.14814814814814814,
+          "update_correctness": 1.0,
+          "context_words": 4.111111111111111,
+          "storage_records": 1.7,
+          "storage_bytes": 416.35,
+          "latency_p50_ms": 0.042292,
+          "latency_p95_ms": 0.2025,
+          "provider_cost_usd": 0,
+          "model_tokens": 0,
+          "success_repeat_stddev": null
+        },
+        "hard_constraints": {
+          "owner_isolation": {
+            "passed": true,
+            "checks": 28,
+            "violations": 0
+          },
+          "deletion": {
+            "passed": true,
+            "checks": 11,
+            "violations": 0
+          },
+          "prohibited_writes": {
+            "passed": true,
+            "checks": 2,
+            "violations": 0
+          }
+        },
+        "recommendation": {
+          "status": "retain_baseline",
+          "rationale": "Frozen comparator; remaining failures are recorded."
+        }
+      },
+      "scenario_executions": 80,
+      "selected": {
+        "id": "agent-03",
+        "config": {
+          "min_confidence": 0.6,
+          "filter_entity": true,
+          "time_aware": true,
+          "deduplicate": true,
+          "top_k": 3
+        },
+        "metrics": {
+          "task_success": 1.0,
+          "useful_write_precision": 1.0,
+          "useful_write_recall": 1.0,
+          "unnecessary_write_rate": 0.0,
+          "relevant_memory_recall": 1.0,
+          "distracting_memory_rate": 0.045454545454545456,
+          "stale_fact_rate": 0.0,
+          "update_correctness": 1.0,
+          "context_words": 2.4444444444444446,
+          "storage_records": 1.65,
+          "storage_bytes": 403.05,
+          "latency_p50_ms": 0.05475,
+          "latency_p95_ms": 0.215583,
+          "provider_cost_usd": 0,
+          "model_tokens": 0,
+          "success_repeat_stddev": null
+        },
+        "hard_constraints": {
+          "owner_isolation": {
+            "passed": true,
+            "checks": 28,
+            "violations": 0
+          },
+          "deletion": {
+            "passed": true,
+            "checks": 11,
+            "violations": 0
+          },
+          "prohibited_writes": {
+            "passed": true,
+            "checks": 2,
+            "violations": 0
+          }
+        },
+        "recommendation": {
+          "status": "recommend_accept",
+          "rationale": "Higher downstream success on these public checks, with no hard-constraint violation. Human review is still required."
+        }
+      },
+      "final_release": "campaign-03/iteration-03/evaluation"
+    }
+  ],
+  "exposure": "Public development stories; no hidden evaluation set.",
+  "review": "Experiment selection only; every deployment decision remains pending human review."
+}

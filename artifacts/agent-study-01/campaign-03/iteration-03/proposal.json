@@ -1,0 +1,29 @@
+{
+  "observations": [
+    {
+      "scenario_id": "useful-low-confidence",
+      "step": 1,
+      "observation": "The useful Portuguese fact scored 0.6 but was rejected because the current min_confidence is 0.7; the subsequent query returned null instead of Portuguese."
+    },
+    {
+      "scenario_id": "clean-abstention",
+      "step": 1,
+      "observation": "A clearly unnecessary color fact scored 0.3 and was correctly rejected, providing evidence that lowering the threshold to 0.6 need not admit this low-confidence write."
+    },
+    {
+      "scenario_id": "uncertain-conflict",
+      "step": 2,
+      "observation": "An undesirable conflicting delivery fact scored 0.4 and was rejected at the current threshold; a 0.6 threshold would continue rejecting it."
+    }
+  ],
+  "hypothesis": "Lowering min_confidence from 0.7 to 0.6 will admit the demonstrated useful low-confidence fact while preserving abstention for the 0.3 and 0.4 cases, improving complete-scenario success without changing retrieval isolation or deduplication behavior.",
+  "predicted_effect": "The useful-low-confidence scenario should answer Portuguese rather than null. Clean abstention and uncertain-conflict should remain unchanged, with no expected hard-constraint impact; storage may increase only for genuinely admitted 0.6-scored facts.",
+  "action": "propose",
+  "patch": {
+    "min_confidence": 0.6,
+    "filter_entity": null,
+    "time_aware": null,
+    "deduplicate": null,
+    "top_k": null
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "observations": [
+    {
+      "scenario_id": "useful-low-confidence",
+      "step": 1,
+      "observation": "The useful Portuguese fact scored 0.6 but was abstained because the current min_confidence is 0.7, causing a missing memory."
+    },
+    {
+      "scenario_id": "useful-low-confidence",
+      "step": 2,
+      "observation": "The subsequent query returned null instead of the expected Portuguese because the fact was not stored."
+    },
+    {
+      "scenario_id": "clean-abstention",
+      "step": 1,
+      "observation": "A clearly unwanted orange fact scored 0.3 and was correctly abstained at the current threshold, providing evidence that lowering the threshold only to 0.6 preserves this abstention."
+    }
+  ],
+  "hypothesis": "Lowering min_confidence from 0.7 to 0.6 will admit the useful Portuguese fact while continuing to reject the 0.3-confidence unwanted fact, improving complete-scenario success without changing retrieval isolation or filtering.",
+  "predicted_effect": "The useful-low-confidence scenario should return Portuguese instead of null. Clean abstention should remain unchanged, with no expected hard-constraint impact; storage may increase only for the newly admitted useful fact.",
+  "action": "propose",
+  "patch": {
+    "min_confidence": 0.6,
+    "filter_entity": null,
+    "time_aware": null,
+    "deduplicate": null,
+    "top_k": null
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "iteration": 4,
+  "parent_id": "agent-03",
+  "status": "agent_stopped",
+  "path": "campaign-01/iteration-04",
+  "reserved_usd": 0.01249945,
+  "latency_seconds": 5.332876707951073,
+  "usage": {
+    "input_tokens": 7860,
+    "input_tokens_details": {
+      "cached_tokens": 0,
+      "cache_write_tokens": 7857
+    },
+    "output_tokens": 297,
+    "output_tokens_details": {
+      "reasoning_tokens": 93
+    },
+    "total_tokens": 8157
+  },
+  "estimated_cost_usd": 0.00232125,
+  "response_model": "gpt-5.6-luna",
+  "reason": "The current configuration already achieves complete-scenario success on the tested public cases while deduplication reduces redundant storage; the supplied evidence does not support a further bounded change without risking recall or write behavior."
+}

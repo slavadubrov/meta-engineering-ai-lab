@@ -1,0 +1,500 @@
+{
+  "baseline": {
+    "metrics": {
+      "task_success": 0.65,
+      "useful_write_precision": 1.0,
+      "useful_write_recall": 0.9736842105263158,
+      "unnecessary_write_rate": 0.0,
+      "relevant_memory_recall": 0.9047619047619048,
+      "distracting_memory_rate": 0.4864864864864865,
+      "stale_fact_rate": 0.14814814814814814,
+      "update_correctness": 1.0,
+      "context_words": 4.111111111111111,
+      "storage_records": 1.7,
+      "storage_bytes": 416.35,
+      "latency_p50_ms": 0.058166,
+      "latency_p95_ms": 0.417459,
+      "provider_cost_usd": 0,
+      "model_tokens": 0,
+      "success_repeat_stddev": null
+    },
+    "counts": {
+      "tasks": 20,
+      "useful_proposals": 38,
+      "retained": 37,
+      "useful_retained": 37,
+      "queries": 27,
+      "context_words": 111,
+      "retrieved": 37,
+      "fact_queries": 21,
+      "recalled": 19,
+      "successes": 13,
+      "storage_records": 34,
+      "storage_bytes": 8327,
+      "unnecessary_proposals": 7,
+      "distractors": 18,
+      "update_queries": 1,
+      "correct_updates": 1,
+      "stale_answers": 4
+    },
+    "repeat_count": 1,
+    "task_count": 20,
+    "hard_constraints": {
+      "owner_isolation": {
+        "passed": true,
+        "checks": 28,
+        "violations": 0
+      },
+      "deletion": {
+        "passed": true,
+        "checks": 11,
+        "violations": 0
+      },
+      "prohibited_writes": {
+        "passed": true,
+        "checks": 2,
+        "violations": 0
+      }
+    },
+    "role_metrics": {
+      "search": {
+        "task_success": 0.6666666666666666,
+        "useful_write_precision": 1.0,
+        "useful_write_recall": 1.0,
+        "unnecessary_write_rate": 0.0,
+        "relevant_memory_recall": 1.0,
+        "distracting_memory_rate": 0.3333333333333333,
+        "stale_fact_rate": 0.16666666666666666,
+        "update_correctness": 1.0,
+        "context_words": 4.5,
+        "storage_records": 1.5,
+        "storage_bytes": 364.8333333333333,
+        "latency_p50_ms": 0.065667,
+        "latency_p95_ms": 0.212459,
+        "provider_cost_usd": 0,
+        "model_tokens": 0,
+        "success_repeat_stddev": null
+      },
+      "evaluation": {
+        "task_success": 0.42857142857142855,
+        "useful_write_precision": 1.0,
+        "useful_write_recall": 0.9411764705882353,
+        "unnecessary_write_rate": 0.0,
+        "relevant_memory_recall": 0.75,
+        "distracting_memory_rate": 0.6,
+        "stale_fact_rate": 0.2222222222222222,
+        "update_correctness": null,
+        "context_words": 5.0,
+        "storage_records": 2.2857142857142856,
+        "storage_bytes": 565.7142857142857,
+        "latency_p50_ms": 0.06,
+        "latency_p95_ms": 0.421541,
+        "provider_cost_usd": 0,
+        "model_tokens": 0,
+        "success_repeat_stddev": null
+      },
+      "adversarial": {
+        "task_success": 0.8571428571428571,
+        "useful_write_precision": 1.0,
+        "useful_write_recall": 1.0,
+        "unnecessary_write_rate": 0.0,
+        "relevant_memory_recall": 1.0,
+        "distracting_memory_rate": 0.46153846153846156,
+        "stale_fact_rate": 0.08333333333333333,
+        "update_correctness": null,
+        "context_words": 3.25,
+        "storage_records": 1.2857142857142858,
+        "storage_bytes": 311.14285714285717,
+        "latency_p50_ms": 0.047542,
+        "latency_p95_ms": 0.417459,
+        "provider_cost_usd": 0,
+        "model_tokens": 0,
+        "success_repeat_stddev": null
+      }
+    },
+    "paired": {
+      "parent_id": null,
+      "task_count": 20,
+      "wins": 0,
+      "ties": 20,
+      "losses": 0,
+      "mean_delta": 0,
+      "repeat_deltas": [
+        0
+      ]
+    }
+  },
+  "scoped-history": {
+    "metrics": {
+      "task_success": 0.95,
+      "useful_write_precision": 1.0,
+      "useful_write_recall": 0.9736842105263158,
+      "unnecessary_write_rate": 0.0,
+      "relevant_memory_recall": 0.9523809523809523,
+      "distracting_memory_rate": 0.047619047619047616,
+      "stale_fact_rate": 0.0,
+      "update_correctness": 1.0,
+      "context_words": 2.3333333333333335,
+      "storage_records": 1.7,
+      "storage_bytes": 416.35,
+      "latency_p50_ms": 0.043667,
+      "latency_p95_ms": 0.173167,
+      "provider_cost_usd": 0,
+      "model_tokens": 0,
+      "success_repeat_stddev": null
+    },
+    "counts": {
+      "tasks": 20,
+      "useful_proposals": 38,
+      "retained": 37,
+      "useful_retained": 37,
+      "queries": 27,
+      "context_words": 63,
+      "retrieved": 21,
+      "fact_queries": 21,
+      "recalled": 20,
+      "successes": 19,
+      "storage_records": 34,
+      "storage_bytes": 8327,
+      "unnecessary_proposals": 7,
+      "update_queries": 1,
+      "correct_updates": 1,
+      "distractors": 1
+    },
+    "repeat_count": 1,
+    "task_count": 20,
+    "hard_constraints": {
+      "owner_isolation": {
+        "passed": true,
+        "checks": 28,
+        "violations": 0
+      },
+      "deletion": {
+        "passed": true,
+        "checks": 11,
+        "violations": 0
+      },
+      "prohibited_writes": {
+        "passed": true,
+        "checks": 2,
+        "violations": 0
+      }
+    },
+    "role_metrics": {
+      "search": {
+        "task_success": 1.0,
+        "useful_write_precision": 1.0,
+        "useful_write_recall": 1.0,
+        "unnecessary_write_rate": 0.0,
+        "relevant_memory_recall": 1.0,
+        "distracting_memory_rate": 0.0,
+        "stale_fact_rate": 0.0,
+        "update_correctness": 1.0,
+        "context_words": 3.0,
+        "storage_records": 1.5,
+        "storage_bytes": 364.8333333333333,
+        "latency_p50_ms": 0.039375,
+        "latency_p95_ms": 0.061542,
+        "provider_cost_usd": 0,
+        "model_tokens": 0,
+        "success_repeat_stddev": null
+      },
+      "evaluation": {
+        "task_success": 0.8571428571428571,
+        "useful_write_precision": 1.0,
+        "useful_write_recall": 0.9411764705882353,
+        "unnecessary_write_rate": 0.0,
+        "relevant_memory_recall": 0.875,
+        "distracting_memory_rate": 0.0,
+        "stale_fact_rate": 0.0,
+        "update_correctness": null,
+        "context_words": 2.3333333333333335,
+        "storage_records": 2.2857142857142856,
+        "storage_bytes": 565.7142857142857,
+        "latency_p50_ms": 0.058541,
+        "latency_p95_ms": 0.315709,
+        "provider_cost_usd": 0,
+        "model_tokens": 0,
+        "success_repeat_stddev": null
+      },
+      "adversarial": {
+        "task_success": 1.0,
+        "useful_write_precision": 1.0,
+        "useful_write_recall": 1.0,
+        "unnecessary_write_rate": 0.0,
+        "relevant_memory_recall": 1.0,
+        "distracting_memory_rate": 0.125,
+        "stale_fact_rate": 0.0,
+        "update_correctness": null,
+        "context_words": 2.0,
+        "storage_records": 1.2857142857142858,
+        "storage_bytes": 311.14285714285717,
+        "latency_p50_ms": 0.046708,
+        "latency_p95_ms": 0.173167,
+        "provider_cost_usd": 0,
+        "model_tokens": 0,
+        "success_repeat_stddev": null
+      }
+    },
+    "paired": {
+      "parent_id": "baseline",
+      "task_count": 20,
+      "wins": 6,
+      "ties": 14,
+      "losses": 0,
+      "mean_delta": 0.3,
+      "repeat_deltas": [
+        0.3
+      ]
+    }
+  },
+  "deduplicated": {
+    "metrics": {
+      "task_success": 0.95,
+      "useful_write_precision": 1.0,
+      "useful_write_recall": 0.9736842105263158,
+      "unnecessary_write_rate": 0.0,
+      "relevant_memory_recall": 0.9523809523809523,
+      "distracting_memory_rate": 0.047619047619047616,
+      "stale_fact_rate": 0.0,
+      "update_correctness": 1.0,
+      "context_words": 2.3333333333333335,
+      "storage_records": 1.6,
+      "storage_bytes": 390.45,
+      "latency_p50_ms": 0.044834,
+      "latency_p95_ms": 0.178416,
+      "provider_cost_usd": 0,
+      "model_tokens": 0,
+      "success_repeat_stddev": null
+    },
+    "counts": {
+      "tasks": 20,
+      "useful_proposals": 38,
+      "retained": 37,
+      "useful_retained": 37,
+      "queries": 27,
+      "context_words": 63,
+      "retrieved": 21,
+      "fact_queries": 21,
+      "recalled": 20,
+      "successes": 19,
+      "storage_records": 32,
+      "storage_bytes": 7809,
+      "unnecessary_proposals": 7,
+      "update_queries": 1,
+      "correct_updates": 1,
+      "distractors": 1
+    },
+    "repeat_count": 1,
+    "task_count": 20,
+    "hard_constraints": {
+      "owner_isolation": {
+        "passed": true,
+        "checks": 28,
+        "violations": 0
+      },
+      "deletion": {
+        "passed": true,
+        "checks": 11,
+        "violations": 0
+      },
+      "prohibited_writes": {
+        "passed": true,
+        "checks": 2,
+        "violations": 0
+      }
+    },
+    "role_metrics": {
+      "search": {
+        "task_success": 1.0,
+        "useful_write_precision": 1.0,
+        "useful_write_recall": 1.0,
+        "unnecessary_write_rate": 0.0,
+        "relevant_memory_recall": 1.0,
+        "distracting_memory_rate": 0.0,
+        "stale_fact_rate": 0.0,
+        "update_correctness": 1.0,
+        "context_words": 3.0,
+        "storage_records": 1.5,
+        "storage_bytes": 364.8333333333333,
+        "latency_p50_ms": 0.036792,
+        "latency_p95_ms": 0.059542,
+        "provider_cost_usd": 0,
+        "model_tokens": 0,
+        "success_repeat_stddev": null
+      },
+      "evaluation": {
+        "task_success": 0.8571428571428571,
+        "useful_write_precision": 1.0,
+        "useful_write_recall": 0.9411764705882353,
+        "unnecessary_write_rate": 0.0,
+        "relevant_memory_recall": 0.875,
+        "distracting_memory_rate": 0.0,
+        "stale_fact_rate": 0.0,
+        "update_correctness": null,
+        "context_words": 2.3333333333333335,
+        "storage_records": 2.0,
+        "storage_bytes": 491.7142857142857,
+        "latency_p50_ms": 0.047958,
+        "latency_p95_ms": 0.287375,
+        "provider_cost_usd": 0,
+        "model_tokens": 0,
+        "success_repeat_stddev": null
+      },
+      "adversarial": {
+        "task_success": 1.0,
+        "useful_write_precision": 1.0,
+        "useful_write_recall": 1.0,
+        "unnecessary_write_rate": 0.0,
+        "relevant_memory_recall": 1.0,
+        "distracting_memory_rate": 0.125,
+        "stale_fact_rate": 0.0,
+        "update_correctness": null,
+        "context_words": 2.0,
+        "storage_records": 1.2857142857142858,
+        "storage_bytes": 311.14285714285717,
+        "latency_p50_ms": 0.044834,
+        "latency_p95_ms": 0.178416,
+        "provider_cost_usd": 0,
+        "model_tokens": 0,
+        "success_repeat_stddev": null
+      }
+    },
+    "paired": {
+      "parent_id": "scoped-history",
+      "task_count": 20,
+      "wins": 0,
+      "ties": 20,
+      "losses": 0,
+      "mean_delta": 0,
+      "repeat_deltas": [
+        0
+      ]
+    }
+  },
+  "broad-writes": {
+    "metrics": {
+      "task_success": 0.8,
+      "useful_write_precision": 0.9047619047619048,
+      "useful_write_recall": 1.0,
+      "unnecessary_write_rate": 0.5714285714285714,
+      "relevant_memory_recall": 0.8571428571428571,
+      "distracting_memory_rate": 0.21739130434782608,
+      "stale_fact_rate": 0.0,
+      "update_correctness": 1.0,
+      "context_words": 2.5555555555555554,
+      "storage_records": 1.95,
+      "storage_bytes": 479.05,
+      "latency_p50_ms": 0.046625,
+      "latency_p95_ms": 0.169834,
+      "provider_cost_usd": 0,
+      "model_tokens": 0,
+      "success_repeat_stddev": null
+    },
+    "counts": {
+      "tasks": 20,
+      "useful_proposals": 38,
+      "retained": 42,
+      "useful_retained": 38,
+      "queries": 27,
+      "context_words": 69,
+      "retrieved": 23,
+      "fact_queries": 21,
+      "recalled": 18,
+      "successes": 16,
+      "storage_records": 39,
+      "storage_bytes": 9581,
+      "unnecessary_proposals": 7,
+      "unnecessary_retained": 4,
+      "distractors": 5,
+      "update_queries": 1,
+      "correct_updates": 1
+    },
+    "repeat_count": 1,
+    "task_count": 20,
+    "hard_constraints": {
+      "owner_isolation": {
+        "passed": true,
+        "checks": 28,
+        "violations": 0
+      },
+      "deletion": {
+        "passed": true,
+        "checks": 11,
+        "violations": 0
+      },
+      "prohibited_writes": {
+        "passed": true,
+        "checks": 2,
+        "violations": 0
+      }
+    },
+    "role_metrics": {
+      "search": {
+        "task_success": 0.6666666666666666,
+        "useful_write_precision": 0.8181818181818182,
+        "useful_write_recall": 1.0,
+        "unnecessary_write_rate": 1.0,
+        "relevant_memory_recall": 0.6666666666666666,
+        "distracting_memory_rate": 0.3333333333333333,
+        "stale_fact_rate": 0.0,
+        "update_correctness": 1.0,
+        "context_words": 3.0,
+        "storage_records": 1.8333333333333333,
+        "storage_bytes": 448.6666666666667,
+        "latency_p50_ms": 0.045292,
+        "latency_p95_ms": 0.057375,
+        "provider_cost_usd": 0,
+        "model_tokens": 0,
+        "success_repeat_stddev": null
+      },
+      "evaluation": {
+        "task_success": 0.7142857142857143,
+        "useful_write_precision": 0.8947368421052632,
+        "useful_write_recall": 1.0,
+        "unnecessary_write_rate": 1.0,
+        "relevant_memory_recall": 0.875,
+        "distracting_memory_rate": 0.2222222222222222,
+        "stale_fact_rate": 0.0,
+        "update_correctness": null,
+        "context_words": 3.0,
+        "storage_records": 2.7142857142857144,
+        "storage_bytes": 673.0,
+        "latency_p50_ms": 0.065209,
+        "latency_p95_ms": 0.293375,
+        "provider_cost_usd": 0,
+        "model_tokens": 0,
+        "success_repeat_stddev": null
+      },
+      "adversarial": {
+        "task_success": 1.0,
+        "useful_write_precision": 1.0,
+        "useful_write_recall": 1.0,
+        "unnecessary_write_rate": 0.0,
+        "relevant_memory_recall": 1.0,
+        "distracting_memory_rate": 0.125,
+        "stale_fact_rate": 0.0,
+        "update_correctness": null,
+        "context_words": 2.0,
+        "storage_records": 1.2857142857142858,
+        "storage_bytes": 311.14285714285717,
+        "latency_p50_ms": 0.046625,
+        "latency_p95_ms": 0.169834,
+        "provider_cost_usd": 0,
+        "model_tokens": 0,
+        "success_repeat_stddev": null
+      }
+    },
+    "paired": {
+      "parent_id": "scoped-history",
+      "task_count": 20,
+      "wins": 1,
+      "ties": 15,
+      "losses": 4,
+      "mean_delta": -0.15,
+      "repeat_deltas": [
+        -0.15
+      ]
+    }
+  }
+}

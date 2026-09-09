@@ -1,0 +1,266 @@
+[
+  {
+    "step": 1,
+    "action": "write",
+    "detail": {
+      "action": "write",
+      "at": "2026-01-01",
+      "tenant": "north",
+      "user": "ada",
+      "should_retain": true,
+      "fact": {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "home",
+        "key": "city",
+        "value": "Berlin",
+        "confidence": 0.95,
+        "valid_from": "2026-01-01",
+        "source": "user",
+        "kind": "fact"
+      },
+      "source_event_id": "entity-grounding:event-1"
+    },
+    "result": {
+      "status": "stored",
+      "reason": "admitted",
+      "retained": true,
+      "record_id": "m001"
+    },
+    "before": [],
+    "after": [
+      {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "home",
+        "key": "city",
+        "value": "Berlin",
+        "valid_from": "2026-01-01",
+        "confidence": 0.95,
+        "source": "user",
+        "id": "m001",
+        "valid_to": null,
+        "observed_at": "2026-01-01",
+        "source_event_id": "entity-grounding:event-1"
+      }
+    ],
+    "state_diff": {
+      "added": [
+        {
+          "tenant": "north",
+          "user": "ada",
+          "entity": "home",
+          "key": "city",
+          "value": "Berlin",
+          "valid_from": "2026-01-01",
+          "confidence": 0.95,
+          "source": "user",
+          "id": "m001",
+          "valid_to": null,
+          "observed_at": "2026-01-01",
+          "source_event_id": "entity-grounding:event-1"
+        }
+      ],
+      "removed": [],
+      "changed": []
+    }
+  },
+  {
+    "step": 2,
+    "action": "write",
+    "detail": {
+      "action": "write",
+      "at": "2026-01-02",
+      "tenant": "north",
+      "user": "ada",
+      "should_retain": true,
+      "fact": {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "work",
+        "key": "city",
+        "value": "Paris",
+        "confidence": 0.95,
+        "valid_from": "2026-01-02",
+        "source": "user",
+        "kind": "fact"
+      },
+      "source_event_id": "entity-grounding:event-2"
+    },
+    "result": {
+      "status": "stored",
+      "reason": "admitted",
+      "retained": true,
+      "record_id": "m002"
+    },
+    "before": [
+      {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "home",
+        "key": "city",
+        "value": "Berlin",
+        "valid_from": "2026-01-01",
+        "confidence": 0.95,
+        "source": "user",
+        "id": "m001",
+        "valid_to": null,
+        "observed_at": "2026-01-01",
+        "source_event_id": "entity-grounding:event-1"
+      }
+    ],
+    "after": [
+      {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "home",
+        "key": "city",
+        "value": "Berlin",
+        "valid_from": "2026-01-01",
+        "confidence": 0.95,
+        "source": "user",
+        "id": "m001",
+        "valid_to": null,
+        "observed_at": "2026-01-01",
+        "source_event_id": "entity-grounding:event-1"
+      },
+      {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "work",
+        "key": "city",
+        "value": "Paris",
+        "valid_from": "2026-01-02",
+        "confidence": 0.95,
+        "source": "user",
+        "id": "m002",
+        "valid_to": null,
+        "observed_at": "2026-01-02",
+        "source_event_id": "entity-grounding:event-2"
+      }
+    ],
+    "state_diff": {
+      "added": [
+        {
+          "tenant": "north",
+          "user": "ada",
+          "entity": "work",
+          "key": "city",
+          "value": "Paris",
+          "valid_from": "2026-01-02",
+          "confidence": 0.95,
+          "source": "user",
+          "id": "m002",
+          "valid_to": null,
+          "observed_at": "2026-01-02",
+          "source_event_id": "entity-grounding:event-2"
+        }
+      ],
+      "removed": [],
+      "changed": []
+    }
+  },
+  {
+    "step": 3,
+    "action": "query",
+    "detail": {
+      "action": "query",
+      "at": "2026-01-03",
+      "tenant": "north",
+      "user": "ada",
+      "entity": "home",
+      "key": "city",
+      "as_of": "2026-01-03",
+      "text": "city",
+      "expected": "Berlin",
+      "source_event_id": "entity-grounding:event-3"
+    },
+    "result": {
+      "answer": "Paris",
+      "answer_record_id": "m002",
+      "retrieved_ids": [
+        "m002",
+        "m001"
+      ],
+      "packed_ids": [
+        "m002",
+        "m001"
+      ],
+      "context_words": 6
+    },
+    "before": [
+      {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "home",
+        "key": "city",
+        "value": "Berlin",
+        "valid_from": "2026-01-01",
+        "confidence": 0.95,
+        "source": "user",
+        "id": "m001",
+        "valid_to": null,
+        "observed_at": "2026-01-01",
+        "source_event_id": "entity-grounding:event-1"
+      },
+      {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "work",
+        "key": "city",
+        "value": "Paris",
+        "valid_from": "2026-01-02",
+        "confidence": 0.95,
+        "source": "user",
+        "id": "m002",
+        "valid_to": null,
+        "observed_at": "2026-01-02",
+        "source_event_id": "entity-grounding:event-2"
+      }
+    ],
+    "after": [
+      {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "home",
+        "key": "city",
+        "value": "Berlin",
+        "valid_from": "2026-01-01",
+        "confidence": 0.95,
+        "source": "user",
+        "id": "m001",
+        "valid_to": null,
+        "observed_at": "2026-01-01",
+        "source_event_id": "entity-grounding:event-1"
+      },
+      {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "work",
+        "key": "city",
+        "value": "Paris",
+        "valid_from": "2026-01-02",
+        "confidence": 0.95,
+        "source": "user",
+        "id": "m002",
+        "valid_to": null,
+        "observed_at": "2026-01-02",
+        "source_event_id": "entity-grounding:event-2"
+      }
+    ],
+    "state_diff": {
+      "added": [],
+      "removed": [],
+      "changed": []
+    },
+    "retrieved_ids": [
+      "m002",
+      "m001"
+    ],
+    "packed_ids": [
+      "m002",
+      "m001"
+    ],
+    "answer": "Paris"
+  }
+]

@@ -1,0 +1,18 @@
+{
+  "id": "agent-01",
+  "label": "Agent proposal 1",
+  "parent_id": "baseline",
+  "hypothesis": "Enabling entity and temporal pre-filters will prevent cross-entity distractors and exclude records outside the requested as-of interval, improving complete-scenario task success and reducing stale or distracting retrieval without changing writes or hard-constraint behavior.",
+  "predicted_effect": "Entity-grounding and distractor cases should return the requested subject; historical-address, future-move, and history-boundary cases should select the valid as-of record. Relevant-memory recall and stale-fact rate should improve, with no expected impact on owner isolation, deletion semantics, or write precision.",
+  "patch": {
+    "filter_entity": true,
+    "time_aware": true
+  },
+  "proposer": {
+    "type": "llm",
+    "name": "OpenAI",
+    "model": "gpt-5.6-luna",
+    "prompt_version": "memory-improver-sgr-v1",
+    "response_id": "resp_0b7d7e2725a4eaf9016aa1b961ca4087d29047caaed8b2e9d1"
+  }
+}

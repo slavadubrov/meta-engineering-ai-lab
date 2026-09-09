@@ -1,0 +1,29 @@
+{
+  "observations": [
+    {
+      "scenario_id": "duplicate-confirmation",
+      "step": 2,
+      "observation": "An identical active value (language=German) was stored as a second record instead of reusing the existing record, increasing historical storage."
+    },
+    {
+      "scenario_id": "duplicate-confirmation",
+      "step": 3,
+      "observation": "A third identical confirmation created another record, demonstrating repeated duplicate accumulation under deduplicate=false."
+    },
+    {
+      "scenario_id": "duplicate-confirmation",
+      "step": 4,
+      "observation": "The query answered correctly but only needed the current identical value, so the extra duplicate records provide no task-success benefit."
+    }
+  ],
+  "hypothesis": "Enabling deduplication will reuse identical active values, reducing stored records and duplicate retrieval distraction while preserving answers and hard-constraint behavior.",
+  "predicted_effect": "Duplicate-confirmation should retain the correct German answer with fewer records; overall task success and write precision should remain unchanged or improve, while storage_records and likely distraction decrease.",
+  "action": "propose",
+  "patch": {
+    "min_confidence": null,
+    "filter_entity": null,
+    "time_aware": null,
+    "deduplicate": true,
+    "top_k": null
+  }
+}

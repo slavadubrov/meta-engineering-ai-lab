@@ -1,0 +1,29 @@
+{
+  "observations": [
+    {
+      "scenario_id": "duplicate-confirmation",
+      "step": 2,
+      "observation": "An identical active language value was stored as a second record instead of reusing the existing record."
+    },
+    {
+      "scenario_id": "duplicate-confirmation",
+      "step": 3,
+      "observation": "A third identical active language value was stored, creating additional historical records without changing the eventual answer."
+    },
+    {
+      "scenario_id": "duplicate-confirmation",
+      "step": 4,
+      "observation": "The query returned the correct German answer, but the scenario retained three records for the same active value."
+    }
+  ],
+  "hypothesis": "Enabling deduplication will reuse identical active values, preserving correct retrieval while reducing redundant stored records.",
+  "predicted_effect": "Complete-scenario success should remain unchanged, while storage records and bytes decrease on repeated identical updates; owner isolation, deletion, and admission behavior should be unaffected.",
+  "action": "propose",
+  "patch": {
+    "min_confidence": null,
+    "filter_entity": null,
+    "time_aware": null,
+    "deduplicate": true,
+    "top_k": null
+  }
+}

@@ -1,55 +1,255 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="campaign-artifact-base" content="../artifacts/agent-study-02/" />
-  <title>An agent improves a memory tool — Closed-Loop AI Lab</title>
-  <link rel="stylesheet" href="style.css" />
-  <style>
-    main{max-width:1100px;margin:auto;padding:32px 20px}header{margin-bottom:32px}
-    .flow{font-size:1.1rem;line-height:1.8;padding:18px;border:1px solid var(--line,#aab9b0);border-radius:10px}
-    .panel{padding:24px;margin:20px 0;border:1px solid var(--line,#aab9b0);border-radius:10px}
-    .choices{display:flex;flex-wrap:wrap;gap:24px}.choices label{display:grid;gap:8px;min-width:180px}
-    .choices select{padding:10px;font:inherit}.decision-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
-    pre{white-space:pre-wrap;overflow-wrap:anywhere}td,th{padding:10px;text-align:left}
-    .table-scroll{overflow:auto}h1{font-size:clamp(2rem,5vw,3.5rem)}h2{font-size:1.5rem}
-    .artifact-links{display:flex;gap:16px;flex-wrap:wrap}#status{font-weight:600}
-    @media(max-width:650px){.decision-grid{grid-template-columns:1fr}.panel{padding:16px}}
-  </style>
-  <script src="campaign.js" defer></script>
-</head>
-<body><main>
-<header>
-  <p class="eyebrow">Edge of Context · Closed-Loop AI Engineering</p>
-  <h1>Watch an agent improve a memory tool</h1>
-  <p>An assistant remembers a future move to Paris and answers Paris while the user still lives in Berlin. Here, an <strong>outer LLM agent</strong> studies the failing tests, proposes a change to the memory rules, and receives the measured result before choosing its next step.</p>
-  <p class="flow">Observe errors → Luna proposes a bounded change → Python validates and tests it → feedback returns to Luna</p>
-  <p>This page shows <strong>saved OpenAI responses and Python evaluations</strong>. Opening it makes no API calls. The memory tool itself uses deterministic rules; the LLM chooses how to change those rules.</p>
-  <nav class="artifact-links" aria-label="Companion links"><a href="https://github.com/slavadubrov/closed-loop-ai-lab">Code and README</a><a href="memory.html">Understand the memory tool</a><span>Companion article: publication pending</span></nav>
-</header>
-<section class="panel" aria-labelledby="guide"><h2 id="guide">What the agent can do</h2>
-  <p>The agent starts with the original configuration. It can propose changes to five settings: the minimum confidence needed to store a fact, subject filtering, date filtering, duplicate handling, and how many records to retrieve. Each proposal changes at most two settings.</p>
-  <p>Every response follows an SGR schema: observations with test-event references, a hypothesis, an expected effect, and a configuration patch. Python checks those fields, evaluates the proposal, and returns feedback. The model cannot edit files, change expected answers, disable owner isolation, or deploy its preferred result.</p>
-  <details><summary>What are a campaign, an iteration, and a scenario?</summary>
-    <p>A <strong>campaign</strong> is one complete attempt at improving the baseline, with fresh agent history. An <strong>iteration</strong> is one model proposal or stop decision. A <strong>scenario</strong> is one prepared test story, such as saving Berlin and a future Paris address, then asking for the city on two dates.</p>
-    <p>Each proposed configuration runs the same 20 scenarios once. Repeating deterministic tests would add no answer-quality evidence. We repeat the agent's entire campaign because its proposals can differ.</p>
-    <p><strong>Confidence is a supplied input score.</strong> A proposed <code>delivery = courier</code> scored <code>0.4</code> is rejected at a <code>0.7</code> storage threshold, but kept at <code>0.2</code>. The program does not calculate that score or treat it as a measured probability.</p>
-  </details>
-</section>
-<p id="loading" role="status">Loading the recorded campaigns…</p>
-<noscript><p>JavaScript is disabled. Read the <a href="../artifacts/agent-study-02/report.md">campaign report</a> and <a href="https://github.com/slavadubrov/closed-loop-ai-lab">README</a> for the recorded results.</p></noscript>
-<section id="explorer" hidden>
-  <section class="panel"><h2>Independent attempts from the same baseline</h2>
-    <p id="sample"></p><div class="table-scroll" tabindex="0" role="region" aria-label="Campaign outcomes"><table><thead><tr><th>Campaign</th><th>Starting success</th><th>Selected success</th><th>Model calls</th><th>Why it ended</th></tr></thead><tbody id="campaign-table"></tbody></table></div>
-    <p id="cost"></p>
-  </section>
-  <div class="choices"><label>Campaign<select id="campaign"></select></label><label>Iteration<select id="iteration"></select></label></div>
-  <section class="panel" aria-live="polite"><h2 id="iteration-title"></h2><p id="status"></p><p id="parent"></p>
-    <div class="decision-grid"><div><h3>What Luna observed</h3><ul id="observations"></ul><h3>Hypothesis</h3><p id="hypothesis"></p><h3>Expected effect</h3><p id="prediction"></p></div><div><h3>Proposed settings</h3><pre id="patch"></pre><h3>What Python measured</h3><p id="outcome"></p><p id="selection"></p></div></div>
-    <p class="artifact-links" id="evidence-links"></p>
-    <details><summary>Exact input given to the agent</summary><pre id="context"></pre></details>
-  </section>
-</section>
-<section class="panel"><h2>What these results establish</h2><p>The recorded requests show whether the agent used feedback to propose a new configuration, and the Python traces show what happened when it was tested. All 20 stories are public development cases. This small experiment does not establish an advantage over manual tuning or performance on unseen conversations.</p><p>“Selected” means the configuration became the parent for another experiment. Every production release still needs human review. No change was deployed by this loop.</p><p><a id="report" href="../artifacts/agent-study-02/report.md">Complete campaign report</a> · <a id="manifest" href="../artifacts/agent-study-02/manifest.json">Evidence file hashes</a></p></section>
-</main></body></html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      name="campaign-artifact-base"
+      content="../artifacts/agent-study-02/"
+    />
+    <title>An agent improves a memory tool — Closed-Loop AI Lab</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      main {
+        max-width: 1100px;
+        margin: auto;
+        padding: 32px 20px;
+      }
+      header {
+        margin-bottom: 32px;
+      }
+      .flow {
+        font-size: 1.1rem;
+        line-height: 1.8;
+        padding: 18px;
+        border: 1px solid var(--line, #aab9b0);
+        border-radius: 10px;
+      }
+      .panel {
+        padding: 24px;
+        margin: 20px 0;
+        border: 1px solid var(--line, #aab9b0);
+        border-radius: 10px;
+      }
+      .choices {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 24px;
+      }
+      .choices label {
+        display: grid;
+        gap: 8px;
+        min-width: 180px;
+      }
+      .choices select {
+        padding: 10px;
+        font: inherit;
+      }
+      .decision-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+      }
+      pre {
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+      }
+      td,
+      th {
+        padding: 10px;
+        text-align: left;
+      }
+      .table-scroll {
+        overflow: auto;
+      }
+      h1 {
+        font-size: clamp(2rem, 5vw, 3.5rem);
+      }
+      h2 {
+        font-size: 1.5rem;
+      }
+      .artifact-links {
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+      #status {
+        font-weight: 600;
+      }
+      @media (max-width: 650px) {
+        .decision-grid {
+          grid-template-columns: 1fr;
+        }
+        .panel {
+          padding: 16px;
+        }
+      }
+    </style>
+    <script src="campaign.js" defer></script>
+  </head>
+  <body>
+    <main>
+      <header>
+        <p class="eyebrow">Edge of Context · Closed-Loop AI Engineering</p>
+        <h1>Watch an agent improve a memory tool</h1>
+        <p>
+          An assistant remembers a future move to Paris and answers Paris while
+          the user still lives in Berlin. Here, an
+          <strong>outer LLM agent</strong> studies the failing tests, proposes a
+          change to the memory rules, and receives the measured result before
+          choosing its next step.
+        </p>
+        <p class="flow">
+          Observe errors → Luna proposes a bounded change → Python validates and
+          tests it → feedback returns to Luna
+        </p>
+        <p>
+          This page shows
+          <strong>saved OpenAI responses and Python evaluations</strong>.
+          Opening it makes no API calls. The memory tool itself uses
+          deterministic rules; the LLM chooses how to change those rules.
+        </p>
+        <nav class="artifact-links" aria-label="Companion links">
+          <a
+            href="https://github.com/slavadubrov/closed-loop-ai-lab/tree/v0.2.0"
+            >Code and README</a
+          ><a href="memory.html">Understand the memory tool</a
+          ><span>Companion article: publication pending</span>
+        </nav>
+      </header>
+      <section class="panel" aria-labelledby="guide">
+        <h2 id="guide">What the agent can do</h2>
+        <p>
+          The agent starts with the original configuration. It can propose
+          changes to five settings: the minimum confidence needed to store a
+          fact, subject filtering, date filtering, duplicate handling, and how
+          many records to retrieve. Each proposal changes at most two settings.
+        </p>
+        <p>
+          Every response follows an SGR schema: observations with test-event
+          references, a hypothesis, an expected effect, and a configuration
+          patch. Python checks those fields, evaluates the proposal, and returns
+          feedback. The model cannot edit files, change expected answers,
+          disable owner isolation, or deploy its preferred result.
+        </p>
+        <details>
+          <summary>What are a campaign, an iteration, and a scenario?</summary>
+          <p>
+            A <strong>campaign</strong> is one complete attempt at improving the
+            baseline, with fresh agent history. An <strong>iteration</strong> is
+            one model proposal or stop decision. A <strong>scenario</strong> is
+            one prepared test story, such as saving Berlin and a future Paris
+            address, then asking for the city on two dates.
+          </p>
+          <p>
+            Each proposed configuration runs the same 20 scenarios once.
+            Repeating deterministic tests would add no answer-quality evidence.
+            We repeat the agent's entire campaign because its proposals can
+            differ.
+          </p>
+          <p>
+            <strong>Confidence is a supplied input score.</strong> A proposed
+            <code>delivery = courier</code> scored <code>0.4</code> is rejected
+            at a <code>0.7</code> storage threshold, but kept at
+            <code>0.2</code>. The program does not calculate that score or treat
+            it as a measured probability.
+          </p>
+        </details>
+      </section>
+      <p id="loading" role="status">Loading the recorded campaigns…</p>
+      <noscript
+        ><p>
+          JavaScript is disabled. Read the
+          <a href="../artifacts/agent-study-02/report.md">campaign report</a>
+          and
+          <a
+            href="https://github.com/slavadubrov/closed-loop-ai-lab/tree/v0.2.0"
+            >README</a
+          >
+          for the recorded results.
+        </p></noscript
+      >
+      <section id="explorer" hidden>
+        <section class="panel">
+          <h2>Independent attempts from the same baseline</h2>
+          <p id="sample"></p>
+          <div
+            class="table-scroll"
+            tabindex="0"
+            role="region"
+            aria-label="Campaign outcomes"
+          >
+            <table>
+              <thead>
+                <tr>
+                  <th>Campaign</th>
+                  <th>Starting success</th>
+                  <th>Selected success</th>
+                  <th>Model calls</th>
+                  <th>Why it ended</th>
+                </tr>
+              </thead>
+              <tbody id="campaign-table"></tbody>
+            </table>
+          </div>
+          <p id="cost"></p>
+        </section>
+        <div class="choices">
+          <label>Campaign<select id="campaign"></select></label
+          ><label>Iteration<select id="iteration"></select></label>
+        </div>
+        <section class="panel" aria-live="polite">
+          <h2 id="iteration-title"></h2>
+          <p id="status"></p>
+          <p id="parent"></p>
+          <div class="decision-grid">
+            <div>
+              <h3>What Luna observed</h3>
+              <ul id="observations"></ul>
+              <h3>Hypothesis</h3>
+              <p id="hypothesis"></p>
+              <h3>Expected effect</h3>
+              <p id="prediction"></p>
+            </div>
+            <div>
+              <h3>Proposed settings</h3>
+              <pre id="patch"></pre>
+              <h3>What Python measured</h3>
+              <p id="outcome"></p>
+              <p id="selection"></p>
+            </div>
+          </div>
+          <p class="artifact-links" id="evidence-links"></p>
+          <details>
+            <summary>Exact input given to the agent</summary>
+            <pre id="context"></pre>
+          </details>
+        </section>
+      </section>
+      <section class="panel">
+        <h2>What these results establish</h2>
+        <p>
+          The recorded requests show whether the agent used feedback to propose
+          a new configuration, and the Python traces show what happened when it
+          was tested. All 20 stories are public development cases. This small
+          experiment does not establish an advantage over manual tuning or
+          performance on unseen conversations.
+        </p>
+        <p>
+          “Selected” means the configuration became the parent for another
+          experiment. Every production release still needs human review. No
+          change was deployed by this loop.
+        </p>
+        <p>
+          <a id="report" href="../artifacts/agent-study-02/report.md"
+            >Complete campaign report</a
+          >
+          ·
+          <a id="manifest" href="../artifacts/agent-study-02/manifest.json"
+            >Evidence file hashes</a
+          >
+        </p>
+      </section>
+    </main>
+  </body>
+</html>

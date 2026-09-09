@@ -1,0 +1,52 @@
+[
+  {
+    "id": "baseline",
+    "label": "Baseline",
+    "parent_id": null,
+    "hypothesis": "Freeze the original thresholded writer and recency-based retrieval.",
+    "predicted_effect": "Useful direct facts work; entity and temporal ambiguity remain visible.",
+    "patch": {},
+    "proposer": {
+      "type": "coding_agent",
+      "name": "Codex",
+      "model": "not exposed to this task",
+      "prompt_version": "article-01-authoring-v1",
+      "attribution": "Authored by Codex while building this demo, with public access to all scenarios; no runtime provider call."
+    }
+  },
+  {
+    "id": "agent-01",
+    "label": "Agent proposal 1",
+    "parent_id": "baseline",
+    "hypothesis": "Enabling entity and temporal pre-filters will prevent cross-entity distractors and exclude records outside the requested as-of interval, improving complete-scenario task success and reducing stale or distracting retrieval without changing writes or hard-constraint behavior.",
+    "predicted_effect": "Entity-grounding and distractor cases should return the requested subject; historical-address, future-move, and history-boundary cases should select the valid as-of record. Relevant-memory recall and stale-fact rate should improve, with no expected impact on owner isolation, deletion semantics, or write precision.",
+    "patch": {
+      "filter_entity": true,
+      "time_aware": true
+    },
+    "proposer": {
+      "type": "llm",
+      "name": "OpenAI",
+      "model": "gpt-5.6-luna",
+      "prompt_version": "memory-improver-sgr-v1",
+      "response_id": "resp_0b7d7e2725a4eaf9016aa1b961ca4087d29047caaed8b2e9d1"
+    }
+  },
+  {
+    "id": "agent-03",
+    "label": "Agent proposal 3",
+    "parent_id": "agent-01",
+    "hypothesis": "Enabling deduplication will reuse identical active values during repeated confirmations, preserving retrieval correctness while reducing unnecessary historical records and storage.",
+    "predicted_effect": "The duplicate-confirmation scenario should retain the German answer while producing fewer records. Complete-scenario success should remain at least as high as the current 0.95, with no expected change to owner isolation, deletion, write admission, or confidence behavior.",
+    "patch": {
+      "deduplicate": true
+    },
+    "proposer": {
+      "type": "llm",
+      "name": "OpenAI",
+      "model": "gpt-5.6-luna",
+      "prompt_version": "memory-improver-sgr-v1",
+      "response_id": "resp_071a5e2f1b4af259016aa1b96b2ae087d28a8e8576d3916fdc"
+    }
+  }
+]

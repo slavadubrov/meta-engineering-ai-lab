@@ -1,0 +1,17 @@
+{
+  "id": "agent-03",
+  "label": "Agent proposal 3",
+  "parent_id": "agent-01",
+  "hypothesis": "Enabling deduplication will reuse identical active values during repeated confirmations, preserving retrieval correctness while reducing unnecessary historical records and storage.",
+  "predicted_effect": "The duplicate-confirmation scenario should retain the German answer while producing fewer records. Complete-scenario success should remain at least as high as the current 0.95, with no expected change to owner isolation, deletion, write admission, or confidence behavior.",
+  "patch": {
+    "deduplicate": true
+  },
+  "proposer": {
+    "type": "llm",
+    "name": "OpenAI",
+    "model": "gpt-5.6-luna",
+    "prompt_version": "memory-improver-sgr-v1",
+    "response_id": "resp_071a5e2f1b4af259016aa1b96b2ae087d28a8e8576d3916fdc"
+  }
+}

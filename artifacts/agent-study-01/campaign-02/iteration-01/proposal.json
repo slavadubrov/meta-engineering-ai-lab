@@ -1,0 +1,39 @@
+{
+  "observations": [
+    {
+      "scenario_id": "entity-grounding",
+      "step": 3,
+      "observation": "Query requested entity home, but retrieval included work and returned Paris instead of expected Berlin because entity filtering was disabled."
+    },
+    {
+      "scenario_id": "distractor-retrieval",
+      "step": 9,
+      "observation": "Query requested entity primary, but retrieval returned the newest project record Bath instead of Berlin; entity filtering was disabled."
+    },
+    {
+      "scenario_id": "historical-address",
+      "step": 3,
+      "observation": "As-of 2026-01-05 returned current Paris rather than historical Berlin, indicating missing time-aware filtering."
+    },
+    {
+      "scenario_id": "future-move",
+      "step": 3,
+      "observation": "As-of 2026-01-05 returned future Paris even though its valid_from is 2026-01-10; time-aware filtering is needed."
+    },
+    {
+      "scenario_id": "history-boundary",
+      "step": 3,
+      "observation": "As-of 2026-01-09 returned Paris rather than Berlin at the validity boundary, showing stale/future records are not filtered before ranking."
+    }
+  ],
+  "hypothesis": "Enabling entity and validity-date filtering will remove cross-entity distractors and exclude records outside the requested as-of interval, improving complete-scenario task success without changing write admission or hard-constraint behavior.",
+  "predicted_effect": "Entity-grounding and distractor-retrieval should select the requested entity; historical-address, future-move, and history-boundary should return the record valid at the requested date. Retrieval distraction and stale-fact errors should decrease, with no expected storage increase.",
+  "action": "propose",
+  "patch": {
+    "min_confidence": null,
+    "filter_entity": true,
+    "time_aware": true,
+    "deduplicate": null,
+    "top_k": null
+  }
+}

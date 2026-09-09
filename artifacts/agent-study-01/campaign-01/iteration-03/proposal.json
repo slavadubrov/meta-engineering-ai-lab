@@ -1,0 +1,24 @@
+{
+  "observations": [
+    {
+      "scenario_id": "duplicate-confirmation",
+      "step": 2,
+      "observation": "An identical active value (language=German) was stored again as record m002 rather than reusing the existing value; the trace reports status=stored and shows m001 closed at 2026-01-02."
+    },
+    {
+      "scenario_id": "duplicate-confirmation",
+      "step": 3,
+      "observation": "The same identical value was stored a third time as m003, producing three historical records for one unchanged fact while the query still returned German."
+    }
+  ],
+  "hypothesis": "Enabling deduplication will reuse identical active values during repeated confirmations, preserving retrieval correctness while reducing unnecessary historical records and storage.",
+  "predicted_effect": "The duplicate-confirmation scenario should retain the German answer while producing fewer records. Complete-scenario success should remain at least as high as the current 0.95, with no expected change to owner isolation, deletion, write admission, or confidence behavior.",
+  "action": "propose",
+  "patch": {
+    "min_confidence": null,
+    "filter_entity": null,
+    "time_aware": null,
+    "deduplicate": true,
+    "top_k": null
+  }
+}

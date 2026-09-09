@@ -1,0 +1,24 @@
+{
+  "observations": [
+    {
+      "scenario_id": "duplicate-confirmation",
+      "step": 3,
+      "observation": "Three identical active-value confirmations for language were stored as separate records, leaving m001, m002, and m003 and increasing storage without changing the returned answer."
+    },
+    {
+      "scenario_id": "duplicate-confirmation",
+      "step": 4,
+      "observation": "The query returned German correctly from m003 despite the duplicate historical records, so deduplication appears able to reduce records without affecting this retrieval result."
+    }
+  ],
+  "hypothesis": "Enabling deduplication will reuse identical active values instead of appending redundant records, preserving successful retrieval while reducing storage records and bytes.",
+  "predicted_effect": "Maintain complete-scenario success and write correctness on the observed duplicate case while reducing stored records and storage size; no hard-constraint behavior should change.",
+  "action": "propose",
+  "patch": {
+    "min_confidence": null,
+    "filter_entity": null,
+    "time_aware": null,
+    "deduplicate": true,
+    "top_k": null
+  }
+}

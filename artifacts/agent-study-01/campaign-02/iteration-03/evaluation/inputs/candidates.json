@@ -1,0 +1,52 @@
+[
+  {
+    "id": "baseline",
+    "label": "Baseline",
+    "parent_id": null,
+    "hypothesis": "Freeze the original thresholded writer and recency-based retrieval.",
+    "predicted_effect": "Useful direct facts work; entity and temporal ambiguity remain visible.",
+    "patch": {},
+    "proposer": {
+      "type": "coding_agent",
+      "name": "Codex",
+      "model": "not exposed to this task",
+      "prompt_version": "article-01-authoring-v1",
+      "attribution": "Authored by Codex while building this demo, with public access to all scenarios; no runtime provider call."
+    }
+  },
+  {
+    "id": "agent-01",
+    "label": "Agent proposal 1",
+    "parent_id": "baseline",
+    "hypothesis": "Enabling entity and validity-date filtering will remove cross-entity distractors and exclude records outside the requested as-of interval, improving complete-scenario task success without changing write admission or hard-constraint behavior.",
+    "predicted_effect": "Entity-grounding and distractor-retrieval should select the requested entity; historical-address, future-move, and history-boundary should return the record valid at the requested date. Retrieval distraction and stale-fact errors should decrease, with no expected storage increase.",
+    "patch": {
+      "filter_entity": true,
+      "time_aware": true
+    },
+    "proposer": {
+      "type": "llm",
+      "name": "OpenAI",
+      "model": "gpt-5.6-luna",
+      "prompt_version": "memory-improver-sgr-v1",
+      "response_id": "resp_009476602c7347c5016aa1b975400087d2b3f434610db410ff"
+    }
+  },
+  {
+    "id": "agent-03",
+    "label": "Agent proposal 3",
+    "parent_id": "agent-01",
+    "hypothesis": "Enabling deduplication will reuse identical active values during repeated confirmations, reducing stored records without changing retrieval answers or write admission.",
+    "predicted_effect": "The duplicate-confirmation scenario should retain the German answer while avoiding redundant version records; complete-scenario success should remain at least as high and storage should decrease. No hard-constraint impact is expected.",
+    "patch": {
+      "deduplicate": true
+    },
+    "proposer": {
+      "type": "llm",
+      "name": "OpenAI",
+      "model": "gpt-5.6-luna",
+      "prompt_version": "memory-improver-sgr-v1",
+      "response_id": "resp_0a1bc6ce375d0a58016aa1b97ea5c487d298e03e6e7df04353"
+    }
+  }
+]

@@ -1,0 +1,23 @@
+{
+  "iteration": 2,
+  "parent_id": "agent-01",
+  "status": "invalid_proposal",
+  "path": "campaign-02/iteration-02",
+  "reserved_usd": 0.011507950000000001,
+  "latency_seconds": 4.043617416988127,
+  "usage": {
+    "input_tokens": 6831,
+    "input_tokens_details": {
+      "cached_tokens": 0,
+      "cache_write_tokens": 6828
+    },
+    "output_tokens": 305,
+    "output_tokens_details": {
+      "reasoning_tokens": 57
+    },
+    "total_tokens": 7136
+  },
+  "estimated_cost_usd": 0.0020736000000000005,
+  "response_model": "gpt-5.6-luna",
+  "reason": "Observation must cite an event supplied in this request"
+}

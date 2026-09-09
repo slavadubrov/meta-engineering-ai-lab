@@ -1,0 +1,29 @@
+{
+  "observations": [
+    {
+      "scenario_id": "duplicate-confirmation",
+      "step": 2,
+      "observation": "Deduplication reused the identical active language value instead of storing a new record."
+    },
+    {
+      "scenario_id": "duplicate-confirmation",
+      "step": 4,
+      "observation": "The deduplicated record still produced the expected German answer."
+    },
+    {
+      "scenario_id": "clean-abstention",
+      "step": 1,
+      "observation": "A low-confidence unnecessary fact was abstained, preserving clean abstention behavior."
+    }
+  ],
+  "hypothesis": "The current configuration already achieves complete-scenario success on the tested public cases while deduplication reduces redundant storage; the supplied evidence does not support a further bounded change without risking recall or write behavior.",
+  "predicted_effect": "Preserve the best observed task success and hard-constraint results, with no unnecessary configuration risk.",
+  "action": "stop",
+  "patch": {
+    "min_confidence": null,
+    "filter_entity": null,
+    "time_aware": null,
+    "deduplicate": null,
+    "top_k": null
+  }
+}

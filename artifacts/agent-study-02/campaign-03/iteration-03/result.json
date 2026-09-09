@@ -1,0 +1,23 @@
+{
+  "iteration": 3,
+  "parent_id": "agent-02",
+  "status": "agent_stopped",
+  "path": "campaign-03/iteration-03",
+  "reserved_usd": 0.011572450000000001,
+  "latency_seconds": 5.2627551250043325,
+  "usage": {
+    "input_tokens": 6862,
+    "input_tokens_details": {
+      "cached_tokens": 0,
+      "cache_write_tokens": 6859
+    },
+    "output_tokens": 349,
+    "output_tokens_details": {
+      "reasoning_tokens": 95
+    },
+    "total_tokens": 7211
+  },
+  "estimated_cost_usd": 0.00213415,
+  "response_model": "gpt-5.6-luna",
+  "reason": "The current configuration already achieves the measured best complete-scenario outcome while deduplicating repeated facts and retaining appropriate low-confidence abstentions; the supplied evidence supports no further bounded change."
+}

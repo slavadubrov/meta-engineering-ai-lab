@@ -1,94 +1,50 @@
-# Deploy the static explorer
+# Deploy the recorded agent experiment
 
-The Python experiment produces frozen JSON. The browser explorer needs only
-HTML, CSS, JavaScript, and those files. No Python hosting, API key, database,
-Worker, or live model backend is required. Website deployment is a separate
-step from publishing this GitHub repository.
+The browser is static HTML, CSS, JavaScript, and saved JSON. It makes no provider calls and needs no API key. Python generates experiments locally; the deployed site only displays the recorded evidence.
 
-## Build or download a version
-
-Clone the [repository](https://github.com/slavadubrov/closed-loop-ai-lab), then:
+## Export the article study
 
 ```sh
-git checkout v0.1.3
+git checkout v0.2.0
 uv sync --frozen
-uv run --frozen python -m lab verify artifacts/article-01.3 --source
+uv run --frozen python -m lab verify artifacts/agent-study-02 --source
 uv run --frozen python -m lab site --output site
-uv run --frozen python -m lab serve
+python -m http.server 8076 --bind 127.0.0.1 --directory site
 ```
 
-Open [the packaged explorer](http://127.0.0.1:8000/site/). The exporter refuses
-to overwrite an existing output directory; use another output path if `site/`
-already exists. To package a fresh experiment, pass its directory with `--release`.
+Open http://127.0.0.1:8076/ and stop with Ctrl-C. The site has two pages:
 
-The [v0.1.3 GitHub release](https://github.com/slavadubrov/closed-loop-ai-lab/releases/tag/v0.1.3)
-also provides `closed-loop-ai-lab-v0.1.3-site.zip` and `SHA256SUMS`.
-The package includes the saved `article-01.3` experiment.
-The ZIP contains the **contents** of `site/`, so its root is directly hostable.
-Verify the downloaded archive before extracting it:
+- `index.html`: the outer LLM agent's campaigns, proposals, feedback, and outcomes.
+- `memory.html`: the deterministic memory mechanics and teaching comparisons.
 
-```sh
-shasum -a 256 -c SHA256SUMS
-unzip closed-loop-ai-lab-v0.1.3-site.zip -d site
-```
+For a different recorded campaign, pass `--campaign-release artifacts/my-agent-study` to `lab site`. Use a new output directory for each export.
 
-## Publish under the existing website
+The [v0.2.0 release](https://github.com/slavadubrov/closed-loop-ai-lab/releases/tag/v0.2.0) includes `closed-loop-ai-lab-v0.2.0-site.zip` and `SHA256SUMS`. Verify the ZIP with `shasum -a 256 -c SHA256SUMS`, then unzip it into the directory you want to serve. All experiment files are included; the local `.env.local` is not.
 
-The intended address is:
+## Mount it under an existing website
 
-```text
-https://slavadubrov.com/labs/memory-improvement/
-```
-
-The deployed layout must be:
+Copy the exported directory as a unit to a subpath such as `/labs/memory-improvement/`. Keep the relative layout:
 
 ```text
 /labs/memory-improvement/index.html
-/labs/memory-improvement/style.css
+/labs/memory-improvement/memory.html
+/labs/memory-improvement/campaign.js
 /labs/memory-improvement/app.js
-/labs/memory-improvement/artifacts/article-01.3/ (complete directory)
+/labs/memory-improvement/style.css
+/labs/memory-improvement/artifacts/agent-study-02/...
+/labs/memory-improvement/artifacts/article-01.5/...
 ```
 
-All paths are relative, so the same package also works at another nested prefix.
-Copy the entire package, including the artifact directory. Its generated HTML
-report provides the fallback when JavaScript is disabled or evidence cannot load.
+For the Notes Astro site, keep a versioned copy of the ZIP output under `vendor/labs/memory-improvement/v0.2.0/`, then copy that directory into `dist/labs/memory-improvement/` after the normal build and discovery steps. A Labs card can link to `/labs/memory-improvement/`; add the article URL to the explorer when the article is public. Verify the entry page, one request JSON, a nested evaluation report, and `memory.html` at the deployed subpath.
 
-For the separate Edge of Context Astro repository:
+This repository does not configure or deploy the production website. Its static output can use the existing static hosting setup; it requires no server functions or usage-based backend.
 
-1. Keep the verified package in a versioned source directory, for example
-   `vendor/labs/memory-improvement/v0.1.3/`, with the release URL and archive checksum.
-2. Add an explicit build step that copies that version into
-   `public/labs/memory-improvement/` **after content import and before Astro builds**.
-   In that repository `public/` is generated; do not edit or commit `dist/`.
-3. Add a Labs card pointing to `/labs/memory-improvement/`, with repository and
-   release links. The article can remain in an unmerged website PR until reviewed. Add its
-   public link after publication.
-4. Run `make check` and `make build`, then preview the built site. Check a direct
-   visit, candidate/scenario links, mobile and keyboard use, browser back, and
-   the no-JavaScript report.
-5. Publish through the website's existing static deployment workflow, then verify
-   the live route and the artifact requests. The Python program does not run on
-   the production website.
+## Theme behavior
 
-Astro copies `public/` files into its output without processing them; see the
-[Astro project-structure documentation](https://docs.astro.build/en/basics/project-structure/#public).
-The package and instructions are ready; the site import step and Labs card are
-not installed by this repository. Production or Cloudflare changes still follow
-the website's applicable approval policy.
+The explorer follows `prefers-color-scheme`. It does not read the Notes site's saved theme selection. The simplest first integration keeps that behavior and links back to the site. To make the theme switch shared later, apply the site's saved light/dark choice before rendering and scope the explorer CSS to its container. Test system-dark/saved-light and system-light/saved-dark combinations before adopting that integration.
 
-## Preserve the evidence when updating
+The nested generated evaluation report is a separate light page. It has no dependency on the explorer's controls.
 
-`article-01.3` contains one run per scenario. Earlier `article-01.1` and
-`article-01.2` snapshots remain unchanged.
-The original Git metadata points to its staging checkout; file hashes identify
-the exact implementation used for each run.
+## Preserve evidence
 
-Create a new experiment release and a new Git tag for changed Python, fixtures,
-or candidate definitions. Do not replace evidence behind an existing version.
-Publication-link fields inside an older bundle describe that snapshot; add
-newly available article/release links to the README and explorer instead of
-rewriting historical files.
-
-The current interactions explore recorded experiments. Add a live backend only
-if a future lab needs to execute new reader-supplied experiments, with that
-behavior and its operating budget defined separately.
+Publish a new experiment directory and Git tag when source, prompts, schema, fixtures, or evaluator change. Do not replace files behind a published manifest. The browser export verifies file hashes before packaging and refuses to overwrite an existing output directory.

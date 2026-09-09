@@ -1,0 +1,34 @@
+{
+  "observations": [
+    {
+      "scenario_id": "entity-grounding",
+      "step": 3,
+      "observation": "The query requested entity home, but retrieval included work and the fixed consumer returned Paris instead of expected Berlin; entity filtering is disabled."
+    },
+    {
+      "scenario_id": "historical-address",
+      "step": 3,
+      "observation": "The as-of date 2026-01-05 should select Berlin, but retrieval returned current Paris; time-aware filtering is disabled."
+    },
+    {
+      "scenario_id": "future-move",
+      "step": 3,
+      "observation": "A future-valid record starting 2026-01-10 was returned for as-of 2026-01-05, producing Paris instead of Berlin."
+    },
+    {
+      "scenario_id": "distractor-retrieval",
+      "step": 9,
+      "observation": "The primary-entity query returned the newest project distractors and Bath instead of Berlin; entity filtering is disabled."
+    }
+  ],
+  "hypothesis": "Enabling entity and as-of-date filtering will prevent cross-entity distractors and exclude records outside the requested validity interval, improving complete-scenario task success without changing write admission or hard-constraint behavior.",
+  "predicted_effect": "Entity-grounding and distractor retrieval should return the requested entity, while historical-address and future-move should select the record valid at the requested as-of date. Retrieval noise and stale-fact errors should decrease.",
+  "action": "propose",
+  "patch": {
+    "min_confidence": null,
+    "filter_entity": true,
+    "time_aware": true,
+    "deduplicate": null,
+    "top_k": null
+  }
+}

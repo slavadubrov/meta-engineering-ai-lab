@@ -1,0 +1,230 @@
+{
+  "schema_version": "agent-campaign-v1",
+  "model": "gpt-5.6-luna",
+  "prompt_version": "memory-improver-sgr-v1",
+  "source": {
+    "target_version": "structured-memory-v1",
+    "evaluator_version": "exact-state-v1",
+    "dataset_version": "original-synthetic-v1",
+    "consumer_version": "first-key-match-v1",
+    "source_sha256": "255f603c37fa48be82b4c94154c6c654243672245632b15bc4baf213dd83fba0",
+    "source_files": {
+      ".python-version": "7b55f8e67b5623c4bef3fa691288da9437d79d3aba156de48d481db32ac7d16d",
+      "data/scenarios.json": "1eae82e424a313c1d3c567126ac99e07f20f960c69c9029e557ff3228d4daa52",
+      "experiments/candidates.json": "bf957a3c6b6cc3f66c172d1a731ac077bc40059267c97fdb9caec273a7dfd0cb",
+      "experiments/contract.json": "7a8e596fa0f7cddc2ac051da46b523d0f12564b2c0cb5d57ab5387117812864b",
+      "lab/__init__.py": "c22745adb5a4d1f0a38795f3cad7c897e7da4481791449e1deb3d6cd20558b7b",
+      "lab/__main__.py": "d8b9f0d35e7a83a049bc44a604fb7490f740475efed1a0105eff944c816fc274",
+      "lab/agent.py": "c74e911b2304f4b9104d833d07ace5f5377875f65dc8132a6d709de52b9c3c81",
+      "lab/campaign.py": "c55a7cb407bdbdf7444804920f3583992bdc438bafac834b562765d2b91f0470",
+      "lab/memory.py": "17e4f52a4fa378c245fa2652c96b26df47ffc0764a6a37a48900f9889c3fa4cb",
+      "lab/runner.py": "442c0da2a9b68715364420bfe0b1ed986a814de0f003941e25905b7a61e5bf84",
+      "pyproject.toml": "d4cd0f7330fa10f64933e8f1f1a4f94398ff9f556f21d6d7d9b0ecd7a0df6d55",
+      "tests/test_campaign.py": "661f3b2b0176f6e187e01d24cc6fbc769a844001e9578877a9e80ee368876e08",
+      "tests/test_lab.py": "98a9533bf0762eb5b63ccc1d9d7e14045de7bce332d67e94bcadc8ef0d1fe042",
+      "uv.lock": "d818ce021b983115d85edb857154df34cd0c3683743edec09f416e84be50765e"
+    },
+    "python": "3.12.10 (main, Apr  9 2025, 03:49:38) [Clang 20.1.0 ]",
+    "platform": "macOS-27.0-arm64-arm-64bit",
+    "model": "none; deterministic structured target",
+    "prompt": "none at runtime",
+    "randomness": "none; seeds do not apply",
+    "git": {
+      "commit": "165338e53aea8a3d9653ec3c878fd171565aed20",
+      "dirty": false
+    }
+  },
+  "planned_campaigns": 1,
+  "max_iterations": 1,
+  "budget_usd": 0.08,
+  "estimated_cost_usd": 0.004371600000000001,
+  "charged_or_reserved_usd": 0.0043716,
+  "pricing_source": "https://developers.openai.com/api/docs/models/gpt-5.6-luna",
+  "pricing_checked": "2026-09-09",
+  "status": "completed",
+  "campaigns": [
+    {
+      "id": "campaign-01",
+      "status": "iteration_limit",
+      "iterations": [
+        {
+          "iteration": 1,
+          "parent_id": "baseline",
+          "status": "evaluated",
+          "path": "campaign-01/iteration-01",
+          "reserved_usd": 0.0184044,
+          "latency_seconds": 6.489639208011795,
+          "usage": {
+            "input_tokens": 19650,
+            "input_tokens_details": {
+              "cached_tokens": 0,
+              "cache_write_tokens": 19647
+            },
+            "output_tokens": 368,
+            "output_tokens_details": {
+              "reasoning_tokens": 59
+            },
+            "total_tokens": 20018
+          },
+          "estimated_cost_usd": 0.004371600000000001,
+          "response_model": "gpt-5.6-luna",
+          "patch": {
+            "filter_entity": true,
+            "time_aware": true
+          },
+          "feedback": {
+            "id": "agent-01",
+            "config": {
+              "min_confidence": 0.7,
+              "filter_entity": true,
+              "time_aware": true,
+              "deduplicate": false,
+              "top_k": 3
+            },
+            "metrics": {
+              "task_success": 0.95,
+              "useful_write_precision": 1.0,
+              "useful_write_recall": 0.9736842105263158,
+              "unnecessary_write_rate": 0.0,
+              "relevant_memory_recall": 0.9523809523809523,
+              "distracting_memory_rate": 0.047619047619047616,
+              "stale_fact_rate": 0.0,
+              "update_correctness": 1.0,
+              "context_words": 2.3333333333333335,
+              "storage_records": 1.7,
+              "storage_bytes": 416.35,
+              "latency_p50_ms": 0.043708,
+              "latency_p95_ms": 0.287292,
+              "provider_cost_usd": 0,
+              "model_tokens": 0,
+              "success_repeat_stddev": null
+            },
+            "hard_constraints": {
+              "owner_isolation": {
+                "passed": true,
+                "checks": 28,
+                "violations": 0
+              },
+              "deletion": {
+                "passed": true,
+                "checks": 11,
+                "violations": 0
+              },
+              "prohibited_writes": {
+                "passed": true,
+                "checks": 2,
+                "violations": 0
+              }
+            },
+            "recommendation": {
+              "status": "recommend_accept",
+              "rationale": "Higher downstream success on these public checks, with no hard-constraint violation. Human review is still required."
+            }
+          },
+          "selected_for_next_iteration": true
+        }
+      ],
+      "baseline": {
+        "id": "baseline",
+        "config": {
+          "min_confidence": 0.7,
+          "filter_entity": false,
+          "time_aware": false,
+          "deduplicate": false,
+          "top_k": 3
+        },
+        "metrics": {
+          "task_success": 0.65,
+          "useful_write_precision": 1.0,
+          "useful_write_recall": 0.9736842105263158,
+          "unnecessary_write_rate": 0.0,
+          "relevant_memory_recall": 0.9047619047619048,
+          "distracting_memory_rate": 0.4864864864864865,
+          "stale_fact_rate": 0.14814814814814814,
+          "update_correctness": 1.0,
+          "context_words": 4.111111111111111,
+          "storage_records": 1.7,
+          "storage_bytes": 416.35,
+          "latency_p50_ms": 0.047334,
+          "latency_p95_ms": 0.173167,
+          "provider_cost_usd": 0,
+          "model_tokens": 0,
+          "success_repeat_stddev": null
+        },
+        "hard_constraints": {
+          "owner_isolation": {
+            "passed": true,
+            "checks": 28,
+            "violations": 0
+          },
+          "deletion": {
+            "passed": true,
+            "checks": 11,
+            "violations": 0
+          },
+          "prohibited_writes": {
+            "passed": true,
+            "checks": 2,
+            "violations": 0
+          }
+        },
+        "recommendation": {
+          "status": "retain_baseline",
+          "rationale": "Frozen comparator; remaining failures are recorded."
+        }
+      },
+      "selected": {
+        "id": "agent-01",
+        "config": {
+          "min_confidence": 0.7,
+          "filter_entity": true,
+          "time_aware": true,
+          "deduplicate": false,
+          "top_k": 3
+        },
+        "metrics": {
+          "task_success": 0.95,
+          "useful_write_precision": 1.0,
+          "useful_write_recall": 0.9736842105263158,
+          "unnecessary_write_rate": 0.0,
+          "relevant_memory_recall": 0.9523809523809523,
+          "distracting_memory_rate": 0.047619047619047616,
+          "stale_fact_rate": 0.0,
+          "update_correctness": 1.0,
+          "context_words": 2.3333333333333335,
+          "storage_records": 1.7,
+          "storage_bytes": 416.35,
+          "latency_p50_ms": 0.043708,
+          "latency_p95_ms": 0.287292,
+          "provider_cost_usd": 0,
+          "model_tokens": 0,
+          "success_repeat_stddev": null
+        },
+        "hard_constraints": {
+          "owner_isolation": {
+            "passed": true,
+            "checks": 28,
+            "violations": 0
+          },
+          "deletion": {
+            "passed": true,
+            "checks": 11,
+            "violations": 0
+          },
+          "prohibited_writes": {
+            "passed": true,
+            "checks": 2,
+            "violations": 0
+          }
+        },
+        "recommendation": {
+          "status": "recommend_accept",
+          "rationale": "Higher downstream success on these public checks, with no hard-constraint violation. Human review is still required."
+        }
+      },
+      "final_release": "campaign-01/iteration-01/evaluation"
+    }
+  ],
+  "exposure": "Public development stories; no hidden evaluation set.",
+  "review": "Experiment selection only; every deployment decision remains pending human review."
+}

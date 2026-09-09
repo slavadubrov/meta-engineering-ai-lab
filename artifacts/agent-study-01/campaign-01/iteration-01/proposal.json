@@ -1,0 +1,39 @@
+{
+  "observations": [
+    {
+      "scenario_id": "entity-grounding",
+      "step": 3,
+      "observation": "Query requested entity home but retrieved work=Paris first, returning Paris instead of expected home=Berlin because entity filtering was disabled."
+    },
+    {
+      "scenario_id": "historical-address",
+      "step": 3,
+      "observation": "As-of 2026-01-05 query returned Paris (future record) instead of Berlin; time-aware filtering was disabled."
+    },
+    {
+      "scenario_id": "future-move",
+      "step": 3,
+      "observation": "As-of 2026-01-05 query returned future Paris instead of Berlin."
+    },
+    {
+      "scenario_id": "history-boundary",
+      "step": 3,
+      "observation": "As-of 2026-01-09 query returned Paris instead of Berlin, showing stale/future records can outrank the valid historical record."
+    },
+    {
+      "scenario_id": "distractor-retrieval",
+      "step": 9,
+      "observation": "Entity primary query returned project-6=Bath instead of primary=Berlin, demonstrating cross-entity retrieval distraction."
+    }
+  ],
+  "hypothesis": "Enabling entity and temporal pre-filters will prevent cross-entity distractors and exclude records outside the requested as-of interval, improving complete-scenario task success and reducing stale or distracting retrieval without changing writes or hard-constraint behavior.",
+  "predicted_effect": "Entity-grounding and distractor cases should return the requested subject; historical-address, future-move, and history-boundary cases should select the valid as-of record. Relevant-memory recall and stale-fact rate should improve, with no expected impact on owner isolation, deletion semantics, or write precision.",
+  "action": "propose",
+  "patch": {
+    "min_confidence": null,
+    "filter_entity": true,
+    "time_aware": true,
+    "deduplicate": null,
+    "top_k": null
+  }
+}
