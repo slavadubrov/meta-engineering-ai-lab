@@ -112,6 +112,21 @@ The fixture includes `expected` and `should_retain` for scoring. The fixed targe
 ignores both fields, although the runner passes the complete event into it.
 These public fixtures are not a hidden test set.
 
+## What is a scenario, an event, and a repeat?
+
+A **scenario** is one complete test story. The future-move story above has four
+**events**: save Berlin, save Paris, ask for January 5, and ask for January 12.
+An event is one action sent to memory: `write`, `query`, or `delete`.
+
+The repository supplies **20 scenarios**. Each configuration runs through the
+same stories, starting with empty memory for each story. A **repeat** runs a
+story again from empty memory. The default is three repeats; the answers are
+identical, while local timings can vary.
+
+Thus **4 configurations × 20 scenarios × 3 repeats = 240 scenario-runs**.
+There are still only 20 different stories. No model is called to generate inputs,
+choose settings, answer questions, or score these runs.
+
 ## What are the four candidates?
 
 A candidate is a **configuration of the same memory program**, not a different
@@ -137,6 +152,43 @@ It fixes one scenario and breaks four: success falls from 19/20 to 16/20.
 Codex authored the original candidates during development with access to all
 scenarios. Running this repository replays those configurations; it does not
 ask a model to invent new ones.
+
+### Two JSON files with different jobs
+
+[experiments/candidates.json](experiments/candidates.json) lists the **four
+configurations to test**. For example, `scoped-history` starts from `baseline`
+and changes two settings in its `patch`:
+
+```json
+{
+  "filter_entity": true,
+  "time_aware": true
+}
+```
+
+These switches enable subject and date filtering. The record's other fields
+name the configuration, identify its parent, explain why the change might help,
+and record who proposed it. Only the settings in `patch` change the memory rules.
+
+[experiments/contract.json](experiments/contract.json) lists **what changes and
+run sizes are allowed**. Its larger numbers are maximum limits:
+
+| Item | Supplied experiment | Maximum allowed |
+| --- | --- | --- |
+| Configurations, counting the baseline | 4 | 8 |
+| Scenarios per configuration | 20 | 64 |
+| Events per scenario | Varies; `future-move` has 4 | 64 |
+| Repeats per scenario | 3 | 5 |
+
+There are no four hidden candidates. The limit of eight leaves room to evaluate
+additional configurations, including their earlier parents. The runner also
+limits evaluation time to 30 seconds. A "campaign" in the code means the whole
+batch of configuration tests.
+
+A candidate may change only `min_confidence`, `filter_entity`, `time_aware`,
+`deduplicate`, and `top_k`. It cannot turn off user isolation, change expected
+answers, or replace the Python implementation through this JSON file. The same
+tests and required data rules apply to every configuration.
 
 ## What are we measuring?
 
@@ -231,17 +283,20 @@ no frontend build step or runtime application server.
 
 ## Run the improvement loop
 
-Export actual baseline failures and metrics from the search role:
+To try an additional configuration, first export the baseline settings and its
+failed tests from the `search` group. This group supplies the examples a proposer
+can inspect; all three groups (`search`, `evaluation`, `adversarial`) are public:
 
 ```sh
 uv run --frozen python -m lab packet \
   --release artifacts/article-01.2 --output proposal-packet.json
 ```
 
-The packet contains the current configuration, mutable surface, source hashes,
-and complete failed search traces. Give it to a coding agent, or inspect it
-yourself, and return a candidate manifest with the exact fields demonstrated in
-`experiments/candidates.json`. Keep its proposer attribution truthful.
+The packet is a JSON file containing the baseline settings, allowed changes,
+source-file hashes, and the inputs and answers from failed tests. The command
+only exports data; it does not contact an AI provider. You can give the file to a
+coding assistant and ask for a new configuration record in the format shown in
+`experiments/candidates.json`, including an accurate record of who proposed it.
 
 For a fully local demonstration, two deterministic diagnosis rules inspect the
 wrong-answer record: wrong entity enables entity filtering; invalid date enables
@@ -254,6 +309,11 @@ uv run --frozen python -m lab evaluate \
   --release artifacts/article-01.2 --candidate diagnosed-candidate.json
 ```
 
+These commands add a fifth configuration, `diagnosed-history`, to the original
+four. The new batch runs 5 × 20 × 3 = 300 scenario-runs. For the supplied
+failures, the helper enables the same filters as Scoped history; it demonstrates
+how a proposed change reaches evaluation, not a newly discovered strategy.
+
 This is a working failure → diagnosis → candidate → evaluation loop. The
 diagnoser is explicitly **rule based**, not an LLM researcher. `evaluate` also
 accepts other valid patches within the same surface. It evaluates the supplied
@@ -264,10 +324,11 @@ to `evaluate --release` when testing its child. The evaluator imports the frozen
 lineage, preserves each ancestor's proposer record, and records the parent
 manifest hash. Source, fixture, contract, and lockfile hashes must match before
 the lineage can be extended; changed code or data require a new baseline.
-The campaign is bounded to eight candidates including ancestors. Output files
+The whole batch may contain at most eight configurations, counting the baseline
+and earlier configurations as well as new proposals. Output files
 are created exclusively; choose a new path to repeat an export.
 
-The configuration surface is limited to `min_confidence`, `filter_entity`,
+The settings a candidate may change are `min_confidence`, `filter_entity`,
 `time_aware`, `deduplicate`, and `top_k`. Their types and ranges are checked
 before execution. Unknown fields, non-finite thresholds, out-of-budget runs,
 and attempts to disable owner isolation, deletion, or prohibited-write rules

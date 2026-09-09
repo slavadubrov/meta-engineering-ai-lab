@@ -92,8 +92,10 @@
           </p>
         </div>
         <p class="small muted">
-          The same scenario also asks on January 12, when Paris is correct.
-          Fixing the earlier answer must preserve the later one.
+          A fourth action asks on January 12, when Paris is correct. These four
+          actions are <strong>events</strong>. Together they form one
+          <strong>scenario</strong>: a complete test story. Fixing the earlier
+          answer must preserve the later one.
         </p>
         <details>
           <summary>See the JSON fields behind this example</summary>
@@ -198,6 +200,29 @@
             isolation, deleted records, or prohibited writes. All four policies
             pass those checks here; their answer quality differs.
           </p>
+          <details>
+            <summary>What runs here, and why does the contract say eight?</summary>
+            <p>
+              Each of the four configurations runs the same 20 test stories.
+              Each story starts with empty memory and runs three times. A
+              <strong>repeat</strong> is another run of the same story, not a
+              new example: 4 configurations × 20 stories × 3 repeats =
+              <strong>240 scenario-runs</strong>.
+            </p>
+            <p>
+              <code>candidates.json</code> lists the four configurations.
+              <code>contract.json</code> sets maximum limits: eight
+              configurations including the baseline, 64 stories per
+              configuration, 64 events per story, five repeats, and 30 seconds
+              for evaluation. These are ceilings for additional experiments,
+              not the counts used here. There are no hidden candidates.
+            </p>
+            <p>
+              Python runs the saved settings. No LLM generates the tests,
+              proposes new settings, answers questions, or scores results
+              during these runs.
+            </p>
+          </details>
           <a
             href="?candidate=scoped-history&amp;family=temporal&amp;scenario=future-move#evidence"
             >Open the city example with Scoped history ↓</a

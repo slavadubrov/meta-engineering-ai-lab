@@ -10,7 +10,7 @@ step from publishing this GitHub repository.
 Clone the [repository](https://github.com/slavadubrov/closed-loop-ai-lab), then:
 
 ```sh
-git checkout v0.1.1
+git checkout v0.1.2
 uv sync --frozen
 uv run --frozen python -m lab verify artifacts/article-01.2 --source
 uv run --frozen python -m lab site --output site
@@ -21,16 +21,15 @@ Open [the packaged explorer](http://127.0.0.1:8000/site/). The exporter refuses
 to overwrite an existing output directory; use another output path if `site/`
 already exists. To package a fresh experiment, pass its directory with `--release`.
 
-The [v0.1.1 GitHub release](https://github.com/slavadubrov/closed-loop-ai-lab/releases/tag/v0.1.1)
-also provides `closed-loop-ai-lab-v0.1.1-site.zip` and `SHA256SUMS`.
-Version `v0.1.1` improves the README and browser onboarding while preserving
-the Python engine and `article-01.2` evidence from `v0.1.0` unchanged.
+The [v0.1.2 GitHub release](https://github.com/slavadubrov/closed-loop-ai-lab/releases/tag/v0.1.2)
+also provides `closed-loop-ai-lab-v0.1.2-site.zip` and `SHA256SUMS`.
+The package includes the saved `article-01.2` experiment.
 The ZIP contains the **contents** of `site/`, so its root is directly hostable.
 Verify the downloaded archive before extracting it:
 
 ```sh
 shasum -a 256 -c SHA256SUMS
-unzip closed-loop-ai-lab-v0.1.1-site.zip -d site
+unzip closed-loop-ai-lab-v0.1.2-site.zip -d site
 ```
 
 ## Publish under the existing website
@@ -57,7 +56,7 @@ report provides the fallback when JavaScript is disabled or evidence cannot load
 For the separate Edge of Context Astro repository:
 
 1. Keep the verified package in a versioned source directory, for example
-   `vendor/labs/memory-improvement/v0.1.1/`, with the release URL and archive checksum.
+   `vendor/labs/memory-improvement/v0.1.2/`, with the release URL and archive checksum.
 2. Add an explicit build step that copies that version into
    `public/labs/memory-improvement/` **after content import and before Astro builds**.
    In that repository `public/` is generated; do not edit or commit `dist/`.
