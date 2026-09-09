@@ -1,0 +1,69 @@
+[
+  {
+    "id": "baseline",
+    "label": "Baseline",
+    "parent_id": null,
+    "hypothesis": "Freeze the original thresholded writer and recency-based retrieval.",
+    "predicted_effect": "Useful direct facts work; entity and temporal ambiguity remain visible.",
+    "patch": {},
+    "proposer": {
+      "type": "coding_agent",
+      "name": "Codex",
+      "model": "not exposed to this task",
+      "prompt_version": "article-01-authoring-v1",
+      "attribution": "Authored by Codex while building this demo, with public access to all scenarios; no runtime provider call."
+    }
+  },
+  {
+    "id": "scoped-history",
+    "label": "Scoped history",
+    "parent_id": "baseline",
+    "hypothesis": "Filter by the requested entity and the fact validity interval before ranking.",
+    "predicted_effect": "Correct entity and as-of answers without relaxing admission or owner safeguards.",
+    "patch": {
+      "filter_entity": true,
+      "time_aware": true
+    },
+    "proposer": {
+      "type": "coding_agent",
+      "name": "Codex",
+      "model": "not exposed to this task",
+      "prompt_version": "article-01-authoring-v1",
+      "attribution": "Authored by Codex while building this demo, with public access to all scenarios; no runtime provider call."
+    }
+  },
+  {
+    "id": "deduplicated",
+    "label": "Deduplicate confirmations",
+    "parent_id": "scoped-history",
+    "hypothesis": "Repeated identical active facts do not need another version.",
+    "predicted_effect": "Equal downstream success with fewer stored rows; no quality gain expected.",
+    "patch": {
+      "deduplicate": true
+    },
+    "proposer": {
+      "type": "coding_agent",
+      "name": "Codex",
+      "model": "not exposed to this task",
+      "prompt_version": "article-01-authoring-v1",
+      "attribution": "Authored by Codex while building this demo, with public access to all scenarios; no runtime provider call."
+    }
+  },
+  {
+    "id": "broad-writes",
+    "label": "Write more",
+    "parent_id": "scoped-history",
+    "hypothesis": "Lowering the admission threshold should retain more useful proposals.",
+    "predicted_effect": "Higher useful-write recall; uncertain contradictions may become durable.",
+    "patch": {
+      "min_confidence": 0.2
+    },
+    "proposer": {
+      "type": "coding_agent",
+      "name": "Codex",
+      "model": "not exposed to this task",
+      "prompt_version": "article-01-authoring-v1",
+      "attribution": "Authored by Codex while building this demo, with public access to all scenarios; no runtime provider call."
+    }
+  }
+]
