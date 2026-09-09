@@ -25,7 +25,7 @@ The companion article is awaiting publication. This README and the browser guide
 ## Inspect the saved campaigns without a key
 
 ```sh
-git clone https://github.com/slavadubrov/closed-loop-ai-lab.git
+git clone --branch v0.2.0 --depth 1 https://github.com/slavadubrov/closed-loop-ai-lab.git
 cd closed-loop-ai-lab
 uv sync --frozen
 uv run --frozen python -m lab verify artifacts/agent-study-02 --source
