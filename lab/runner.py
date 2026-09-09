@@ -453,17 +453,24 @@ def build_bundle(
             raise ValueError("Use a parent release or an initial lineage, not both")
         lineage = read_json(parent_release / "inputs/candidates.json")
     candidates = load_candidates(extra, lineage)
+    # Reuse verified deterministic parent evidence; only the new candidate needs execution.
+    recorded = {}
+    if parent_release is not None and repeats == 1:
+        previous = read_json(parent_release / "bundle.json", MAX_ARTIFACT_JSON_BYTES)
+        if all(c["summary"]["repeat_count"] == 1 for c in previous["candidates"]):
+            recorded = {c["id"]: c["runs"] for c in previous["candidates"]}
     deadline = time.monotonic() + MAX_WALL_SECONDS
     all_runs, by_id = [], {}
     for candidate in candidates:
-        runs = []
-        for repeat in range(repeats):
-            for scenario in scenarios:
-                if time.monotonic() > deadline:
-                    raise TimeoutError(f"Campaign exceeded {MAX_WALL_SECONDS} seconds")
-                run = run_scenario(scenario, Config(**candidate["config"]), repeat)
-                run["candidate_id"] = candidate["id"]
-                runs.append(run)
+        runs = deepcopy(recorded.get(candidate["id"], []))
+        if not runs:
+            for repeat in range(repeats):
+                for scenario in scenarios:
+                    if time.monotonic() > deadline:
+                        raise TimeoutError(f"Campaign exceeded {MAX_WALL_SECONDS} seconds")
+                    run = run_scenario(scenario, Config(**candidate["config"]), repeat)
+                    run["candidate_id"] = candidate["id"]
+                    runs.append(run)
         summary = aggregate(runs, repeats)
         summary["role_metrics"] = {
             role: aggregate([r for r in runs if r["role"] == role], repeats)["metrics"]
@@ -558,7 +565,7 @@ def build_bundle(
             raise AssertionError("Unsafe proposal unexpectedly passed validation")
     return {
         "schema_version": "1.0",
-        "release_id": "article-01.3",
+        "release_id": "article-01.4",
         "parent_release": (
             {
                 "release_id": parent_manifest["release_id"],

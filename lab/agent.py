@@ -13,7 +13,7 @@ MODEL = "gpt-5.6-luna"
 PROMPT_VERSION = "memory-improver-sgr-v1"
 MAX_OUTPUT_TOKENS = 4096
 MAX_INPUT_BYTES = 100_000
-# Published USD per million tokens, checked 2026-09-09. Ignore cache discounts.
+# Published USD per million tokens, checked 2026-09-09. Include write surcharge; ignore read discounts.
 INPUT_USD_PER_M = 0.20
 OUTPUT_USD_PER_M = 1.20
 PRICING_SOURCE = "https://developers.openai.com/api/docs/models/gpt-5.6-luna"
@@ -122,7 +122,7 @@ def request_for(context: dict) -> dict:
 def reserve_usd(request: dict) -> float:
     # ponytail: byte count plus framing overestimates text tokens; no tokenizer needed here.
     return (
-        (len(json.dumps(request, ensure_ascii=False).encode()) + 1024) * INPUT_USD_PER_M
+        (len(json.dumps(request, ensure_ascii=False).encode()) + 1024) * INPUT_USD_PER_M * 1.25
         + MAX_OUTPUT_TOKENS * OUTPUT_USD_PER_M
     ) / 1_000_000
 
@@ -132,8 +132,13 @@ def usage_cost(usage: dict | None) -> float | None:
         type(usage.get(k)) is not int or usage[k] < 0 for k in ("input_tokens", "output_tokens")
     ):
         return None
+    writes = (usage.get("input_tokens_details") or {}).get("cache_write_tokens", 0)
+    if type(writes) is not int or not 0 <= writes <= usage["input_tokens"]:
+        return None
     return (
-        usage["input_tokens"] * INPUT_USD_PER_M + usage["output_tokens"] * OUTPUT_USD_PER_M
+        usage["input_tokens"] * INPUT_USD_PER_M
+        + writes * INPUT_USD_PER_M * 0.25
+        + usage["output_tokens"] * OUTPUT_USD_PER_M
     ) / 1_000_000
 
 

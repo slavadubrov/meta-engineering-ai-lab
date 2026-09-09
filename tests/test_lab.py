@@ -151,7 +151,7 @@ class ExperimentContractTests(unittest.TestCase):
             site = Path(directory) / "site"
             export_site(path, site)
             self.assertIn("./artifacts/release/", (site / "index.html").read_text())
-            self.assertNotIn("../artifacts/article-01.3/", (site / "index.html").read_text())
+            self.assertNotIn("../artifacts/article-01.4/", (site / "index.html").read_text())
             self.assertEqual(verify(site / "artifacts/release"), verify(path))
             with self.assertRaises(FileExistsError):
                 export(path, self.bundle, self.runs)

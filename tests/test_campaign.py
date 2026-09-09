@@ -8,7 +8,8 @@ from types import SimpleNamespace
 
 from pydantic import ValidationError
 
-from lab.agent import Proposal, request_for, validate_proposal
+from lab.__main__ import export_site
+from lab.agent import Proposal, request_for, usage_cost, validate_proposal
 from lab.campaign import context_for, run_campaigns
 from lab.runner import ROOT, build_bundle, read_json, sha256
 
@@ -88,6 +89,7 @@ class CampaignTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d:
             root = Path(d) / "campaign"
             result = run_campaigns(root, 1, 3, client=client)
+            self.assertEqual(result["campaigns"][0]["scenario_executions"], 80)
             rows = result["campaigns"][0]["iterations"]
             self.assertEqual([r["status"] for r in rows], ["evaluated"] * 3)
             self.assertEqual([r["selected_for_next_iteration"] for r in rows], [True, False, True])
@@ -96,6 +98,9 @@ class CampaignTests(unittest.TestCase):
             self.assertFalse(context["previous_iterations"][1]["selected"])
             self.assertEqual(len(json.loads(client.requests[0]["input"])["tested"]), 1)
             self.assertEqual(result["campaigns"][0]["selected"]["metrics"]["task_success"], 0.95)
+            export_site(root / "campaign-01/baseline", Path(d) / "site", root)
+            self.assertTrue((Path(d) / "site/memory.html").is_file())
+            self.assertIn("./artifacts/campaign/", (Path(d) / "site/index.html").read_text())
             manifest = read_json(root / "manifest.json")
             self.assertTrue(all(sha256(root / f["path"]) == f["sha256"] for f in manifest["files"]))
 
@@ -111,6 +116,19 @@ class CampaignTests(unittest.TestCase):
             result = run_campaigns(Path(d) / "budget", 1, 3, 0.000001, client=empty)
             self.assertEqual(empty.requests, [])
             self.assertEqual(result["campaigns"][0]["status"], "budget_exhausted")
+
+    def test_cost_includes_cache_write_surcharge_and_unknown_is_not_zero(self):
+        self.assertAlmostEqual(
+            usage_cost(
+                {
+                    "input_tokens": 1000,
+                    "output_tokens": 100,
+                    "input_tokens_details": {"cache_write_tokens": 1000},
+                }
+            ),
+            0.00037,
+        )
+        self.assertIsNone(usage_cost(None))
 
     def test_schema_permissions_evidence_and_stop(self):
         bundle, _ = build_bundle(lineage=[read_json(ROOT / "experiments/candidates.json")[0]])

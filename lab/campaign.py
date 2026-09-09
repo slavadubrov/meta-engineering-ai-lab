@@ -3,6 +3,7 @@
 import json
 import math
 import time
+from datetime import UTC, datetime
 from pathlib import Path
 
 from .agent import (
@@ -95,6 +96,7 @@ def run_campaigns(
     identity = provenance()
     experiment = {
         "schema_version": "agent-campaign-v1",
+        "generated_at": datetime.now(UTC).isoformat(),
         "model": MODEL,
         "prompt_version": PROMPT_VERSION,
         "source": identity,
@@ -127,6 +129,7 @@ def run_campaigns(
                 "status": "running",
                 "iterations": [],
                 "baseline": feedback(bundle["candidates"][0]),
+                "scenario_executions": len(runs),
             }
             experiment["campaigns"].append(campaign)
             history = []
@@ -204,6 +207,7 @@ def run_campaigns(
                     )
                     dump(step / "candidate.json", candidate)
                     next_bundle, next_runs = build_bundle(extra=candidate, parent_release=release)
+                    campaign["scenario_executions"] += len(next_bundle["scenarios"])
                     evaluated = next_bundle["candidates"][-1]
                     release = step / "evaluation"
                     next_bundle["release_id"] = release.name
@@ -258,7 +262,7 @@ def run_campaigns(
         dump(
             output / "manifest.json",
             {
-                "source": identity,
+                "provenance": identity,
                 "files": [
                     {"path": str(p.relative_to(output)), "sha256": sha256(p)}
                     for p in sorted(output.rglob("*"))
@@ -318,7 +322,7 @@ def write_campaign_report(output: Path, experiment: dict) -> None:
             "All 20 stories are public development inputs. These campaigns do not "
             "establish held-out generalization or an advantage over manual tuning.",
             "",
-            f"Estimated model cost (cache discounts ignored): ${experiment['estimated_cost_usd']:.6f}. "
+            f"Estimated model cost (cache-write surcharge included; read discounts ignored): ${experiment['estimated_cost_usd']:.6f}. "
             f"Cost plus unknown-call reservations: ${experiment['charged_or_reserved_usd']:.6f}. "
             "Provider failures remain in the record; unknown cost is not zero.",
             "",

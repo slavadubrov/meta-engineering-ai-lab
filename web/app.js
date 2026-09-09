@@ -1,6 +1,6 @@
 const artifactRoot = new URL(
   document.querySelector('meta[name="memory-artifact-base"]')?.content ??
-    "../artifacts/article-01.3/",
+    "../artifacts/article-01.4/",
   document.baseURI,
 );
 const $ = (id) => document.getElementById(id);
