@@ -10,9 +10,9 @@ step from publishing this GitHub repository.
 Clone the [repository](https://github.com/slavadubrov/closed-loop-ai-lab), then:
 
 ```sh
-git checkout v0.1.2
+git checkout v0.1.3
 uv sync --frozen
-uv run --frozen python -m lab verify artifacts/article-01.2 --source
+uv run --frozen python -m lab verify artifacts/article-01.3 --source
 uv run --frozen python -m lab site --output site
 uv run --frozen python -m lab serve
 ```
@@ -21,15 +21,15 @@ Open [the packaged explorer](http://127.0.0.1:8000/site/). The exporter refuses
 to overwrite an existing output directory; use another output path if `site/`
 already exists. To package a fresh experiment, pass its directory with `--release`.
 
-The [v0.1.2 GitHub release](https://github.com/slavadubrov/closed-loop-ai-lab/releases/tag/v0.1.2)
-also provides `closed-loop-ai-lab-v0.1.2-site.zip` and `SHA256SUMS`.
-The package includes the saved `article-01.2` experiment.
+The [v0.1.3 GitHub release](https://github.com/slavadubrov/closed-loop-ai-lab/releases/tag/v0.1.3)
+also provides `closed-loop-ai-lab-v0.1.3-site.zip` and `SHA256SUMS`.
+The package includes the saved `article-01.3` experiment.
 The ZIP contains the **contents** of `site/`, so its root is directly hostable.
 Verify the downloaded archive before extracting it:
 
 ```sh
 shasum -a 256 -c SHA256SUMS
-unzip closed-loop-ai-lab-v0.1.2-site.zip -d site
+unzip closed-loop-ai-lab-v0.1.3-site.zip -d site
 ```
 
 ## Publish under the existing website
@@ -46,7 +46,7 @@ The deployed layout must be:
 /labs/memory-improvement/index.html
 /labs/memory-improvement/style.css
 /labs/memory-improvement/app.js
-/labs/memory-improvement/artifacts/article-01.2/ (complete directory)
+/labs/memory-improvement/artifacts/article-01.3/ (complete directory)
 ```
 
 All paths are relative, so the same package also works at another nested prefix.
@@ -56,7 +56,7 @@ report provides the fallback when JavaScript is disabled or evidence cannot load
 For the separate Edge of Context Astro repository:
 
 1. Keep the verified package in a versioned source directory, for example
-   `vendor/labs/memory-improvement/v0.1.2/`, with the release URL and archive checksum.
+   `vendor/labs/memory-improvement/v0.1.3/`, with the release URL and archive checksum.
 2. Add an explicit build step that copies that version into
    `public/labs/memory-improvement/` **after content import and before Astro builds**.
    In that repository `public/` is generated; do not edit or commit `dist/`.
@@ -78,8 +78,8 @@ the website's applicable approval policy.
 
 ## Preserve the evidence when updating
 
-`article-01.1` is the original local article run. `article-01.2` is the publication
-preparation run, with timeless execution disclosures. Keep both unchanged.
+`article-01.3` contains one run per scenario. Earlier `article-01.1` and
+`article-01.2` snapshots remain unchanged.
 The original Git metadata points to its staging checkout; file hashes identify
 the exact implementation used for each run.
 

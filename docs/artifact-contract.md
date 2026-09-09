@@ -1,6 +1,6 @@
 # Public artifact contract, version 1.0
 
-Python is authoritative. The browser reads `../artifacts/article-01.2/bundle.json`
+Python is authoritative. The browser reads `../artifacts/article-01.3/bundle.json`
 from `web/index.html`; it filters recorded evidence, never evaluates a target.
 `report.html` is a semantic, standalone no-JavaScript comparison; `report.md`
 contains the same conclusions. `manifest.json` hashes every public artifact.

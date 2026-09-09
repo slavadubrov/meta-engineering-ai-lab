@@ -87,6 +87,12 @@ Read `fact` as a request to save **Ada's account city = Paris, effective January
 | `source`, `kind`   | Labels checked by the writer's fixed admission rules: a user-supplied fact.                                                                |
 | `should_retain`    | The evaluator's label: this is a useful proposal that should be kept. The target ignores this field.                                       |
 
+**Confidence decides whether to store a proposed fact.** The writer rejects
+a proposal when its supplied score is below `min_confidence`. For example,
+`delivery = courier` scored `0.4` is rejected at the baseline threshold of
+`0.7`, but stored at Broad writes' threshold of `0.2`. The program does not
+calculate this score or turn it into a probability of correctness.
+
 The January 5 query is another event:
 
 ```json
@@ -112,18 +118,16 @@ The fixture includes `expected` and `should_retain` for scoring. The fixed targe
 ignores both fields, although the runner passes the complete event into it.
 These public fixtures are not a hidden test set.
 
-## What is a scenario, an event, and a repeat?
+## What is a scenario and an event?
 
 A **scenario** is one complete test story. The future-move story above has four
 **events**: save Berlin, save Paris, ask for January 5, and ask for January 12.
 An event is one action sent to memory: `write`, `query`, or `delete`.
 
 The repository supplies **20 scenarios**. Each configuration runs through the
-same stories, starting with empty memory for each story. A **repeat** runs a
-story again from empty memory. The default is three repeats; the answers are
-identical, while local timings can vary.
+same stories once, starting with empty memory for each story.
 
-Thus **4 configurations × 20 scenarios × 3 repeats = 240 scenario-runs**.
+Thus **4 configurations × 20 scenarios = 80 scenario-runs**.
 There are still only 20 different stories. No model is called to generate inputs,
 choose settings, answer questions, or score these runs.
 
@@ -145,7 +149,7 @@ inherit deduplication. Scoped history changes two filters together, so its score
 measures that combined change.
 
 Why include a worse candidate? Write more retains all 38 useful proposals per
-repeat, compared with its parent's 37, but also admits four unnecessary ones.
+pass through the suite, compared with its parent's 37, but also admits four unnecessary ones.
 It fixes one scenario and breaks four: success falls from 19/20 to 16/20.
 **Keeping more useful facts does not necessarily produce better answers.**
 
@@ -213,24 +217,22 @@ all candidates:
 
 | Check             | Concrete example                                                                                                      | Recorded failures / checks per candidate |
 | ----------------- | --------------------------------------------------------------------------------------------------------------------- | ---------------------------------------: |
-| Owner isolation   | Ada's query must not retrieve another user's records; a write claiming a different owner must leave memory unchanged. |                                   0 / 84 |
-| Deletion          | Deleting Ada's `account/city` removes every version in that scope; those deleted record IDs must not reappear later.  |                                   0 / 33 |
-| Prohibited writes | A proposal with a disallowed key, source, or kind must be rejected without changing memory.                           |                                    0 / 6 |
+| Owner isolation   | Ada's query must not retrieve another user's records; a write claiming a different owner must leave memory unchanged. |                                   0 / 28 |
+| Deletion          | Deleting Ada's `account/city` removes every version in that scope; those deleted record IDs must not reappear later.  |                                   0 / 11 |
+| Prohibited writes | A proposal with a disallowed key, source, or kind must be rejected without changing memory.                           |                                    0 / 2 |
 
-These counts cover event-level checks across three repeats, not that many
-independent scenarios. Deletion checks concern the target's memory; saved traces
+These counts cover individual events in one run of the 20 scenarios. Deletion checks concern the target's memory; saved traces
 still contain earlier states. The structured admission rules are not a general
 secret or prompt-injection detector.
 
-The frozen experiment contains **20 scenarios × 4 configurations × 3 repeats =
-240 scenario-runs**. Repeats reproduce the same answers; they do not add new test
-cases. All four configurations pass the implemented hard checks, so their answer
+The frozen experiment contains **20 scenarios × 4 configurations =
+80 scenario-runs**. Each story runs once per configuration. All four configurations pass the implemented hard checks, so their answer
 quality still needs a separate comparison.
 
 The evaluator recommends accept or reject based on the results. Every human
 review is still pending. A recommendation neither approves nor deploys a change.
-See the [readable comparison report](artifacts/article-01.2/report.md) and
-[exact counts in bundle.json](artifacts/article-01.2/bundle.json) under each
+See the [readable comparison report](artifacts/article-01.3/report.md) and
+[exact counts in bundle.json](artifacts/article-01.3/bundle.json) under each
 candidate’s `summary.counts`.
 
 ## Run it
@@ -244,7 +246,7 @@ uv run --frozen python -m lab run
 ```
 
 The command runs the baseline plus three candidates, each on 20 independent
-synthetic scenarios three times. It creates a new `artifacts/local-<timestamp>/`
+synthetic scenarios once. It creates a new `artifacts/local-<timestamp>/`
 directory containing a complete report, metrics, traces, state diffs, input
 snapshots, and a SHA-256 manifest. It never overwrites another run.
 
@@ -260,7 +262,7 @@ uv run --frozen python -m lab serve
 ```
 
 Visit [http://127.0.0.1:8000/web/](http://127.0.0.1:8000/web/). It serves on
-loopback only. The explorer initially uses `artifacts/article-01.2/`, the evidence explained above. Fresh runs keep their own directories; open
+loopback only. The explorer initially uses `artifacts/article-01.3/`, the evidence explained above. Fresh runs keep their own directories; open
 their `report.html` through the same server to inspect their results. Stop the
 server with Ctrl+C.
 
@@ -289,7 +291,7 @@ can inspect; all three groups (`search`, `evaluation`, `adversarial`) are public
 
 ```sh
 uv run --frozen python -m lab packet \
-  --release artifacts/article-01.2 --output proposal-packet.json
+  --release artifacts/article-01.3 --output proposal-packet.json
 ```
 
 The packet is a JSON file containing the baseline settings, allowed changes,
@@ -304,13 +306,13 @@ temporal filtering. They generate a new candidate from the actual trace:
 
 ```sh
 uv run --frozen python -m lab propose \
-  --release artifacts/article-01.2 --output diagnosed-candidate.json
+  --release artifacts/article-01.3 --output diagnosed-candidate.json
 uv run --frozen python -m lab evaluate \
-  --release artifacts/article-01.2 --candidate diagnosed-candidate.json
+  --release artifacts/article-01.3 --candidate diagnosed-candidate.json
 ```
 
 These commands add a fifth configuration, `diagnosed-history`, to the original
-four. The new batch runs 5 × 20 × 3 = 300 scenario-runs. For the supplied
+four. The new batch runs 5 × 20 = 100 scenario-runs. For the supplied
 failures, the helper enables the same filters as Scoped history; it demonstrates
 how a proposed change reaches evaluation, not a newly discovered strategy.
 
@@ -340,7 +342,7 @@ decision separately from the frozen evidence:
 
 ```sh
 uv run --frozen python -m lab decision \
-  --release artifacts/article-01.2 --candidate scoped-history \
+  --release artifacts/article-01.3 --candidate scoped-history \
   --verdict accept --reviewer "Your name" --reason "Your evidence-based rationale"
 ```
 
@@ -356,7 +358,7 @@ does not record a decision.
 uv run --frozen python -m unittest discover -s tests -v
 uv run --frozen ruff check lab tests
 uv run --frozen ruff format --check lab tests
-uv run --frozen python -m lab verify artifacts/article-01.2 --source
+uv run --frozen python -m lab verify artifacts/article-01.3 --source
 ```
 
 Tests cover the observed positive/neutral/regressing outcomes, owner isolation,
@@ -384,8 +386,9 @@ executable. Running the actual frontend needs no npm dependency. See
 [deployment instructions](DEPLOYMENT.md) for exact static paths.
 
 The preserved `article-01.1` evidence predates this standalone repository;
-its Git metadata identifies the original staging checkout. `article-01.2` is
-the publication-preparation rerun from the standalone source commit. Each
+its Git metadata identifies the original staging checkout. `article-01.2`
+preserves the earlier three-run experiment. The current `article-01.3` evidence
+runs each story once per configuration. Each
 manifest records the exact source files and environment used for its run.
 Frozen publication-link fields describe that evidence release; they do not
 describe the current availability of the repository or companion article.
@@ -403,7 +406,7 @@ source project. Referenced papers and external projects retain their own terms.
 | `data/scenarios.json`     | Original public normalized events and expected answers               |
 | `experiments/`            | Baseline, candidate lineage, mutation and budget contract            |
 | `tests/test_lab.py`       | Runnable regression and invariant checks                             |
-| `artifacts/article-01.2/` | Frozen measured evidence used by the draft and explorer              |
+| `artifacts/article-01.3/` | Frozen measured evidence used by the draft and explorer              |
 | `web/`                    | Small static presentation; no second implementation of the evaluator |
 | `docs/`                   | Research and the public artifact contract                            |
 
@@ -413,9 +416,11 @@ source project. Referenced papers and external projects retain their own terms.
   public diagnostic/regression groups. All were visible while the candidates
   were authored. A later generalization experiment needs fresh inaccessible
   tasks and a frozen candidate before evaluation.
-- **No stochastic confidence claim.** Three repeats check reproducibility and
-  sample local timing. They produce the same answers; zero score variance does
-  not increase the number of independent tasks.
+- **Deterministic results.** The default is one run per story. Repeating the
+  same inputs adds no answer-quality evidence. `--repeats N` remains available
+  for explicit reruns, but does not add an LLM or simulate model variability.
+  A future model-backed evaluation would need repeated trials if outputs vary,
+  with the model and generation settings recorded.
 - **No production benchmark.** Exact matching on original synthetic scenarios
   does not measure real-world assistant quality. Context words are whitespace
   counts; model tokens and provider expenditure are zero. CPU timing excludes

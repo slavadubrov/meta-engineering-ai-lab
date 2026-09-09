@@ -28,7 +28,7 @@
   "max_events_per_scenario": 64,
   "max_repeats": 5,
   "max_wall_seconds": 30,
-  "default_repeats": 3,
+  "default_repeats": 1,
   "context_word_budget": 64,
   "provider_calls": 0,
   "provider_spend_usd": 0,

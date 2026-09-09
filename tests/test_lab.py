@@ -30,6 +30,37 @@ class ExperimentContractTests(unittest.TestCase):
         cls.candidates = {c["id"]: c for c in cls.bundle["candidates"]}
         cls.scenarios = read_json(ROOT / "data/scenarios.json")
 
+    def test_default_is_one_run_per_scenario(self):
+        bundle, runs = build_bundle()
+        self.assertEqual(len(runs), 80)
+        self.assertTrue(all(c["summary"]["repeat_count"] == 1 for c in bundle["candidates"]))
+        self.assertTrue(
+            all(
+                c["summary"]["metrics"]["success_repeat_stddev"] is None
+                for c in bundle["candidates"]
+            )
+        )
+        self.assertEqual(read_json(ROOT / "experiments/contract.json")["default_repeats"], 1)
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            parent = root / "parent"
+            export(parent, bundle, runs)
+            proposal = root / "candidate.json"
+            proposal.write_text(json.dumps(propose(proposal_context(parent, "baseline"))))
+            for command, extra, expected in (
+                ("run", [], 80),
+                ("evaluate", ["--release", str(parent), "--candidate", str(proposal)], 100),
+            ):
+                output = root / command
+                result = subprocess.run(
+                    [sys.executable, "-m", "lab", command, "--output", str(output), *extra],
+                    cwd=ROOT,
+                    capture_output=True,
+                    text=True,
+                )
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertEqual(len((output / "runs.jsonl").read_text().splitlines()), expected)
+
     def test_observed_quality_proxy_and_neutral_outcomes(self):
         base = self.candidates["baseline"]["summary"]["metrics"]
         scoped = self.candidates["scoped-history"]["summary"]["metrics"]
@@ -120,7 +151,7 @@ class ExperimentContractTests(unittest.TestCase):
             site = Path(directory) / "site"
             export_site(path, site)
             self.assertIn("./artifacts/release/", (site / "index.html").read_text())
-            self.assertNotIn("../artifacts/article-01.2/", (site / "index.html").read_text())
+            self.assertNotIn("../artifacts/article-01.3/", (site / "index.html").read_text())
             self.assertEqual(verify(site / "artifacts/release"), verify(path))
             with self.assertRaises(FileExistsError):
                 export(path, self.bundle, self.runs)

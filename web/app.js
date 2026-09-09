@@ -1,6 +1,6 @@
 const artifactRoot = new URL(
   document.querySelector('meta[name="memory-artifact-base"]')?.content ??
-    "../artifacts/article-01.2/",
+    "../artifacts/article-01.3/",
   document.baseURI,
 );
 const $ = (id) => document.getElementById(id);
@@ -236,7 +236,7 @@ async function start() {
           baseline)
         : baseline;
     $("view-status").textContent =
-      `${candidate.label} · ${scenario.title} · ${label(scenario.role)} scenario · recorded repeat ${selectedRun.repeat ?? 0}.`;
+      `${candidate.label} · ${scenario.title} · ${label(scenario.role)} scenario · recorded run ${(selectedRun.repeat ?? 0) + 1}.`;
     $("proposal-title").textContent = candidate.label;
     $("hypothesis").textContent = candidate.hypothesis;
     $("predicted").textContent = candidate.predicted_effect;
@@ -342,34 +342,40 @@ async function start() {
       ),
     );
     $("sample-size").textContent =
-      `${candidate.summary.task_count} distinct scenarios · ${candidate.summary.repeat_count} identical-answer repeats`;
+      `${candidate.summary.task_count} distinct scenarios · ${candidate.summary.repeat_count} ${candidate.summary.repeat_count === 1 ? "run" : "runs"} per scenario`;
     $("metric-candidate-label").textContent = candidate.label;
     $("metric-reference-label").textContent = reference.label;
     $("metrics").replaceChildren(
-      ...Object.entries(candidate.summary.metrics).map(([key, value]) => {
-        const definition = bundle.metric_definitions[key] ?? {
-          label: label(key),
-        };
-        const row = element("tr");
-        const name = element("th", definition.label);
-        name.scope = "row";
-        row.append(
-          name,
-          element(
-            "td",
-            metric(reference.summary.metrics[key], definition),
-            "metric-value",
-          ),
-          element("td", metric(value, definition), "metric-value"),
-          element(
-            "td",
-            definition.description ??
-              "See the artifact for this metric's definition.",
-            "metric-description",
-          ),
-        );
-        return row;
-      }),
+      ...Object.entries(candidate.summary.metrics)
+        .filter(
+          ([key]) =>
+            key !== "success_repeat_stddev" ||
+            candidate.summary.repeat_count > 1,
+        )
+        .map(([key, value]) => {
+          const definition = bundle.metric_definitions[key] ?? {
+            label: label(key),
+          };
+          const row = element("tr");
+          const name = element("th", definition.label);
+          name.scope = "row";
+          row.append(
+            name,
+            element(
+              "td",
+              metric(reference.summary.metrics[key], definition),
+              "metric-value",
+            ),
+            element("td", metric(value, definition), "metric-value"),
+            element(
+              "td",
+              definition.description ??
+                "See the artifact for this metric's definition.",
+              "metric-description",
+            ),
+          );
+          return row;
+        }),
     );
     $("uncertainty").replaceChildren(
       element(

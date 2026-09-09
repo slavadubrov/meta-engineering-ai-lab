@@ -124,7 +124,7 @@ LIMITATIONS = [
     "This target starts from structured fact proposals. Confidence scores are hand-authored fixture values, not calibrated probabilities. It does not measure language extraction, model calibration, or a real assistant's reasoning.",
     "The frozen consumer returns the first packed fact with the requested key. Its failure modes are inspectable; they do not estimate a language model's behavior.",
     "Scoped history changes entity and temporal filtering together. Its gain is attributable to the tested bundle; this run does not estimate the isolated effect of each switch.",
-    "Repeated runs are identical deterministic tasks in isolated memory. Zero score variance checks replay consistency; it is not a confidence interval or evidence of generalization.",
+    "Each scenario runs once by default. Repeating these deterministic rules adds no answer-quality evidence; variation across repeats is unavailable for a single run.",
     "Configuration validation limits what these manifests can change. This same-user process is not an operating-system sandbox against a malicious coding agent with filesystem access.",
     "The durable-key/source/kind gate rejects the supplied structured attacks. It is not a general prompt-injection defense or a detector for secrets hidden in allowed values.",
     "Latency is local execution of tiny in-memory scenarios. Context words are not model tokens. Zero provider expenditure excludes authoring, machine and electricity costs.",
@@ -190,7 +190,9 @@ def metrics(counts: Counter, latencies: list[float], repeat_scores: list[float])
         "latency_p95_ms": percentile(0.95),
         "provider_cost_usd": 0,
         "model_tokens": 0,
-        "success_repeat_stddev": statistics.pstdev(repeat_scores) if repeat_scores else 0,
+        "success_repeat_stddev": statistics.pstdev(repeat_scores)
+        if len(repeat_scores) > 1
+        else None,
     }
 
 
@@ -435,7 +437,7 @@ def provenance() -> dict:
 
 
 def build_bundle(
-    repeats: int = 3, extra: dict | None = None, parent_release: Path | None = None
+    repeats: int = 1, extra: dict | None = None, parent_release: Path | None = None
 ) -> tuple[dict, list[dict]]:
     if type(repeats) is not int or not 1 <= repeats <= MAX_REPEATS:
         raise ValueError(f"Repeats must be between 1 and {MAX_REPEATS}")
@@ -551,7 +553,7 @@ def build_bundle(
             raise AssertionError("Unsafe proposal unexpectedly passed validation")
     return {
         "schema_version": "1.0",
-        "release_id": "article-01.2",
+        "release_id": "article-01.3",
         "parent_release": (
             {
                 "release_id": parent_manifest["release_id"],
@@ -596,6 +598,10 @@ def write_reports(output: Path, bundle: dict) -> None:
     labels = [c["label"] for c in candidates]
     rows = []
     for key, definition in bundle["metric_definitions"].items():
+        if key == "success_repeat_stddev" and all(
+            c["summary"]["repeat_count"] == 1 for c in candidates
+        ):
+            continue
         rows.append(
             [definition["label"] + f" ({definition['unit']})"]
             + [format_metric(c["summary"]["metrics"][key], definition["unit"]) for c in candidates]
@@ -625,7 +631,7 @@ def write_reports(output: Path, bundle: dict) -> None:
             "",
             "Decision: **pending human review**. No candidate has been promoted.",
             "",
-            f"Paired with parent: {paired['wins']} wins, {paired['ties']} ties, {paired['losses']} losses across {paired['task_count']} scenarios. Repeat deltas: {paired['repeat_deltas']}.",
+            f"Paired with parent: {paired['wins']} wins, {paired['ties']} ties, {paired['losses']} losses across {paired['task_count']} scenarios.",
             "",
             "Hard constraints: "
             + "; ".join(

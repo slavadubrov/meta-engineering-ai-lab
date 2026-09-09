@@ -22,7 +22,7 @@ from .runner import (
     verify_source,
 )
 
-DEFAULT_RELEASE = ROOT / "artifacts/article-01.2"
+DEFAULT_RELEASE = ROOT / "artifacts/article-01.3"
 
 
 def stamp() -> str:
@@ -40,7 +40,7 @@ def export_site(release: Path, output: Path) -> None:
     """Copy a verified artifact and three browser files into a portable static directory."""
     verify(release)
     original = (ROOT / "web/index.html").read_text()
-    prefix = "../artifacts/article-01.2/"
+    prefix = "../artifacts/article-01.3/"
     if prefix not in original:
         raise ValueError("The explorer's artifact URL contract changed; update the static exporter")
     output.mkdir(parents=True, exist_ok=False)
@@ -122,7 +122,12 @@ def main() -> int:
             name, help="Run the baseline and candidates in fresh scenario state"
         )
         command.add_argument("--output", type=Path)
-        command.add_argument("--repeats", type=int, default=3)
+        command.add_argument(
+            "--repeats",
+            type=int,
+            default=1,
+            help="Runs per scenario (default: 1; this target is deterministic)",
+        )
         if name == "evaluate":
             command.add_argument("--candidate", type=Path, required=True)
             command.add_argument(
