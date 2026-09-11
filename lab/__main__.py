@@ -22,7 +22,7 @@ from .runner import (
     verify_source,
 )
 
-DEFAULT_RELEASE = ROOT / "artifacts/article-01.5"
+DEFAULT_RELEASE = ROOT / "artifacts/article-01.6"
 
 
 def stamp() -> str:
@@ -40,7 +40,7 @@ def export_site(release: Path, output: Path, campaign_release: Path | None = Non
     """Copy a verified artifact and three browser files into a portable static directory."""
     verify(release)
     original = (ROOT / "web/memory.html").read_text()
-    prefix = "../artifacts/article-01.5/"
+    prefix = "../artifacts/article-01.6/"
     if prefix not in original:
         raise ValueError("The explorer's artifact URL contract changed; update the static exporter")
     if campaign_release is not None:
@@ -59,7 +59,7 @@ def export_site(release: Path, output: Path, campaign_release: Path | None = Non
             (ROOT / "web/index.html")
             .read_text()
             .replace(
-                "../artifacts/agent-study-02/",
+                "../artifacts/agent-study-03/",
                 f"./artifacts/{quote(campaign_release.name, safe='')}/",
             )
         )
@@ -180,7 +180,7 @@ def main() -> int:
     command = sub.add_parser("site", help="Export a portable static explorer and verified evidence")
     command.add_argument("--release", type=Path, default=DEFAULT_RELEASE)
     command.add_argument("--output", type=Path, required=True)
-    command.add_argument("--campaign-release", type=Path, default=ROOT / "artifacts/agent-study-02")
+    command.add_argument("--campaign-release", type=Path, default=ROOT / "artifacts/agent-study-03")
     command = sub.add_parser("campaign", help="Run the live outer LLM improvement agent")
     command.add_argument(
         "--live", action="store_true", required=True, help="Explicitly authorize API calls"
