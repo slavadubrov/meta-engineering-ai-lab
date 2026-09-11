@@ -1,0 +1,52 @@
+[
+  {
+    "id": "baseline",
+    "label": "Baseline",
+    "parent_id": null,
+    "hypothesis": "Freeze the original thresholded writer and recency-based retrieval.",
+    "predicted_effect": "Useful direct facts work; entity and temporal ambiguity remain visible.",
+    "patch": {},
+    "proposer": {
+      "type": "coding_agent",
+      "name": "Codex",
+      "model": "not exposed to this task",
+      "prompt_version": "article-01-authoring-v1",
+      "attribution": "Authored by Codex while building this demo, with public access to all scenarios; no runtime provider call."
+    }
+  },
+  {
+    "id": "agent-01",
+    "label": "Agent proposal 1",
+    "parent_id": "baseline",
+    "hypothesis": "Enabling entity filtering and time-aware retrieval will select the requested subject and validity interval before ranking, correcting entity distractor and historical/future-date failures without changing writes or hard-constraint behavior.",
+    "predicted_effect": "Task success should improve on entity-grounding, distractor-retrieval, historical-address, future-move, and related temporal cases; retrieval should contain fewer irrelevant records and reduce stale-fact errors.",
+    "patch": {
+      "filter_entity": true,
+      "time_aware": true
+    },
+    "proposer": {
+      "type": "llm",
+      "name": "OpenAI",
+      "model": "gpt-5.6-luna",
+      "prompt_version": "memory-improver-sgr-v2",
+      "response_id": "resp_04ca6e1e81f6834a016aa454451dc887d29ba998b29ae75fe2"
+    }
+  },
+  {
+    "id": "agent-02",
+    "label": "Agent proposal 2",
+    "parent_id": "agent-01",
+    "hypothesis": "Enabling deduplication will reuse identical active values confirmed at later effective dates, reducing redundant storage without changing retrieval correctness.",
+    "predicted_effect": "Task success and hard-constraint results should remain unchanged on these public cases, while storage records and bytes should decrease for repeated identical confirmations.",
+    "patch": {
+      "deduplicate": true
+    },
+    "proposer": {
+      "type": "llm",
+      "name": "OpenAI",
+      "model": "gpt-5.6-luna",
+      "prompt_version": "memory-improver-sgr-v2",
+      "response_id": "resp_03697846e7fd6dff016aa45449d2d487d2bae701cd5d439db7"
+    }
+  }
+]

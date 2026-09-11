@@ -1,0 +1,39 @@
+{
+  "observations": [
+    {
+      "scenario_id": "duplicate-confirmation",
+      "step": 2,
+      "observation": "The identical active language value was deduplicated rather than stored as a new record."
+    },
+    {
+      "scenario_id": "duplicate-confirmation",
+      "step": 3,
+      "observation": "A second later confirmation of the same value was also deduplicated, preserving a single record."
+    },
+    {
+      "scenario_id": "duplicate-confirmation",
+      "step": 4,
+      "observation": "Retrieval returned the preserved record with the correct German answer."
+    },
+    {
+      "scenario_id": "clean-abstention",
+      "step": 1,
+      "observation": "The low-confidence irrelevant color fact was rejected, preserving the expected empty result."
+    },
+    {
+      "scenario_id": "uncertain-conflict",
+      "step": 2,
+      "observation": "The low-confidence conflicting delivery value was rejected, preserving the existing pickup fact."
+    }
+  ],
+  "hypothesis": "The current configuration already achieves complete success on the measured scenarios while preserving abstention and deduplication behavior; the evidence does not support a further bounded setting change that would improve success or reduce storage without risking regression.",
+  "predicted_effect": "Stopping preserves the observed 1.0 task success, perfect write precision and recall, zero stale-fact rate, and existing hard-constraint results. No further improvement is supported by the supplied evidence.",
+  "action": "stop",
+  "patch": {
+    "min_confidence": null,
+    "filter_entity": null,
+    "time_aware": null,
+    "deduplicate": null,
+    "top_k": null
+  }
+}

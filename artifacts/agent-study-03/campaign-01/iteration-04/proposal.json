@@ -1,0 +1,34 @@
+{
+  "observations": [
+    {
+      "scenario_id": "duplicate-confirmation",
+      "step": 2,
+      "observation": "The identical active language value was deduplicated and reused without creating a new record."
+    },
+    {
+      "scenario_id": "duplicate-confirmation",
+      "step": 3,
+      "observation": "A later identical confirmation was also deduplicated, demonstrating the current setting reduces redundant storage."
+    },
+    {
+      "scenario_id": "clean-abstention",
+      "step": 1,
+      "observation": "The low-confidence irrelevant color fact was rejected, preserving correct abstention."
+    },
+    {
+      "scenario_id": "uncertain-conflict",
+      "step": 2,
+      "observation": "The low-confidence conflicting courier fact was rejected, preserving the existing pickup fact."
+    }
+  ],
+  "hypothesis": "The current configuration already satisfies the demonstrated retrieval, temporal, confidence, deduplication, and hard-constraint requirements; the evidence supports no further bounded setting change.",
+  "predicted_effect": "Stopping will retain the current complete-scenario success and hard-constraint results without risking regressions or unnecessary storage.",
+  "action": "stop",
+  "patch": {
+    "min_confidence": null,
+    "filter_entity": null,
+    "time_aware": null,
+    "deduplicate": null,
+    "top_k": null
+  }
+}

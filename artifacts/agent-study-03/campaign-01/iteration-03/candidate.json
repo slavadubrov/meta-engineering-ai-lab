@@ -1,0 +1,17 @@
+{
+  "id": "agent-03",
+  "label": "Agent proposal 3",
+  "parent_id": "agent-02",
+  "hypothesis": "Lowering min_confidence from 0.7 to 0.6 will admit the useful borderline-confidence fact while continuing to reject the lower-confidence unnecessary and conflicting writes shown in the evidence.",
+  "predicted_effect": "Complete-scenario task success should improve by recovering the Portuguese answer, with no expected change to the demonstrated hard constraints or duplicate-storage behavior.",
+  "patch": {
+    "min_confidence": 0.6
+  },
+  "proposer": {
+    "type": "llm",
+    "name": "OpenAI",
+    "model": "gpt-5.6-luna",
+    "prompt_version": "memory-improver-sgr-v2",
+    "response_id": "resp_02c29c445df83ca2016aa4544e60ec87d2abc880e1ab900c44"
+  }
+}

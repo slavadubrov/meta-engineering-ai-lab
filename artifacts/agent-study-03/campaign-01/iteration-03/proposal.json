@@ -1,0 +1,29 @@
+{
+  "observations": [
+    {
+      "scenario_id": "useful-low-confidence",
+      "step": 1,
+      "observation": "The useful Portuguese fact scored 0.6 but was rejected at the current 0.7 threshold, leaving the subsequent query without an answer."
+    },
+    {
+      "scenario_id": "clean-abstention",
+      "step": 1,
+      "observation": "The irrelevant color fact scored 0.3 and was correctly rejected, providing evidence that a threshold of 0.6 would still abstain here."
+    },
+    {
+      "scenario_id": "uncertain-conflict",
+      "step": 2,
+      "observation": "The conflicting courier fact scored 0.4 and was rejected; lowering the threshold only to 0.6 would continue to prevent this uncertain overwrite."
+    }
+  ],
+  "hypothesis": "Lowering min_confidence from 0.7 to 0.6 will admit the useful borderline-confidence fact while continuing to reject the lower-confidence unnecessary and conflicting writes shown in the evidence.",
+  "predicted_effect": "Complete-scenario task success should improve by recovering the Portuguese answer, with no expected change to the demonstrated hard constraints or duplicate-storage behavior.",
+  "action": "propose",
+  "patch": {
+    "min_confidence": 0.6,
+    "filter_entity": null,
+    "time_aware": null,
+    "deduplicate": null,
+    "top_k": null
+  }
+}

@@ -1,0 +1,441 @@
+[
+  {
+    "step": 1,
+    "action": "write",
+    "detail": {
+      "action": "write",
+      "at": "2026-01-01",
+      "tenant": "north",
+      "user": "ada",
+      "should_retain": true,
+      "fact": {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "account",
+        "key": "city",
+        "value": "Berlin",
+        "confidence": 0.95,
+        "valid_from": "2026-01-01",
+        "source": "user",
+        "kind": "fact"
+      },
+      "source_event_id": "history-boundary:event-1"
+    },
+    "result": {
+      "status": "stored",
+      "reason": "admitted",
+      "retained": true,
+      "record_id": "m001"
+    },
+    "before": [],
+    "after": [
+      {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "account",
+        "key": "city",
+        "value": "Berlin",
+        "confidence": 0.95,
+        "source": "user",
+        "valid_from": "2026-01-01",
+        "schema_version": 1,
+        "memory_type": "fact",
+        "id": "m001",
+        "source_event_id": "history-boundary:event-1",
+        "observed_at": "2026-01-01",
+        "valid_to": null,
+        "supersedes_memory_id": null
+      }
+    ],
+    "state_diff": {
+      "added": [
+        {
+          "tenant": "north",
+          "user": "ada",
+          "entity": "account",
+          "key": "city",
+          "value": "Berlin",
+          "confidence": 0.95,
+          "source": "user",
+          "valid_from": "2026-01-01",
+          "schema_version": 1,
+          "memory_type": "fact",
+          "id": "m001",
+          "source_event_id": "history-boundary:event-1",
+          "observed_at": "2026-01-01",
+          "valid_to": null,
+          "supersedes_memory_id": null
+        }
+      ],
+      "removed": [],
+      "changed": []
+    }
+  },
+  {
+    "step": 2,
+    "action": "write",
+    "detail": {
+      "action": "write",
+      "at": "2026-01-03",
+      "tenant": "north",
+      "user": "ada",
+      "should_retain": true,
+      "fact": {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "account",
+        "key": "city",
+        "value": "Paris",
+        "confidence": 0.95,
+        "valid_from": "2026-01-10",
+        "source": "user",
+        "kind": "fact"
+      },
+      "source_event_id": "history-boundary:event-2"
+    },
+    "result": {
+      "status": "stored",
+      "reason": "admitted",
+      "retained": true,
+      "record_id": "m002"
+    },
+    "before": [
+      {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "account",
+        "key": "city",
+        "value": "Berlin",
+        "confidence": 0.95,
+        "source": "user",
+        "valid_from": "2026-01-01",
+        "schema_version": 1,
+        "memory_type": "fact",
+        "id": "m001",
+        "source_event_id": "history-boundary:event-1",
+        "observed_at": "2026-01-01",
+        "valid_to": null,
+        "supersedes_memory_id": null
+      }
+    ],
+    "after": [
+      {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "account",
+        "key": "city",
+        "value": "Berlin",
+        "confidence": 0.95,
+        "source": "user",
+        "valid_from": "2026-01-01",
+        "schema_version": 1,
+        "memory_type": "fact",
+        "id": "m001",
+        "source_event_id": "history-boundary:event-1",
+        "observed_at": "2026-01-01",
+        "valid_to": "2026-01-10",
+        "supersedes_memory_id": null
+      },
+      {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "account",
+        "key": "city",
+        "value": "Paris",
+        "confidence": 0.95,
+        "source": "user",
+        "valid_from": "2026-01-10",
+        "schema_version": 1,
+        "memory_type": "fact",
+        "id": "m002",
+        "source_event_id": "history-boundary:event-2",
+        "observed_at": "2026-01-03",
+        "valid_to": null,
+        "supersedes_memory_id": "m001"
+      }
+    ],
+    "state_diff": {
+      "added": [
+        {
+          "tenant": "north",
+          "user": "ada",
+          "entity": "account",
+          "key": "city",
+          "value": "Paris",
+          "confidence": 0.95,
+          "source": "user",
+          "valid_from": "2026-01-10",
+          "schema_version": 1,
+          "memory_type": "fact",
+          "id": "m002",
+          "source_event_id": "history-boundary:event-2",
+          "observed_at": "2026-01-03",
+          "valid_to": null,
+          "supersedes_memory_id": "m001"
+        }
+      ],
+      "removed": [],
+      "changed": [
+        {
+          "id": "m001",
+          "before": {
+            "tenant": "north",
+            "user": "ada",
+            "entity": "account",
+            "key": "city",
+            "value": "Berlin",
+            "confidence": 0.95,
+            "source": "user",
+            "valid_from": "2026-01-01",
+            "schema_version": 1,
+            "memory_type": "fact",
+            "id": "m001",
+            "source_event_id": "history-boundary:event-1",
+            "observed_at": "2026-01-01",
+            "valid_to": null,
+            "supersedes_memory_id": null
+          },
+          "after": {
+            "tenant": "north",
+            "user": "ada",
+            "entity": "account",
+            "key": "city",
+            "value": "Berlin",
+            "confidence": 0.95,
+            "source": "user",
+            "valid_from": "2026-01-01",
+            "schema_version": 1,
+            "memory_type": "fact",
+            "id": "m001",
+            "source_event_id": "history-boundary:event-1",
+            "observed_at": "2026-01-01",
+            "valid_to": "2026-01-10",
+            "supersedes_memory_id": null
+          }
+        }
+      ]
+    }
+  },
+  {
+    "step": 3,
+    "action": "query",
+    "detail": {
+      "action": "query",
+      "at": "2026-01-12",
+      "tenant": "north",
+      "user": "ada",
+      "entity": "account",
+      "key": "city",
+      "as_of": "2026-01-09",
+      "text": "city",
+      "expected": "Berlin",
+      "source_event_id": "history-boundary:event-3"
+    },
+    "result": {
+      "answer": "Berlin",
+      "answer_record_id": "m001",
+      "retrieved_ids": [
+        "m001"
+      ],
+      "packed_ids": [
+        "m001"
+      ],
+      "context_words": 3
+    },
+    "before": [
+      {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "account",
+        "key": "city",
+        "value": "Berlin",
+        "confidence": 0.95,
+        "source": "user",
+        "valid_from": "2026-01-01",
+        "schema_version": 1,
+        "memory_type": "fact",
+        "id": "m001",
+        "source_event_id": "history-boundary:event-1",
+        "observed_at": "2026-01-01",
+        "valid_to": "2026-01-10",
+        "supersedes_memory_id": null
+      },
+      {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "account",
+        "key": "city",
+        "value": "Paris",
+        "confidence": 0.95,
+        "source": "user",
+        "valid_from": "2026-01-10",
+        "schema_version": 1,
+        "memory_type": "fact",
+        "id": "m002",
+        "source_event_id": "history-boundary:event-2",
+        "observed_at": "2026-01-03",
+        "valid_to": null,
+        "supersedes_memory_id": "m001"
+      }
+    ],
+    "after": [
+      {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "account",
+        "key": "city",
+        "value": "Berlin",
+        "confidence": 0.95,
+        "source": "user",
+        "valid_from": "2026-01-01",
+        "schema_version": 1,
+        "memory_type": "fact",
+        "id": "m001",
+        "source_event_id": "history-boundary:event-1",
+        "observed_at": "2026-01-01",
+        "valid_to": "2026-01-10",
+        "supersedes_memory_id": null
+      },
+      {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "account",
+        "key": "city",
+        "value": "Paris",
+        "confidence": 0.95,
+        "source": "user",
+        "valid_from": "2026-01-10",
+        "schema_version": 1,
+        "memory_type": "fact",
+        "id": "m002",
+        "source_event_id": "history-boundary:event-2",
+        "observed_at": "2026-01-03",
+        "valid_to": null,
+        "supersedes_memory_id": "m001"
+      }
+    ],
+    "state_diff": {
+      "added": [],
+      "removed": [],
+      "changed": []
+    },
+    "retrieved_ids": [
+      "m001"
+    ],
+    "packed_ids": [
+      "m001"
+    ],
+    "answer": "Berlin"
+  },
+  {
+    "step": 4,
+    "action": "query",
+    "detail": {
+      "action": "query",
+      "at": "2026-01-12",
+      "tenant": "north",
+      "user": "ada",
+      "entity": "account",
+      "key": "city",
+      "as_of": "2026-01-10",
+      "text": "city",
+      "expected": "Paris",
+      "source_event_id": "history-boundary:event-4"
+    },
+    "result": {
+      "answer": "Paris",
+      "answer_record_id": "m002",
+      "retrieved_ids": [
+        "m002"
+      ],
+      "packed_ids": [
+        "m002"
+      ],
+      "context_words": 3
+    },
+    "before": [
+      {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "account",
+        "key": "city",
+        "value": "Berlin",
+        "confidence": 0.95,
+        "source": "user",
+        "valid_from": "2026-01-01",
+        "schema_version": 1,
+        "memory_type": "fact",
+        "id": "m001",
+        "source_event_id": "history-boundary:event-1",
+        "observed_at": "2026-01-01",
+        "valid_to": "2026-01-10",
+        "supersedes_memory_id": null
+      },
+      {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "account",
+        "key": "city",
+        "value": "Paris",
+        "confidence": 0.95,
+        "source": "user",
+        "valid_from": "2026-01-10",
+        "schema_version": 1,
+        "memory_type": "fact",
+        "id": "m002",
+        "source_event_id": "history-boundary:event-2",
+        "observed_at": "2026-01-03",
+        "valid_to": null,
+        "supersedes_memory_id": "m001"
+      }
+    ],
+    "after": [
+      {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "account",
+        "key": "city",
+        "value": "Berlin",
+        "confidence": 0.95,
+        "source": "user",
+        "valid_from": "2026-01-01",
+        "schema_version": 1,
+        "memory_type": "fact",
+        "id": "m001",
+        "source_event_id": "history-boundary:event-1",
+        "observed_at": "2026-01-01",
+        "valid_to": "2026-01-10",
+        "supersedes_memory_id": null
+      },
+      {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "account",
+        "key": "city",
+        "value": "Paris",
+        "confidence": 0.95,
+        "source": "user",
+        "valid_from": "2026-01-10",
+        "schema_version": 1,
+        "memory_type": "fact",
+        "id": "m002",
+        "source_event_id": "history-boundary:event-2",
+        "observed_at": "2026-01-03",
+        "valid_to": null,
+        "supersedes_memory_id": "m001"
+      }
+    ],
+    "state_diff": {
+      "added": [],
+      "removed": [],
+      "changed": []
+    },
+    "retrieved_ids": [
+      "m002"
+    ],
+    "packed_ids": [
+      "m002"
+    ],
+    "answer": "Paris"
+  }
+]

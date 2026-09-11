@@ -1,0 +1,39 @@
+{
+  "observations": [
+    {
+      "scenario_id": "entity-grounding",
+      "step": 3,
+      "observation": "The query requested entity home, but retrieval returned both home and work records and selected Paris from work instead of Berlin."
+    },
+    {
+      "scenario_id": "distractor-retrieval",
+      "step": 9,
+      "observation": "The query requested entity primary, but retrieval ranked unrelated project records ahead of the primary record and returned Bath instead of Berlin."
+    },
+    {
+      "scenario_id": "historical-address",
+      "step": 3,
+      "observation": "The query as of 2026-01-05 returned the later Paris record despite Berlin being valid for the requested date."
+    },
+    {
+      "scenario_id": "future-move",
+      "step": 3,
+      "observation": "The query as of 2026-01-05 returned a record whose valid_from date was 2026-01-10, producing Paris instead of Berlin."
+    },
+    {
+      "scenario_id": "duplicate-confirmation",
+      "step": 4,
+      "observation": "Three identical active historical records were retrieved, increasing context and storage without changing the answer."
+    }
+  ],
+  "hypothesis": "Enabling entity and temporal filtering will remove cross-entity distractors and exclude records outside the requested as-of interval, while deduplication can reduce repeated identical facts without changing answers.",
+  "predicted_effect": "Higher complete-scenario success, especially for entity grounding and historical/future-date cases; fewer distracting records and lower storage for repeated confirmations.",
+  "action": "propose",
+  "patch": {
+    "min_confidence": null,
+    "filter_entity": true,
+    "time_aware": true,
+    "deduplicate": null,
+    "top_k": null
+  }
+}

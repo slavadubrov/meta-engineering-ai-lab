@@ -1,0 +1,23 @@
+{
+  "iteration": 4,
+  "parent_id": "agent-03",
+  "status": "agent_stopped",
+  "path": "campaign-02/iteration-04",
+  "reserved_usd": 0.012906200000000001,
+  "latency_seconds": 4.801644124905579,
+  "usage": {
+    "input_tokens": 8279,
+    "input_tokens_details": {
+      "cached_tokens": 0,
+      "cache_write_tokens": 8276
+    },
+    "output_tokens": 351,
+    "output_tokens_details": {
+      "reasoning_tokens": 134
+    },
+    "total_tokens": 8630
+  },
+  "estimated_cost_usd": 0.0024908,
+  "response_model": "gpt-5.6-luna",
+  "reason": "The current configuration already achieves complete-scenario success while preserving demonstrated abstentions and duplicate reuse; the evidence supports no further bounded setting change."
+}

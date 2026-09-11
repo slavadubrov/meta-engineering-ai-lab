@@ -2,18 +2,15 @@
 
 This page explains the inner tool only. The [main README](../README.md) follows the outer LLM agent and its real campaigns.
 
-# Closed-Loop AI Lab
-
 Why does a memory system answer **Paris** when the user still lives in **Berlin**?
 This small Python experiment reproduces that mistake, changes the memory rules,
 and checks whether the fix helps across 20 scenarios. A browser page lets you
 compare the saved answers and inspect how each answer was produced.
 
-This is one example of **closed-loop AI engineering**: observe a failure → propose
-a limited change → evaluate it against the previous version → review the evidence
-before accepting the change. Here the change is a memory configuration. The
-experiment uses ordinary Python rules throughout, so you can follow every step
-without an LLM, API key, or paid service.
+This is the component the outer agent improves. Here we inspect four prepared
+configurations to understand what its settings do. These comparisons use ordinary
+Python rules and need no API key; the main README shows the LLM choosing its own
+changes and receiving feedback.
 
 [Source on GitHub](https://github.com/slavadubrov/closed-loop-ai-lab) ·
 [Run locally](#run-it) · [Deployment guide](../DEPLOYMENT.md).
@@ -121,6 +118,72 @@ The evaluator then compares the returned value with `expected`.
 The fixture includes `expected` and `should_retain` for scoring. The fixed target
 ignores both fields, although the runner passes the complete event into it.
 These public fixtures are not a hidden test set.
+
+## How the memory schema governs a write
+
+The outer agent uses SGR to propose settings. The inner tool applies a small part
+of [Schema-Guided Agent Memory (SGAM)](https://slavadubrov.com/blog/2026/06/20/schema-guided-agent-memory/):
+validated fact records, ownership, provenance, validity dates, and deletion.
+
+[`FactProposal` and `MemoryRecord`](../lab/memory.py) validate inputs and stored
+state with Pydantic. Required fields have types and bounds; unknown fields,
+noncanonical dates, nonfinite confidence values, and missing source references
+are rejected. Every stored record carries `schema_version: 1` and
+`memory_type: "fact"`. The version identifies the record format; it does not
+perform migrations.
+
+This is the actual Paris record after event 2:
+
+```json
+{
+  "tenant": "north",
+  "user": "ada",
+  "entity": "account",
+  "key": "city",
+  "value": "Paris",
+  "confidence": 0.95,
+  "source": "user",
+  "valid_from": "2026-01-10",
+  "schema_version": 1,
+  "memory_type": "fact",
+  "id": "m002",
+  "source_event_id": "future-move:event-2",
+  "observed_at": "2026-01-03",
+  "valid_to": null,
+  "supersedes_memory_id": "m001"
+}
+```
+
+`source_event_id` points back to the write that supplied Paris.
+`supersedes_memory_id: "m001"` links it to Berlin. Berlin ends on January 10;
+Paris starts that day. A closed interval must end **after** it starts.
+`Memory.write()` validates the proposed state before replacing stored history.
+Malformed input leaves the previous records and next record ID unchanged.
+
+What if another write also says it takes effect on January 10?
+
+| Incoming fact for the same owner, subject, and property | What the writer does |
+| --- | --- |
+| `city = Rome`, effective January 10 | Rejects `same_date_conflict`; Paris remains unchanged. |
+| `city = Paris`, effective January 10 | Reuses the existing fact; creates no empty interval. |
+| `city = Rome`, effective January 9 | Rejects `out_of_order_update`; this small writer does not insert late history. |
+
+For a confirmation with a **later** effective date, `deduplicate` still controls
+whether the tool reuses the active fact or creates a new version. The agent can
+tune that behavior; it cannot change the schema or conflict policy.
+
+The baseline intentionally omits subject and date filters during retrieval.
+Its records are valid, but it can select the wrong one. The scoped-history
+configuration applies those filters before ranking. Owner filtering always
+applies, and deletion removes every version of the requested property within
+that owner's subject.
+
+Storage is a Python list reset for each scenario. There is no database,
+authentication service, retention scheduler, or schema migration system. Earlier
+states remain in the synthetic experiment traces even after deletion from the
+tool. The [writer regression test](../tests/test_lab.py) checks malformed input,
+same-date conflicts, late updates, and interval boundaries separately from the
+20 stories used to compare agent proposals.
 
 ## What is a scenario and an event?
 
@@ -235,8 +298,8 @@ quality still needs a separate comparison.
 
 The evaluator recommends accept or reject based on the results. Every human
 review is still pending. A recommendation neither approves nor deploys a change.
-See the [readable comparison report](../artifacts/article-01.5/report.md) and
-[exact counts in bundle.json](../artifacts/article-01.5/bundle.json) under each
+See the [readable comparison report](../artifacts/article-01.6/report.md) and
+[exact counts in bundle.json](../artifacts/article-01.6/bundle.json) under each
 candidate’s `summary.counts`.
 
 ## Run it
@@ -244,7 +307,7 @@ candidate’s `summary.counts`.
 Install [uv](https://docs.astral.sh/uv/getting-started/installation/), then run:
 
 ```sh
-git clone --branch v0.2.0 --depth 1 https://github.com/slavadubrov/closed-loop-ai-lab.git
+git clone --branch v0.2.1 --depth 1 https://github.com/slavadubrov/closed-loop-ai-lab.git
 cd closed-loop-ai-lab
 uv run --frozen python -m lab run
 ```
@@ -266,7 +329,7 @@ uv run --frozen python -m lab serve
 ```
 
 Visit [http://127.0.0.1:8000/web/memory.html](http://127.0.0.1:8000/web/memory.html). It serves on
-loopback only. The explorer initially uses `artifacts/article-01.5/`, the evidence explained above. Fresh runs keep their own directories; open
+loopback only. The explorer initially uses `artifacts/article-01.6/`, the evidence explained above. Fresh runs keep their own directories; open
 their `report.html` through the same server to inspect their results. Stop the
 server with Ctrl+C.
 
@@ -295,7 +358,7 @@ can inspect; all three groups (`search`, `evaluation`, `adversarial`) are public
 
 ```sh
 uv run --frozen python -m lab packet \
-  --release artifacts/article-01.5 --output proposal-packet.json
+  --release artifacts/article-01.6 --output proposal-packet.json
 ```
 
 The packet is a JSON file containing the baseline settings, allowed changes,
@@ -310,9 +373,9 @@ temporal filtering. They generate a new candidate from the actual trace:
 
 ```sh
 uv run --frozen python -m lab propose \
-  --release artifacts/article-01.5 --output diagnosed-candidate.json
+  --release artifacts/article-01.6 --output diagnosed-candidate.json
 uv run --frozen python -m lab evaluate \
-  --release artifacts/article-01.5 --candidate diagnosed-candidate.json
+  --release artifacts/article-01.6 --candidate diagnosed-candidate.json
 ```
 
 These commands add a fifth configuration, `diagnosed-history`, to the original
@@ -346,7 +409,7 @@ decision separately from the frozen evidence:
 
 ```sh
 uv run --frozen python -m lab decision \
-  --release artifacts/article-01.5 --candidate scoped-history \
+  --release artifacts/article-01.6 --candidate scoped-history \
   --verdict accept --reviewer "Your name" --reason "Your evidence-based rationale"
 ```
 
@@ -362,7 +425,7 @@ does not record a decision.
 uv run --frozen python -m unittest discover -s tests -v
 uv run --frozen ruff check lab tests
 uv run --frozen ruff format --check lab tests
-uv run --frozen python -m lab verify artifacts/article-01.5 --source
+uv run --frozen python -m lab verify artifacts/article-01.6 --source
 ```
 
 Tests cover the observed positive/neutral/regressing outcomes, owner isolation,
@@ -391,7 +454,7 @@ executable. Running the actual frontend needs no npm dependency. See
 
 The preserved `article-01.1` evidence predates this standalone repository;
 its Git metadata identifies the original staging checkout. `article-01.2`
-preserves the earlier three-run experiment. The current `article-01.5` evidence
+preserves the earlier three-run experiment. The current `article-01.6` evidence
 runs each story once per configuration. Each
 manifest records the exact source files and environment used for its run.
 Frozen publication-link fields describe that evidence release; they do not
@@ -410,7 +473,7 @@ source project. Referenced papers and external projects retain their own terms.
 | `data/scenarios.json`     | Original public normalized events and expected answers               |
 | `experiments/`            | Baseline, candidate lineage, mutation and budget contract            |
 | `tests/test_lab.py`       | Runnable regression and invariant checks                             |
-| `artifacts/article-01.5/` | Frozen measured evidence used by the draft and explorer              |
+| `artifacts/article-01.6/` | Frozen measured evidence used by the draft and explorer              |
 | `web/`                    | Small static presentation; no second implementation of the evaluator |
 | `docs/`                   | Research and the public artifact contract                            |
 

@@ -1,0 +1,40 @@
+{
+  "added": [
+    {
+      "tenant": "north",
+      "user": "ada",
+      "entity": "account",
+      "key": "city",
+      "value": "Berlin",
+      "confidence": 0.95,
+      "source": "user",
+      "valid_from": "2026-01-01",
+      "schema_version": 1,
+      "memory_type": "fact",
+      "id": "m001",
+      "source_event_id": "user-isolation:event-1",
+      "observed_at": "2026-01-01",
+      "valid_to": null,
+      "supersedes_memory_id": null
+    },
+    {
+      "tenant": "north",
+      "user": "ben",
+      "entity": "account",
+      "key": "city",
+      "value": "Paris",
+      "confidence": 0.95,
+      "source": "user",
+      "valid_from": "2026-01-02",
+      "schema_version": 1,
+      "memory_type": "fact",
+      "id": "m002",
+      "source_event_id": "user-isolation:event-2",
+      "observed_at": "2026-01-02",
+      "valid_to": null,
+      "supersedes_memory_id": null
+    }
+  ],
+  "removed": [],
+  "changed": []
+}

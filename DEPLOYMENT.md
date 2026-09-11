@@ -5,9 +5,9 @@ The browser is static HTML, CSS, JavaScript, and saved JSON. It makes no provide
 ## Export the article study
 
 ```sh
-git checkout v0.2.0
+git checkout v0.2.1
 uv sync --frozen
-uv run --frozen python -m lab verify artifacts/agent-study-02 --source
+uv run --frozen python -m lab verify artifacts/agent-study-03 --source
 uv run --frozen python -m lab site --output site
 python -m http.server 8076 --bind 127.0.0.1 --directory site
 ```
@@ -19,7 +19,7 @@ Open http://127.0.0.1:8076/ and stop with Ctrl-C. The site has two pages:
 
 For a different recorded campaign, pass `--campaign-release artifacts/my-agent-study` to `lab site`. Use a new output directory for each export.
 
-The [v0.2.0 release](https://github.com/slavadubrov/closed-loop-ai-lab/releases/tag/v0.2.0) includes `closed-loop-ai-lab-v0.2.0-site.zip` and `SHA256SUMS`. Verify the ZIP with `shasum -a 256 -c SHA256SUMS`, then unzip it into the directory you want to serve. All experiment files are included; the local `.env.local` is not.
+The [v0.2.1 release](https://github.com/slavadubrov/closed-loop-ai-lab/releases/tag/v0.2.1) includes `closed-loop-ai-lab-v0.2.1-site.zip` and `SHA256SUMS`. Verify the ZIP with `shasum -a 256 -c SHA256SUMS`, then unzip it into the directory you want to serve. All experiment files are included; the local `.env.local` is not.
 
 ## Mount it under an existing website
 
@@ -31,11 +31,11 @@ Copy the exported directory as a unit to a subpath such as `/labs/memory-improve
 /labs/memory-improvement/campaign.js
 /labs/memory-improvement/app.js
 /labs/memory-improvement/style.css
-/labs/memory-improvement/artifacts/agent-study-02/...
-/labs/memory-improvement/artifacts/article-01.5/...
+/labs/memory-improvement/artifacts/agent-study-03/...
+/labs/memory-improvement/artifacts/article-01.6/...
 ```
 
-For the Notes Astro site, keep a versioned copy of the ZIP output under `vendor/labs/memory-improvement/v0.2.0/`, then copy that directory into `dist/labs/memory-improvement/` after the normal build and discovery steps. A Labs card can link to `/labs/memory-improvement/`; add the article URL to the explorer when the article is public. Verify the entry page, one request JSON, a nested evaluation report, and `memory.html` at the deployed subpath.
+For the Notes Astro site, keep a versioned copy of the ZIP output under `vendor/labs/memory-improvement/v0.2.1/`, then copy that directory into `dist/labs/memory-improvement/` after the normal build and discovery steps. A Labs card can link to `/labs/memory-improvement/`; add the article URL to the explorer when the article is public. Verify the entry page, one request JSON, a nested evaluation report, and `memory.html` at the deployed subpath.
 
 This repository does not configure or deploy the production website. Its static output can use the existing static hosting setup; it requires no server functions or usage-based backend.
 

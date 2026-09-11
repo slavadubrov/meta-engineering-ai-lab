@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta
       name="campaign-artifact-base"
-      content="../artifacts/agent-study-02/"
+      content="../artifacts/agent-study-03/"
     />
     <title>An agent improves a memory tool — Closed-Loop AI Lab</title>
     <link rel="stylesheet" href="style.css" />
@@ -100,8 +100,8 @@
           choosing its next step.
         </p>
         <p class="flow">
-          Observe errors → Luna proposes a bounded change → Python validates and
-          tests it → feedback returns to Luna
+          Observe errors → the agent proposes a bounded change → Python validates and
+          tests it → feedback returns to the agent
         </p>
         <p>
           This page shows
@@ -111,7 +111,7 @@
         </p>
         <nav class="artifact-links" aria-label="Companion links">
           <a
-            href="https://github.com/slavadubrov/closed-loop-ai-lab/tree/v0.2.0"
+            href="https://github.com/slavadubrov/closed-loop-ai-lab/tree/v0.2.1"
             >Code and README</a
           ><a href="memory.html">Understand the memory tool</a
           ><span>Companion article: publication pending</span>
@@ -126,11 +126,20 @@
           many records to retrieve. Each proposal changes at most two settings.
         </p>
         <p>
-          Every response follows an SGR schema: observations with test-event
+          Every response follows a Schema-Guided Reasoning (SGR) schema: observations with test-event
           references, a hypothesis, an expected effect, and a configuration
           patch. Python checks those fields, evaluates the proposal, and returns
           feedback. The model cannot edit files, change expected answers,
           disable owner isolation, or deploy its preferred result.
+        </p>
+        <p>
+          SGR structures the agent's decision. Schema-Guided Agent Memory
+          (SGAM) governs the facts it is
+          trying to manage: Python validates each memory record, preserves its
+          owner and source event, and checks its validity interval before a
+          write. A conflicting city for the same effective date is rejected
+          without changing history. These fixed rules are outside the agent's
+          permissions. <a href="memory.html#lab-guide">See the concrete memory example</a>.
         </p>
         <details>
           <summary>What are a campaign, an iteration, and a scenario?</summary>
@@ -160,10 +169,10 @@
       <noscript
         ><p>
           JavaScript is disabled. Read the
-          <a href="../artifacts/agent-study-02/report.md">campaign report</a>
+          <a href="../artifacts/agent-study-03/report.md">campaign report</a>
           and
           <a
-            href="https://github.com/slavadubrov/closed-loop-ai-lab/tree/v0.2.0"
+            href="https://github.com/slavadubrov/closed-loop-ai-lab/tree/v0.2.1"
             >README</a
           >
           for the recorded results.
@@ -204,7 +213,7 @@
           <p id="parent"></p>
           <div class="decision-grid">
             <div>
-              <h3>What Luna observed</h3>
+              <h3>What the agent observed</h3>
               <ul id="observations"></ul>
               <h3>Hypothesis</h3>
               <p id="hypothesis"></p>
@@ -241,11 +250,11 @@
           change was deployed by this loop.
         </p>
         <p>
-          <a id="report" href="../artifacts/agent-study-02/report.md"
+          <a id="report" href="../artifacts/agent-study-03/report.md"
             >Complete campaign report</a
           >
           ·
-          <a id="manifest" href="../artifacts/agent-study-02/manifest.json"
+          <a id="manifest" href="../artifacts/agent-study-03/manifest.json"
             >Evidence file hashes</a
           >
         </p>

@@ -1,0 +1,70 @@
+[
+  {
+    "step": 1,
+    "action": "write",
+    "detail": {
+      "action": "write",
+      "at": "2026-01-01",
+      "tenant": "north",
+      "user": "ada",
+      "should_retain": true,
+      "fact": {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "account",
+        "key": "language",
+        "value": "Portuguese",
+        "confidence": 0.6,
+        "valid_from": "2026-01-01",
+        "source": "user",
+        "kind": "fact"
+      },
+      "source_event_id": "useful-low-confidence:event-1"
+    },
+    "result": {
+      "status": "abstained",
+      "reason": "below_threshold",
+      "retained": false
+    },
+    "before": [],
+    "after": [],
+    "state_diff": {
+      "added": [],
+      "removed": [],
+      "changed": []
+    }
+  },
+  {
+    "step": 2,
+    "action": "query",
+    "detail": {
+      "action": "query",
+      "at": "2026-01-02",
+      "tenant": "north",
+      "user": "ada",
+      "entity": "account",
+      "key": "language",
+      "as_of": "2026-01-02",
+      "text": "language",
+      "expected": "Portuguese",
+      "source_event_id": "useful-low-confidence:event-2"
+    },
+    "result": {
+      "answer": null,
+      "answer_record_id": null,
+      "retrieved_ids": [],
+      "packed_ids": [],
+      "context_words": 0
+    },
+    "before": [],
+    "after": [],
+    "state_diff": {
+      "added": [],
+      "removed": [],
+      "changed": []
+    },
+    "retrieved_ids": [],
+    "packed_ids": [],
+    "answer": null
+  }
+]

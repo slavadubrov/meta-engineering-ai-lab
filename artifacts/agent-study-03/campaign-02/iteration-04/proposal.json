@@ -1,0 +1,29 @@
+{
+  "observations": [
+    {
+      "scenario_id": "duplicate-confirmation",
+      "step": 4,
+      "observation": "With deduplication enabled, repeated identical confirmations reuse m001 and the query returns the correct German value."
+    },
+    {
+      "scenario_id": "clean-abstention",
+      "step": 1,
+      "observation": "The 0.3-confidence unwanted fact remains correctly abstained under the current 0.6 threshold."
+    },
+    {
+      "scenario_id": "uncertain-conflict",
+      "step": 2,
+      "observation": "The 0.4-confidence conflicting fact remains correctly abstained under the current 0.6 threshold."
+    }
+  ],
+  "hypothesis": "The current configuration already achieves complete-scenario success while preserving demonstrated abstentions and duplicate reuse; the evidence supports no further bounded setting change.",
+  "predicted_effect": "Stopping preserves the measured 1.0 task success and current storage efficiency without risking regressions from an unsupported change.",
+  "action": "stop",
+  "patch": {
+    "min_confidence": null,
+    "filter_entity": null,
+    "time_aware": null,
+    "deduplicate": null,
+    "top_k": null
+  }
+}

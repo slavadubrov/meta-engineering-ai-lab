@@ -1,0 +1,35 @@
+[
+  {
+    "id": "baseline",
+    "label": "Baseline",
+    "parent_id": null,
+    "hypothesis": "Freeze the original thresholded writer and recency-based retrieval.",
+    "predicted_effect": "Useful direct facts work; entity and temporal ambiguity remain visible.",
+    "patch": {},
+    "proposer": {
+      "type": "coding_agent",
+      "name": "Codex",
+      "model": "not exposed to this task",
+      "prompt_version": "article-01-authoring-v1",
+      "attribution": "Authored by Codex while building this demo, with public access to all scenarios; no runtime provider call."
+    }
+  },
+  {
+    "id": "agent-01",
+    "label": "Agent proposal 1",
+    "parent_id": "baseline",
+    "hypothesis": "Applying entity and temporal filters before ranking will remove cross-entity distractors and records outside the requested as-of interval, improving complete-scenario retrieval correctness without changing writes or hard-constraint behavior.",
+    "predicted_effect": "Task success and relevant-memory precision should improve on entity-grounding, distractor-retrieval, historical-address, future-move, and history-boundary; distracting and stale retrieval should decrease. Storage and write precision should remain unchanged.",
+    "patch": {
+      "filter_entity": true,
+      "time_aware": true
+    },
+    "proposer": {
+      "type": "llm",
+      "name": "OpenAI",
+      "model": "gpt-5.6-luna",
+      "prompt_version": "memory-improver-sgr-v2",
+      "response_id": "resp_012ba32bec640776016aa454715a0087d2a462d41efdd5a673"
+    }
+  }
+]

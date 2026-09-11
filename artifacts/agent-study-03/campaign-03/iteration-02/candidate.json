@@ -1,0 +1,17 @@
+{
+  "id": "agent-02",
+  "label": "Agent proposal 2",
+  "parent_id": "agent-01",
+  "hypothesis": "Enabling deduplicate will reuse an identical active value confirmed at a later effective date, reducing redundant records while preserving retrieval correctness and hard-constraint behavior.",
+  "predicted_effect": "Task success should remain approximately unchanged, while storage records and bytes should decrease, especially for repeated confirmations. Write precision and hard-constraint results should remain unchanged.",
+  "patch": {
+    "deduplicate": true
+  },
+  "proposer": {
+    "type": "llm",
+    "name": "OpenAI",
+    "model": "gpt-5.6-luna",
+    "prompt_version": "memory-improver-sgr-v2",
+    "response_id": "resp_007586067f83f582016aa454763c9487d298a2f68fde6a41ee"
+  }
+}

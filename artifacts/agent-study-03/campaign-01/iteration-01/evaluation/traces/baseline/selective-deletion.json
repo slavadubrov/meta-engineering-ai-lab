@@ -1,0 +1,1161 @@
+[
+  {
+    "step": 1,
+    "action": "write",
+    "detail": {
+      "action": "write",
+      "at": "2026-01-01",
+      "tenant": "north",
+      "user": "ada",
+      "should_retain": true,
+      "fact": {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "account",
+        "key": "city",
+        "value": "Berlin",
+        "confidence": 0.95,
+        "valid_from": "2026-01-01",
+        "source": "user",
+        "kind": "fact"
+      },
+      "source_event_id": "selective-deletion:event-1"
+    },
+    "result": {
+      "status": "stored",
+      "reason": "admitted",
+      "retained": true,
+      "record_id": "m001"
+    },
+    "before": [],
+    "after": [
+      {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "account",
+        "key": "city",
+        "value": "Berlin",
+        "confidence": 0.95,
+        "source": "user",
+        "valid_from": "2026-01-01",
+        "schema_version": 1,
+        "memory_type": "fact",
+        "id": "m001",
+        "source_event_id": "selective-deletion:event-1",
+        "observed_at": "2026-01-01",
+        "valid_to": null,
+        "supersedes_memory_id": null
+      }
+    ],
+    "state_diff": {
+      "added": [
+        {
+          "tenant": "north",
+          "user": "ada",
+          "entity": "account",
+          "key": "city",
+          "value": "Berlin",
+          "confidence": 0.95,
+          "source": "user",
+          "valid_from": "2026-01-01",
+          "schema_version": 1,
+          "memory_type": "fact",
+          "id": "m001",
+          "source_event_id": "selective-deletion:event-1",
+          "observed_at": "2026-01-01",
+          "valid_to": null,
+          "supersedes_memory_id": null
+        }
+      ],
+      "removed": [],
+      "changed": []
+    }
+  },
+  {
+    "step": 2,
+    "action": "write",
+    "detail": {
+      "action": "write",
+      "at": "2026-01-02",
+      "tenant": "north",
+      "user": "ada",
+      "should_retain": true,
+      "fact": {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "account",
+        "key": "city",
+        "value": "Paris",
+        "confidence": 0.95,
+        "valid_from": "2026-01-02",
+        "source": "user",
+        "kind": "fact"
+      },
+      "source_event_id": "selective-deletion:event-2"
+    },
+    "result": {
+      "status": "stored",
+      "reason": "admitted",
+      "retained": true,
+      "record_id": "m002"
+    },
+    "before": [
+      {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "account",
+        "key": "city",
+        "value": "Berlin",
+        "confidence": 0.95,
+        "source": "user",
+        "valid_from": "2026-01-01",
+        "schema_version": 1,
+        "memory_type": "fact",
+        "id": "m001",
+        "source_event_id": "selective-deletion:event-1",
+        "observed_at": "2026-01-01",
+        "valid_to": null,
+        "supersedes_memory_id": null
+      }
+    ],
+    "after": [
+      {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "account",
+        "key": "city",
+        "value": "Berlin",
+        "confidence": 0.95,
+        "source": "user",
+        "valid_from": "2026-01-01",
+        "schema_version": 1,
+        "memory_type": "fact",
+        "id": "m001",
+        "source_event_id": "selective-deletion:event-1",
+        "observed_at": "2026-01-01",
+        "valid_to": "2026-01-02",
+        "supersedes_memory_id": null
+      },
+      {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "account",
+        "key": "city",
+        "value": "Paris",
+        "confidence": 0.95,
+        "source": "user",
+        "valid_from": "2026-01-02",
+        "schema_version": 1,
+        "memory_type": "fact",
+        "id": "m002",
+        "source_event_id": "selective-deletion:event-2",
+        "observed_at": "2026-01-02",
+        "valid_to": null,
+        "supersedes_memory_id": "m001"
+      }
+    ],
+    "state_diff": {
+      "added": [
+        {
+          "tenant": "north",
+          "user": "ada",
+          "entity": "account",
+          "key": "city",
+          "value": "Paris",
+          "confidence": 0.95,
+          "source": "user",
+          "valid_from": "2026-01-02",
+          "schema_version": 1,
+          "memory_type": "fact",
+          "id": "m002",
+          "source_event_id": "selective-deletion:event-2",
+          "observed_at": "2026-01-02",
+          "valid_to": null,
+          "supersedes_memory_id": "m001"
+        }
+      ],
+      "removed": [],
+      "changed": [
+        {
+          "id": "m001",
+          "before": {
+            "tenant": "north",
+            "user": "ada",
+            "entity": "account",
+            "key": "city",
+            "value": "Berlin",
+            "confidence": 0.95,
+            "source": "user",
+            "valid_from": "2026-01-01",
+            "schema_version": 1,
+            "memory_type": "fact",
+            "id": "m001",
+            "source_event_id": "selective-deletion:event-1",
+            "observed_at": "2026-01-01",
+            "valid_to": null,
+            "supersedes_memory_id": null
+          },
+          "after": {
+            "tenant": "north",
+            "user": "ada",
+            "entity": "account",
+            "key": "city",
+            "value": "Berlin",
+            "confidence": 0.95,
+            "source": "user",
+            "valid_from": "2026-01-01",
+            "schema_version": 1,
+            "memory_type": "fact",
+            "id": "m001",
+            "source_event_id": "selective-deletion:event-1",
+            "observed_at": "2026-01-01",
+            "valid_to": "2026-01-02",
+            "supersedes_memory_id": null
+          }
+        }
+      ]
+    }
+  },
+  {
+    "step": 3,
+    "action": "write",
+    "detail": {
+      "action": "write",
+      "at": "2026-01-03",
+      "tenant": "north",
+      "user": "ada",
+      "should_retain": true,
+      "fact": {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "account",
+        "key": "language",
+        "value": "German",
+        "confidence": 0.95,
+        "valid_from": "2026-01-03",
+        "source": "user",
+        "kind": "fact"
+      },
+      "source_event_id": "selective-deletion:event-3"
+    },
+    "result": {
+      "status": "stored",
+      "reason": "admitted",
+      "retained": true,
+      "record_id": "m003"
+    },
+    "before": [
+      {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "account",
+        "key": "city",
+        "value": "Berlin",
+        "confidence": 0.95,
+        "source": "user",
+        "valid_from": "2026-01-01",
+        "schema_version": 1,
+        "memory_type": "fact",
+        "id": "m001",
+        "source_event_id": "selective-deletion:event-1",
+        "observed_at": "2026-01-01",
+        "valid_to": "2026-01-02",
+        "supersedes_memory_id": null
+      },
+      {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "account",
+        "key": "city",
+        "value": "Paris",
+        "confidence": 0.95,
+        "source": "user",
+        "valid_from": "2026-01-02",
+        "schema_version": 1,
+        "memory_type": "fact",
+        "id": "m002",
+        "source_event_id": "selective-deletion:event-2",
+        "observed_at": "2026-01-02",
+        "valid_to": null,
+        "supersedes_memory_id": "m001"
+      }
+    ],
+    "after": [
+      {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "account",
+        "key": "city",
+        "value": "Berlin",
+        "confidence": 0.95,
+        "source": "user",
+        "valid_from": "2026-01-01",
+        "schema_version": 1,
+        "memory_type": "fact",
+        "id": "m001",
+        "source_event_id": "selective-deletion:event-1",
+        "observed_at": "2026-01-01",
+        "valid_to": "2026-01-02",
+        "supersedes_memory_id": null
+      },
+      {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "account",
+        "key": "city",
+        "value": "Paris",
+        "confidence": 0.95,
+        "source": "user",
+        "valid_from": "2026-01-02",
+        "schema_version": 1,
+        "memory_type": "fact",
+        "id": "m002",
+        "source_event_id": "selective-deletion:event-2",
+        "observed_at": "2026-01-02",
+        "valid_to": null,
+        "supersedes_memory_id": "m001"
+      },
+      {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "account",
+        "key": "language",
+        "value": "German",
+        "confidence": 0.95,
+        "source": "user",
+        "valid_from": "2026-01-03",
+        "schema_version": 1,
+        "memory_type": "fact",
+        "id": "m003",
+        "source_event_id": "selective-deletion:event-3",
+        "observed_at": "2026-01-03",
+        "valid_to": null,
+        "supersedes_memory_id": null
+      }
+    ],
+    "state_diff": {
+      "added": [
+        {
+          "tenant": "north",
+          "user": "ada",
+          "entity": "account",
+          "key": "language",
+          "value": "German",
+          "confidence": 0.95,
+          "source": "user",
+          "valid_from": "2026-01-03",
+          "schema_version": 1,
+          "memory_type": "fact",
+          "id": "m003",
+          "source_event_id": "selective-deletion:event-3",
+          "observed_at": "2026-01-03",
+          "valid_to": null,
+          "supersedes_memory_id": null
+        }
+      ],
+      "removed": [],
+      "changed": []
+    }
+  },
+  {
+    "step": 4,
+    "action": "write",
+    "detail": {
+      "action": "write",
+      "at": "2026-01-04",
+      "tenant": "north",
+      "user": "ada",
+      "should_retain": true,
+      "fact": {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "office",
+        "key": "city",
+        "value": "Oslo",
+        "confidence": 0.95,
+        "valid_from": "2026-01-04",
+        "source": "user",
+        "kind": "fact"
+      },
+      "source_event_id": "selective-deletion:event-4"
+    },
+    "result": {
+      "status": "stored",
+      "reason": "admitted",
+      "retained": true,
+      "record_id": "m004"
+    },
+    "before": [
+      {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "account",
+        "key": "city",
+        "value": "Berlin",
+        "confidence": 0.95,
+        "source": "user",
+        "valid_from": "2026-01-01",
+        "schema_version": 1,
+        "memory_type": "fact",
+        "id": "m001",
+        "source_event_id": "selective-deletion:event-1",
+        "observed_at": "2026-01-01",
+        "valid_to": "2026-01-02",
+        "supersedes_memory_id": null
+      },
+      {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "account",
+        "key": "city",
+        "value": "Paris",
+        "confidence": 0.95,
+        "source": "user",
+        "valid_from": "2026-01-02",
+        "schema_version": 1,
+        "memory_type": "fact",
+        "id": "m002",
+        "source_event_id": "selective-deletion:event-2",
+        "observed_at": "2026-01-02",
+        "valid_to": null,
+        "supersedes_memory_id": "m001"
+      },
+      {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "account",
+        "key": "language",
+        "value": "German",
+        "confidence": 0.95,
+        "source": "user",
+        "valid_from": "2026-01-03",
+        "schema_version": 1,
+        "memory_type": "fact",
+        "id": "m003",
+        "source_event_id": "selective-deletion:event-3",
+        "observed_at": "2026-01-03",
+        "valid_to": null,
+        "supersedes_memory_id": null
+      }
+    ],
+    "after": [
+      {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "account",
+        "key": "city",
+        "value": "Berlin",
+        "confidence": 0.95,
+        "source": "user",
+        "valid_from": "2026-01-01",
+        "schema_version": 1,
+        "memory_type": "fact",
+        "id": "m001",
+        "source_event_id": "selective-deletion:event-1",
+        "observed_at": "2026-01-01",
+        "valid_to": "2026-01-02",
+        "supersedes_memory_id": null
+      },
+      {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "account",
+        "key": "city",
+        "value": "Paris",
+        "confidence": 0.95,
+        "source": "user",
+        "valid_from": "2026-01-02",
+        "schema_version": 1,
+        "memory_type": "fact",
+        "id": "m002",
+        "source_event_id": "selective-deletion:event-2",
+        "observed_at": "2026-01-02",
+        "valid_to": null,
+        "supersedes_memory_id": "m001"
+      },
+      {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "account",
+        "key": "language",
+        "value": "German",
+        "confidence": 0.95,
+        "source": "user",
+        "valid_from": "2026-01-03",
+        "schema_version": 1,
+        "memory_type": "fact",
+        "id": "m003",
+        "source_event_id": "selective-deletion:event-3",
+        "observed_at": "2026-01-03",
+        "valid_to": null,
+        "supersedes_memory_id": null
+      },
+      {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "office",
+        "key": "city",
+        "value": "Oslo",
+        "confidence": 0.95,
+        "source": "user",
+        "valid_from": "2026-01-04",
+        "schema_version": 1,
+        "memory_type": "fact",
+        "id": "m004",
+        "source_event_id": "selective-deletion:event-4",
+        "observed_at": "2026-01-04",
+        "valid_to": null,
+        "supersedes_memory_id": null
+      }
+    ],
+    "state_diff": {
+      "added": [
+        {
+          "tenant": "north",
+          "user": "ada",
+          "entity": "office",
+          "key": "city",
+          "value": "Oslo",
+          "confidence": 0.95,
+          "source": "user",
+          "valid_from": "2026-01-04",
+          "schema_version": 1,
+          "memory_type": "fact",
+          "id": "m004",
+          "source_event_id": "selective-deletion:event-4",
+          "observed_at": "2026-01-04",
+          "valid_to": null,
+          "supersedes_memory_id": null
+        }
+      ],
+      "removed": [],
+      "changed": []
+    }
+  },
+  {
+    "step": 5,
+    "action": "delete",
+    "detail": {
+      "action": "delete",
+      "at": "2026-01-05",
+      "tenant": "north",
+      "user": "ada",
+      "entity": "account",
+      "key": "city",
+      "source_event_id": "selective-deletion:event-5"
+    },
+    "result": {
+      "status": "deleted",
+      "record_ids": [
+        "m001",
+        "m002"
+      ]
+    },
+    "before": [
+      {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "account",
+        "key": "city",
+        "value": "Berlin",
+        "confidence": 0.95,
+        "source": "user",
+        "valid_from": "2026-01-01",
+        "schema_version": 1,
+        "memory_type": "fact",
+        "id": "m001",
+        "source_event_id": "selective-deletion:event-1",
+        "observed_at": "2026-01-01",
+        "valid_to": "2026-01-02",
+        "supersedes_memory_id": null
+      },
+      {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "account",
+        "key": "city",
+        "value": "Paris",
+        "confidence": 0.95,
+        "source": "user",
+        "valid_from": "2026-01-02",
+        "schema_version": 1,
+        "memory_type": "fact",
+        "id": "m002",
+        "source_event_id": "selective-deletion:event-2",
+        "observed_at": "2026-01-02",
+        "valid_to": null,
+        "supersedes_memory_id": "m001"
+      },
+      {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "account",
+        "key": "language",
+        "value": "German",
+        "confidence": 0.95,
+        "source": "user",
+        "valid_from": "2026-01-03",
+        "schema_version": 1,
+        "memory_type": "fact",
+        "id": "m003",
+        "source_event_id": "selective-deletion:event-3",
+        "observed_at": "2026-01-03",
+        "valid_to": null,
+        "supersedes_memory_id": null
+      },
+      {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "office",
+        "key": "city",
+        "value": "Oslo",
+        "confidence": 0.95,
+        "source": "user",
+        "valid_from": "2026-01-04",
+        "schema_version": 1,
+        "memory_type": "fact",
+        "id": "m004",
+        "source_event_id": "selective-deletion:event-4",
+        "observed_at": "2026-01-04",
+        "valid_to": null,
+        "supersedes_memory_id": null
+      }
+    ],
+    "after": [
+      {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "account",
+        "key": "language",
+        "value": "German",
+        "confidence": 0.95,
+        "source": "user",
+        "valid_from": "2026-01-03",
+        "schema_version": 1,
+        "memory_type": "fact",
+        "id": "m003",
+        "source_event_id": "selective-deletion:event-3",
+        "observed_at": "2026-01-03",
+        "valid_to": null,
+        "supersedes_memory_id": null
+      },
+      {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "office",
+        "key": "city",
+        "value": "Oslo",
+        "confidence": 0.95,
+        "source": "user",
+        "valid_from": "2026-01-04",
+        "schema_version": 1,
+        "memory_type": "fact",
+        "id": "m004",
+        "source_event_id": "selective-deletion:event-4",
+        "observed_at": "2026-01-04",
+        "valid_to": null,
+        "supersedes_memory_id": null
+      }
+    ],
+    "state_diff": {
+      "added": [],
+      "removed": [
+        {
+          "tenant": "north",
+          "user": "ada",
+          "entity": "account",
+          "key": "city",
+          "value": "Berlin",
+          "confidence": 0.95,
+          "source": "user",
+          "valid_from": "2026-01-01",
+          "schema_version": 1,
+          "memory_type": "fact",
+          "id": "m001",
+          "source_event_id": "selective-deletion:event-1",
+          "observed_at": "2026-01-01",
+          "valid_to": "2026-01-02",
+          "supersedes_memory_id": null
+        },
+        {
+          "tenant": "north",
+          "user": "ada",
+          "entity": "account",
+          "key": "city",
+          "value": "Paris",
+          "confidence": 0.95,
+          "source": "user",
+          "valid_from": "2026-01-02",
+          "schema_version": 1,
+          "memory_type": "fact",
+          "id": "m002",
+          "source_event_id": "selective-deletion:event-2",
+          "observed_at": "2026-01-02",
+          "valid_to": null,
+          "supersedes_memory_id": "m001"
+        }
+      ],
+      "changed": []
+    }
+  },
+  {
+    "step": 6,
+    "action": "query",
+    "detail": {
+      "action": "query",
+      "at": "2026-01-06",
+      "tenant": "north",
+      "user": "ada",
+      "entity": "account",
+      "key": "city",
+      "as_of": "2026-01-06",
+      "text": "city",
+      "expected": null,
+      "source_event_id": "selective-deletion:event-6"
+    },
+    "result": {
+      "answer": "Oslo",
+      "answer_record_id": "m004",
+      "retrieved_ids": [
+        "m004",
+        "m003"
+      ],
+      "packed_ids": [
+        "m004",
+        "m003"
+      ],
+      "context_words": 6
+    },
+    "before": [
+      {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "account",
+        "key": "language",
+        "value": "German",
+        "confidence": 0.95,
+        "source": "user",
+        "valid_from": "2026-01-03",
+        "schema_version": 1,
+        "memory_type": "fact",
+        "id": "m003",
+        "source_event_id": "selective-deletion:event-3",
+        "observed_at": "2026-01-03",
+        "valid_to": null,
+        "supersedes_memory_id": null
+      },
+      {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "office",
+        "key": "city",
+        "value": "Oslo",
+        "confidence": 0.95,
+        "source": "user",
+        "valid_from": "2026-01-04",
+        "schema_version": 1,
+        "memory_type": "fact",
+        "id": "m004",
+        "source_event_id": "selective-deletion:event-4",
+        "observed_at": "2026-01-04",
+        "valid_to": null,
+        "supersedes_memory_id": null
+      }
+    ],
+    "after": [
+      {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "account",
+        "key": "language",
+        "value": "German",
+        "confidence": 0.95,
+        "source": "user",
+        "valid_from": "2026-01-03",
+        "schema_version": 1,
+        "memory_type": "fact",
+        "id": "m003",
+        "source_event_id": "selective-deletion:event-3",
+        "observed_at": "2026-01-03",
+        "valid_to": null,
+        "supersedes_memory_id": null
+      },
+      {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "office",
+        "key": "city",
+        "value": "Oslo",
+        "confidence": 0.95,
+        "source": "user",
+        "valid_from": "2026-01-04",
+        "schema_version": 1,
+        "memory_type": "fact",
+        "id": "m004",
+        "source_event_id": "selective-deletion:event-4",
+        "observed_at": "2026-01-04",
+        "valid_to": null,
+        "supersedes_memory_id": null
+      }
+    ],
+    "state_diff": {
+      "added": [],
+      "removed": [],
+      "changed": []
+    },
+    "retrieved_ids": [
+      "m004",
+      "m003"
+    ],
+    "packed_ids": [
+      "m004",
+      "m003"
+    ],
+    "answer": "Oslo"
+  },
+  {
+    "step": 7,
+    "action": "query",
+    "detail": {
+      "action": "query",
+      "at": "2026-01-06",
+      "tenant": "north",
+      "user": "ada",
+      "entity": "account",
+      "key": "language",
+      "as_of": "2026-01-06",
+      "text": "language",
+      "expected": "German",
+      "source_event_id": "selective-deletion:event-7"
+    },
+    "result": {
+      "answer": "German",
+      "answer_record_id": "m003",
+      "retrieved_ids": [
+        "m003",
+        "m004"
+      ],
+      "packed_ids": [
+        "m003",
+        "m004"
+      ],
+      "context_words": 6
+    },
+    "before": [
+      {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "account",
+        "key": "language",
+        "value": "German",
+        "confidence": 0.95,
+        "source": "user",
+        "valid_from": "2026-01-03",
+        "schema_version": 1,
+        "memory_type": "fact",
+        "id": "m003",
+        "source_event_id": "selective-deletion:event-3",
+        "observed_at": "2026-01-03",
+        "valid_to": null,
+        "supersedes_memory_id": null
+      },
+      {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "office",
+        "key": "city",
+        "value": "Oslo",
+        "confidence": 0.95,
+        "source": "user",
+        "valid_from": "2026-01-04",
+        "schema_version": 1,
+        "memory_type": "fact",
+        "id": "m004",
+        "source_event_id": "selective-deletion:event-4",
+        "observed_at": "2026-01-04",
+        "valid_to": null,
+        "supersedes_memory_id": null
+      }
+    ],
+    "after": [
+      {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "account",
+        "key": "language",
+        "value": "German",
+        "confidence": 0.95,
+        "source": "user",
+        "valid_from": "2026-01-03",
+        "schema_version": 1,
+        "memory_type": "fact",
+        "id": "m003",
+        "source_event_id": "selective-deletion:event-3",
+        "observed_at": "2026-01-03",
+        "valid_to": null,
+        "supersedes_memory_id": null
+      },
+      {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "office",
+        "key": "city",
+        "value": "Oslo",
+        "confidence": 0.95,
+        "source": "user",
+        "valid_from": "2026-01-04",
+        "schema_version": 1,
+        "memory_type": "fact",
+        "id": "m004",
+        "source_event_id": "selective-deletion:event-4",
+        "observed_at": "2026-01-04",
+        "valid_to": null,
+        "supersedes_memory_id": null
+      }
+    ],
+    "state_diff": {
+      "added": [],
+      "removed": [],
+      "changed": []
+    },
+    "retrieved_ids": [
+      "m003",
+      "m004"
+    ],
+    "packed_ids": [
+      "m003",
+      "m004"
+    ],
+    "answer": "German"
+  },
+  {
+    "step": 8,
+    "action": "query",
+    "detail": {
+      "action": "query",
+      "at": "2026-01-06",
+      "tenant": "north",
+      "user": "ada",
+      "entity": "office",
+      "key": "city",
+      "as_of": "2026-01-06",
+      "text": "city",
+      "expected": "Oslo",
+      "source_event_id": "selective-deletion:event-8"
+    },
+    "result": {
+      "answer": "Oslo",
+      "answer_record_id": "m004",
+      "retrieved_ids": [
+        "m004",
+        "m003"
+      ],
+      "packed_ids": [
+        "m004",
+        "m003"
+      ],
+      "context_words": 6
+    },
+    "before": [
+      {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "account",
+        "key": "language",
+        "value": "German",
+        "confidence": 0.95,
+        "source": "user",
+        "valid_from": "2026-01-03",
+        "schema_version": 1,
+        "memory_type": "fact",
+        "id": "m003",
+        "source_event_id": "selective-deletion:event-3",
+        "observed_at": "2026-01-03",
+        "valid_to": null,
+        "supersedes_memory_id": null
+      },
+      {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "office",
+        "key": "city",
+        "value": "Oslo",
+        "confidence": 0.95,
+        "source": "user",
+        "valid_from": "2026-01-04",
+        "schema_version": 1,
+        "memory_type": "fact",
+        "id": "m004",
+        "source_event_id": "selective-deletion:event-4",
+        "observed_at": "2026-01-04",
+        "valid_to": null,
+        "supersedes_memory_id": null
+      }
+    ],
+    "after": [
+      {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "account",
+        "key": "language",
+        "value": "German",
+        "confidence": 0.95,
+        "source": "user",
+        "valid_from": "2026-01-03",
+        "schema_version": 1,
+        "memory_type": "fact",
+        "id": "m003",
+        "source_event_id": "selective-deletion:event-3",
+        "observed_at": "2026-01-03",
+        "valid_to": null,
+        "supersedes_memory_id": null
+      },
+      {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "office",
+        "key": "city",
+        "value": "Oslo",
+        "confidence": 0.95,
+        "source": "user",
+        "valid_from": "2026-01-04",
+        "schema_version": 1,
+        "memory_type": "fact",
+        "id": "m004",
+        "source_event_id": "selective-deletion:event-4",
+        "observed_at": "2026-01-04",
+        "valid_to": null,
+        "supersedes_memory_id": null
+      }
+    ],
+    "state_diff": {
+      "added": [],
+      "removed": [],
+      "changed": []
+    },
+    "retrieved_ids": [
+      "m004",
+      "m003"
+    ],
+    "packed_ids": [
+      "m004",
+      "m003"
+    ],
+    "answer": "Oslo"
+  },
+  {
+    "step": 9,
+    "action": "query",
+    "detail": {
+      "action": "query",
+      "at": "2026-01-06",
+      "tenant": "north",
+      "user": "ada",
+      "entity": "account",
+      "key": "city",
+      "as_of": "2026-01-01",
+      "text": "city",
+      "expected": null,
+      "source_event_id": "selective-deletion:event-9"
+    },
+    "result": {
+      "answer": "Oslo",
+      "answer_record_id": "m004",
+      "retrieved_ids": [
+        "m004",
+        "m003"
+      ],
+      "packed_ids": [
+        "m004",
+        "m003"
+      ],
+      "context_words": 6
+    },
+    "before": [
+      {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "account",
+        "key": "language",
+        "value": "German",
+        "confidence": 0.95,
+        "source": "user",
+        "valid_from": "2026-01-03",
+        "schema_version": 1,
+        "memory_type": "fact",
+        "id": "m003",
+        "source_event_id": "selective-deletion:event-3",
+        "observed_at": "2026-01-03",
+        "valid_to": null,
+        "supersedes_memory_id": null
+      },
+      {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "office",
+        "key": "city",
+        "value": "Oslo",
+        "confidence": 0.95,
+        "source": "user",
+        "valid_from": "2026-01-04",
+        "schema_version": 1,
+        "memory_type": "fact",
+        "id": "m004",
+        "source_event_id": "selective-deletion:event-4",
+        "observed_at": "2026-01-04",
+        "valid_to": null,
+        "supersedes_memory_id": null
+      }
+    ],
+    "after": [
+      {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "account",
+        "key": "language",
+        "value": "German",
+        "confidence": 0.95,
+        "source": "user",
+        "valid_from": "2026-01-03",
+        "schema_version": 1,
+        "memory_type": "fact",
+        "id": "m003",
+        "source_event_id": "selective-deletion:event-3",
+        "observed_at": "2026-01-03",
+        "valid_to": null,
+        "supersedes_memory_id": null
+      },
+      {
+        "tenant": "north",
+        "user": "ada",
+        "entity": "office",
+        "key": "city",
+        "value": "Oslo",
+        "confidence": 0.95,
+        "source": "user",
+        "valid_from": "2026-01-04",
+        "schema_version": 1,
+        "memory_type": "fact",
+        "id": "m004",
+        "source_event_id": "selective-deletion:event-4",
+        "observed_at": "2026-01-04",
+        "valid_to": null,
+        "supersedes_memory_id": null
+      }
+    ],
+    "state_diff": {
+      "added": [],
+      "removed": [],
+      "changed": []
+    },
+    "retrieved_ids": [
+      "m004",
+      "m003"
+    ],
+    "packed_ids": [
+      "m004",
+      "m003"
+    ],
+    "answer": "Oslo"
+  }
+]

@@ -1,0 +1,24 @@
+{
+  "observations": [
+    {
+      "scenario_id": "duplicate-confirmation",
+      "step": 2,
+      "observation": "An identical active language value was stored again as record m002 rather than reused."
+    },
+    {
+      "scenario_id": "duplicate-confirmation",
+      "step": 3,
+      "observation": "A third identical confirmation created m003, leaving three records for the same active value."
+    }
+  ],
+  "hypothesis": "Enabling deduplication will reuse identical active values confirmed at later effective dates, reducing redundant storage without changing retrieval correctness.",
+  "predicted_effect": "Task success and hard-constraint results should remain unchanged on these public cases, while storage records and bytes should decrease for repeated identical confirmations.",
+  "action": "propose",
+  "patch": {
+    "min_confidence": null,
+    "filter_entity": null,
+    "time_aware": null,
+    "deduplicate": true,
+    "top_k": null
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "observations": [
+    {
+      "scenario_id": "duplicate-confirmation",
+      "step": 2,
+      "observation": "An identical German fact confirmed on a later date was stored as a new record m002 instead of reusing m001."
+    },
+    {
+      "scenario_id": "duplicate-confirmation",
+      "step": 3,
+      "observation": "A third identical German confirmation was stored as m003, creating three historical records for the same active value."
+    },
+    {
+      "scenario_id": "duplicate-confirmation",
+      "step": 4,
+      "observation": "The query returned the correct German value, but only after the redundant records had increased stored history."
+    }
+  ],
+  "hypothesis": "Enabling deduplication will reuse identical active values confirmed on later effective dates, preserving retrieval answers while reducing redundant stored records.",
+  "predicted_effect": "Complete-scenario success should remain at least unchanged, while storage records and bytes decrease on repeated-confirmation cases; no hard-constraint impact is expected.",
+  "action": "propose",
+  "patch": {
+    "min_confidence": null,
+    "filter_entity": null,
+    "time_aware": null,
+    "deduplicate": true,
+    "top_k": null
+  }
+}

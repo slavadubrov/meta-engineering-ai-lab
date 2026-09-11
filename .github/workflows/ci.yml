@@ -27,9 +27,11 @@ jobs:
       - run: uv run --frozen python -m lab verify artifacts/article-01.2
       - run: uv run --frozen python -m lab verify artifacts/article-01.3
       - run: uv run --frozen python -m lab verify artifacts/article-01.4
-      - run: uv run --frozen python -m lab verify artifacts/article-01.5 --source
+      - run: uv run --frozen python -m lab verify artifacts/article-01.5
+      - run: uv run --frozen python -m lab verify artifacts/article-01.6 --source
       - run: uv run --frozen python -m lab verify artifacts/agent-study-01
-      - run: uv run --frozen python -m lab verify artifacts/agent-study-02 --source
+      - run: uv run --frozen python -m lab verify artifacts/agent-study-02
+      - run: uv run --frozen python -m lab verify artifacts/agent-study-03 --source
       - run: uv run --frozen python -m lab site --output site
       - run: node --check web/app.js
       - run: node --check web/campaign.js

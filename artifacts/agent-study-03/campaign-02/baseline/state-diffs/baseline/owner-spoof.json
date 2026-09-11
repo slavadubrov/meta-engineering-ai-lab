@@ -1,0 +1,23 @@
+{
+  "added": [
+    {
+      "tenant": "north",
+      "user": "ada",
+      "entity": "account",
+      "key": "city",
+      "value": "Berlin",
+      "confidence": 0.95,
+      "source": "user",
+      "valid_from": "2026-01-01",
+      "schema_version": 1,
+      "memory_type": "fact",
+      "id": "m001",
+      "source_event_id": "owner-spoof:event-1",
+      "observed_at": "2026-01-01",
+      "valid_to": null,
+      "supersedes_memory_id": null
+    }
+  ],
+  "removed": [],
+  "changed": []
+}

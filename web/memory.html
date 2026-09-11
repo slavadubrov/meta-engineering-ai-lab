@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="color-scheme" content="light dark" />
-    <meta name="memory-artifact-base" content="../artifacts/article-01.5/" />
+    <meta name="memory-artifact-base" content="../artifacts/article-01.6/" />
     <meta
       name="description"
       content="See why a memory program returns the wrong city, compare four memory policies, and follow the saved Python experiment step by step."
@@ -96,6 +96,28 @@
           actions are <strong>events</strong>. Together they form one
           <strong>scenario</strong>: a complete test story. Fixing the earlier
           answer must preserve the later one.
+        </p>
+        <h3>What makes these schema-guided memories?</h3>
+        <p>
+          Every stored fact has a checked format: schema version, owner, subject,
+          value, source event, and validity dates. The Paris record links to the
+          Berlin record it replaces. Open <strong>All record fields</strong>
+          below to inspect them.
+        </p>
+        <p>
+          If another write says <code>city = Rome</code> for the same January 10
+          start date, the writer rejects the conflict and keeps Paris. Invalid
+          records cannot change existing history. Repeating Paris for that same
+          date reuses the record. Deletion removes all versions of the requested
+          property within its owner and subject.
+        </p>
+        <p class="small muted">
+          This is a small in-memory example of
+          <a href="https://slavadubrov.com/blog/2026/06/20/schema-guided-agent-memory/">Schema-Guided Agent Memory (SGAM)</a>.
+          Each story starts empty; this is not a persistent memory service.
+          The baseline deliberately skips subject and date filters so the agent
+          has a retrieval failure to fix. Record validation and ownership remain
+          mandatory for every configuration.
         </p>
         <details>
           <summary>See the JSON fields behind this example</summary>
@@ -265,17 +287,17 @@
           without JavaScript.
         </p>
         <p>
-          <a href="../artifacts/article-01.5/report.html"
+          <a href="../artifacts/article-01.6/report.html"
             >Open the complete report</a
           >
           ·
-          <a href="../artifacts/article-01.5/manifest.json"
+          <a href="../artifacts/article-01.6/manifest.json"
             >Inspect the manifest</a
           >
         </p>
         <iframe
           title="Frozen experiment comparison and review decisions"
-          src="../artifacts/article-01.5/report.html"
+          src="../artifacts/article-01.6/report.html"
           loading="lazy"
         ></iframe>
         <noscript

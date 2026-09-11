@@ -1,0 +1,69 @@
+[
+  {
+    "id": "baseline",
+    "label": "Baseline",
+    "parent_id": null,
+    "hypothesis": "Freeze the original thresholded writer and recency-based retrieval.",
+    "predicted_effect": "Useful direct facts work; entity and temporal ambiguity remain visible.",
+    "patch": {},
+    "proposer": {
+      "type": "coding_agent",
+      "name": "Codex",
+      "model": "not exposed to this task",
+      "prompt_version": "article-01-authoring-v1",
+      "attribution": "Authored by Codex while building this demo, with public access to all scenarios; no runtime provider call."
+    }
+  },
+  {
+    "id": "agent-01",
+    "label": "Agent proposal 1",
+    "parent_id": "baseline",
+    "hypothesis": "Applying entity and temporal filters before ranking will remove cross-entity distractors and records outside the requested as-of interval, improving complete-scenario retrieval correctness without changing writes or hard-constraint behavior.",
+    "predicted_effect": "Task success and relevant-memory precision should improve on entity-grounding, distractor-retrieval, historical-address, future-move, and history-boundary; distracting and stale retrieval should decrease. Storage and write precision should remain unchanged.",
+    "patch": {
+      "filter_entity": true,
+      "time_aware": true
+    },
+    "proposer": {
+      "type": "llm",
+      "name": "OpenAI",
+      "model": "gpt-5.6-luna",
+      "prompt_version": "memory-improver-sgr-v2",
+      "response_id": "resp_012ba32bec640776016aa454715a0087d2a462d41efdd5a673"
+    }
+  },
+  {
+    "id": "agent-02",
+    "label": "Agent proposal 2",
+    "parent_id": "agent-01",
+    "hypothesis": "Enabling deduplicate will reuse an identical active value confirmed at a later effective date, reducing redundant records while preserving retrieval correctness and hard-constraint behavior.",
+    "predicted_effect": "Task success should remain approximately unchanged, while storage records and bytes should decrease, especially for repeated confirmations. Write precision and hard-constraint results should remain unchanged.",
+    "patch": {
+      "deduplicate": true
+    },
+    "proposer": {
+      "type": "llm",
+      "name": "OpenAI",
+      "model": "gpt-5.6-luna",
+      "prompt_version": "memory-improver-sgr-v2",
+      "response_id": "resp_007586067f83f582016aa454763c9487d298a2f68fde6a41ee"
+    }
+  },
+  {
+    "id": "agent-03",
+    "label": "Agent proposal 3",
+    "parent_id": "agent-02",
+    "hypothesis": "Lowering min_confidence from 0.7 to 0.6 will admit the useful low-confidence fact while continuing to reject the demonstrated 0.3 and 0.4 low-confidence writes, improving complete-scenario success without changing retrieval behavior or duplication efficiency.",
+    "predicted_effect": "Task success should improve on the useful-low-confidence scenario, with no expected change to entity/time retrieval, deduplication, storage for existing high-confidence cases, or hard-constraint outcomes on the supplied evidence.",
+    "patch": {
+      "min_confidence": 0.6
+    },
+    "proposer": {
+      "type": "llm",
+      "name": "OpenAI",
+      "model": "gpt-5.6-luna",
+      "prompt_version": "memory-improver-sgr-v2",
+      "response_id": "resp_0156e0d6a6a0b539016aa4547ae7fc87d2b1fc50be2fb8f03a"
+    }
+  }
+]

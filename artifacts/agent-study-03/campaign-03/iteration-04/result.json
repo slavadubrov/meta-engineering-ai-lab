@@ -1,0 +1,23 @@
+{
+  "iteration": 4,
+  "parent_id": "agent-03",
+  "status": "agent_stopped",
+  "path": "campaign-03/iteration-04",
+  "reserved_usd": 0.012959950000000001,
+  "latency_seconds": 4.726315416977741,
+  "usage": {
+    "input_tokens": 8323,
+    "input_tokens_details": {
+      "cached_tokens": 0,
+      "cache_write_tokens": 8320
+    },
+    "output_tokens": 397,
+    "output_tokens_details": {
+      "reasoning_tokens": 103
+    },
+    "total_tokens": 8720
+  },
+  "estimated_cost_usd": 0.0025570000000000002,
+  "response_model": "gpt-5.6-luna",
+  "reason": "The current configuration already achieves complete success on the measured scenarios while preserving abstention and deduplication behavior; the evidence does not support a further bounded setting change that would improve success or reduce storage without risking regression."
+}

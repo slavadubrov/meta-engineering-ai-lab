@@ -1,0 +1,29 @@
+{
+  "observations": [
+    {
+      "scenario_id": "duplicate-confirmation",
+      "step": 2,
+      "observation": "An identical active language value was stored again on a later effective date as record m002."
+    },
+    {
+      "scenario_id": "duplicate-confirmation",
+      "step": 3,
+      "observation": "The same identical active language value was stored a third time as record m003, creating three records for one unchanged fact."
+    },
+    {
+      "scenario_id": "duplicate-confirmation",
+      "step": 4,
+      "observation": "Retrieval returned the latest duplicate record m003 and the scenario answer was correct, so deduplication should reduce storage without changing the answer."
+    }
+  ],
+  "hypothesis": "Enabling deduplicate will reuse an identical active value confirmed at a later effective date, reducing redundant records while preserving retrieval correctness and hard-constraint behavior.",
+  "predicted_effect": "Task success should remain approximately unchanged, while storage records and bytes should decrease, especially for repeated confirmations. Write precision and hard-constraint results should remain unchanged.",
+  "action": "propose",
+  "patch": {
+    "min_confidence": null,
+    "filter_entity": null,
+    "time_aware": null,
+    "deduplicate": true,
+    "top_k": null
+  }
+}

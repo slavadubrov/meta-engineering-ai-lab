@@ -1,0 +1,23 @@
+{
+  "iteration": 4,
+  "parent_id": "agent-03",
+  "status": "agent_stopped",
+  "path": "campaign-01/iteration-04",
+  "reserved_usd": 0.01277695,
+  "latency_seconds": 4.032897791010328,
+  "usage": {
+    "input_tokens": 8155,
+    "input_tokens_details": {
+      "cached_tokens": 0,
+      "cache_write_tokens": 8152
+    },
+    "output_tokens": 325,
+    "output_tokens_details": {
+      "reasoning_tokens": 88
+    },
+    "total_tokens": 8480
+  },
+  "estimated_cost_usd": 0.0024286,
+  "response_model": "gpt-5.6-luna",
+  "reason": "The current configuration already satisfies the demonstrated retrieval, temporal, confidence, deduplication, and hard-constraint requirements; the evidence supports no further bounded setting change."
+}

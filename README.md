@@ -5,30 +5,30 @@ An **outer LLM agent improves a memory tool**. It reads recorded failures, propo
 Start with the failure: Ada lives in Berlin and reports a move to Paris effective next week. The memory tool returns Paris when asked where she lives today. The agent studies that trace and can change the rules for storing and retrieving facts.
 
 ```text
-Run the original memory tool → give its failures to Luna
+Run the original memory tool → give its failures to the agent
                                       ↓
                     SGR observations, hypothesis, patch
                                       ↓
                     Python validates and tests the patch
                                       ↓
-                    Return results or rejection to Luna
+                    Return results or rejection to the agent
                                       ↓
                     Next proposal, until stop or limit
 ```
 
 The repository includes **actual saved OpenAI requests and responses**, not a simulated agent transcript. The browser shows that evidence without making API calls. A separate memory walkthrough explains the deterministic component in detail.
 
-[Recorded study](artifacts/agent-study-02/report.md) · [Memory-tool walkthrough](docs/memory-tool.md) · [Deployment](DEPLOYMENT.md)
+[Recorded study](artifacts/agent-study-03/report.md) · [Memory-tool walkthrough](docs/memory-tool.md) · [Deployment](DEPLOYMENT.md)
 
 The companion article is awaiting publication. This README and the browser guide stand on their own.
 
 ## Inspect the saved campaigns without a key
 
 ```sh
-git clone --branch v0.2.0 --depth 1 https://github.com/slavadubrov/closed-loop-ai-lab.git
+git clone --branch v0.2.1 --depth 1 https://github.com/slavadubrov/closed-loop-ai-lab.git
 cd closed-loop-ai-lab
 uv sync --frozen
-uv run --frozen python -m lab verify artifacts/agent-study-02 --source
+uv run --frozen python -m lab verify artifacts/agent-study-03 --source
 uv run --frozen python -m lab serve --port 8075
 ```
 
@@ -44,18 +44,18 @@ Each of three campaigns started with the same baseline and fresh agent history. 
 | --- | ---: | ---: | ---: | ---: | ---: |
 | 1 | 4 | 3 | 0 | 13/20 | 20/20 |
 | 2 | 4 | 3 | 0 | 13/20 | 20/20 |
-| 3 | 3 | 2 | 0 | 13/20 | 20/20 |
+| 3 | 4 | 3 | 0 | 13/20 | 20/20 |
 
 In campaign 1:
 
-1. Luna enabled subject and date filtering. Python measured an improvement from 13/20 to 19/20 passing scenarios.
-2. Luna proposed deduplication. Answers stayed at 19/20 while mean stored records fell from 1.70 to 1.60.
-3. Luna lowered the storage-confidence threshold from 0.7 to 0.6. The remaining useful preference was retained, bringing success to 20/20 and mean storage to 1.65 records.
-4. Luna returned a stop decision because it had no further supported change to propose from the supplied evidence.
+1. The agent enabled subject and date filtering. Python measured an improvement from 13/20 to 19/20 passing scenarios.
+2. The agent proposed deduplication. Answers stayed at 19/20 while mean stored records fell from 1.70 to 1.60.
+3. The agent lowered the storage-confidence threshold from 0.7 to 0.6. The remaining useful preference was retained, bringing success to 20/20 and mean storage to 1.65 records.
+4. The agent returned a stop decision because it had no further supported change to propose from the supplied evidence.
 
-All three agents chose to stop within the four-decision limit. Their final settings matched, but the paths differed: campaign 3 combined deduplication and the lower threshold in decision 2, then stopped on decision 3. A stop decision is not proof of a globally optimal configuration.
+All three agents chose to stop within the four-decision limit. They chose the same sequence and final settings in this study. A stop decision is not proof of a globally optimal configuration.
 
-The estimated cost of the 11 model calls was **$0.034123**, against a **$0.50** budget. This estimate uses recorded usage and the published Luna rates checked on September 9, 2026. It includes cache-write surcharges and ignores cache-read discounts; it is not an invoice. Local CPU, hardware, and development costs are separate.
+The estimated cost of the 12 model calls was **$0.039177**, against a **$0.50** budget. This estimate uses recorded usage and the published Luna rates checked on September 11, 2026. It includes cache-write surcharges and ignores cache-read discounts; it is not an invoice. Local CPU, hardware, and development costs are separate.
 
 **20/20 is a result on these public development stories.** It does not establish production quality, unseen-task performance, or an advantage over human or classical search.
 
@@ -73,15 +73,35 @@ A new configuration runs the 20 scenarios **once**. The runner reuses verified d
 
 | Component | What executes |
 | --- | --- |
-| Outer proposer | Luna receives traces and feedback, then returns an SGR decision record. |
+| Outer proposer | The LLM receives traces and feedback, then returns an SGR decision record. |
 | Proposal validation | Python checks structure, permitted settings, event references, and duplicate configurations. |
 | Memory tool | Ordinary Python stores prepared facts and selects values from records. |
 | Evaluator | Python checks expected answers, state, owner isolation, deletion, and prohibited writes. |
 | Browser | JavaScript displays saved evidence. No API key or provider call. |
 
-The memory tool does not extract facts from conversation or generate natural-language answers. The test supplies `city = Paris`, its date, owner, and other fields as JSON. The code copies those fields into an in-memory list and retrieves a value. See [the concrete input and storage walkthrough](docs/memory-tool.md#what-exactly-goes-into-the-program).
+The memory tool does not extract facts from conversation or generate natural-language answers. The test supplies `city = Paris`, its date, owner, and other fields as JSON. The writer validates those fields, creates a versioned record in an in-memory list, and retrieves a value. See [the concrete input and storage walkthrough](docs/memory-tool.md#what-exactly-goes-into-the-program).
 
 **Confidence decides whether a proposed fact is stored.** It is a supplied test score, not a model-calibrated probability. The writer rejects scores below `min_confidence`. A `delivery = courier` proposal scored `0.4` is rejected at threshold `0.7` and stored at `0.2`. The agent's successful `0.6` threshold admits a useful preference scored `0.6` while keeping the uncertain `0.4` proposal out.
+
+## Where SGR and SGAM apply
+
+**Schema-Guided Reasoning (SGR) governs every LLM response:** observations, hypothesis, expected effect,
+action, and a bounded patch. **Schema-Guided Agent Memory (SGAM) governs the stored facts:** a typed record
+with a schema version, owner, source event, and validity dates. Python enforces
+these rules before changing memory; a schema-valid proposal alone cannot bypass
+them.
+
+For example, Paris becomes valid on January 10 and links to the Berlin record
+it replaces. A conflicting `city = Rome` for that same effective date is rejected
+without changing either record. Repeating Paris for that same date reuses it.
+Deletion removes all versions for the requested owner, subject, and property.
+The [memory walkthrough](docs/memory-tool.md#how-the-memory-schema-governs-a-write)
+shows the complete stored JSON and conflict rules.
+
+This demonstrates selected SGAM lifecycle rules in memory. It has no database,
+retention service, or migration engine. The baseline's missing subject/date
+filters are deliberate faults for the agent to repair, while ownership, schema
+validation, and conflict handling apply to every configuration.
 
 ## What the agent is allowed to change
 
@@ -151,12 +171,12 @@ The 20 stories are public development cases. The original `search`, `evaluation`
 uv run --frozen python -m unittest discover -s tests -v
 uv run --frozen ruff check lab tests
 uv run --frozen ruff format --check lab tests
-uv run --frozen python -m lab verify artifacts/agent-study-02 --source
-uv run --frozen python -m lab verify artifacts/article-01.5 --source
+uv run --frozen python -m lab verify artifacts/agent-study-03 --source
+uv run --frozen python -m lab verify artifacts/article-01.6 --source
 node --check web/campaign.js
 ```
 
-Tests use scripted transport to check the real iteration controller without provider calls. They cover feedback, failed-reference validation, parent selection, a regressing change, budget exhaustion, provider errors, strict schema requirements, cost accounting, and the existing memory checks.
+Tests use scripted transport to check the real iteration controller without provider calls. They cover feedback, failed-reference validation, parent selection, a regressing change, budget exhaustion, provider errors, strict schema requirements, cost accounting, and memory record validation, unchanged state after rejected writes, temporal conflicts, isolation, and deletion.
 
 | File | Responsibility |
 | --- | --- |

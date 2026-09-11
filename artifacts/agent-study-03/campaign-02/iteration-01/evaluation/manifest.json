@@ -1,0 +1,411 @@
+{
+  "schema_version": "1.0",
+  "release_id": "evaluation",
+  "generated_at": "2026-09-11T19:20:02.061916+00:00",
+  "provenance": {
+    "target_version": "structured-memory-v1",
+    "evaluator_version": "exact-state-v1",
+    "dataset_version": "original-synthetic-v1",
+    "consumer_version": "first-key-match-v1",
+    "source_sha256": "e29a92de7497dff9e97d07de7aba37ebf30c26f9d7c55ec8f515dced8ce0418a",
+    "source_files": {
+      ".python-version": "7b55f8e67b5623c4bef3fa691288da9437d79d3aba156de48d481db32ac7d16d",
+      "data/scenarios.json": "1eae82e424a313c1d3c567126ac99e07f20f960c69c9029e557ff3228d4daa52",
+      "experiments/candidates.json": "bf957a3c6b6cc3f66c172d1a731ac077bc40059267c97fdb9caec273a7dfd0cb",
+      "experiments/contract.json": "f0b77550e5020599cf4b9569858fe593c438064bef11fe504faa3adbe755973f",
+      "lab/__init__.py": "c22745adb5a4d1f0a38795f3cad7c897e7da4481791449e1deb3d6cd20558b7b",
+      "lab/__main__.py": "55e4776f4ab636feaa9f6cee73ffbe4922dba68857a0747e535b7b04c17c9ee0",
+      "lab/agent.py": "a85d00c2ae2bb0a9db3eba13f9f995579e1c3deeaebc58be2976cbf6e510f4ea",
+      "lab/campaign.py": "85c43d97d377edf1b90adab817c8e45803b032b3b9ca54a6d93f24ff8a3d23fc",
+      "lab/memory.py": "e3dfd3958f5baa267e5cdb6b85016c67c48324a7004921e432063726a4a0326f",
+      "lab/runner.py": "1a7e2ccfcd5b726f0b035aa8f987b63e663f7d2ffa4a9ffe27d61dd01e57b259",
+      "pyproject.toml": "d4cd0f7330fa10f64933e8f1f1a4f94398ff9f556f21d6d7d9b0ecd7a0df6d55",
+      "tests/test_campaign.py": "867a52ca0f0724f9cc6a54b430f984e2284128ea190566800f120cc60f70a401",
+      "tests/test_lab.py": "5f25ffd7efa76f95c470729187dac8ea6e3c85b2f464c814aa2acea34b093ca9",
+      "uv.lock": "d818ce021b983115d85edb857154df34cd0c3683743edec09f416e84be50765e"
+    },
+    "python": "3.12.10 (main, Apr  9 2025, 03:49:38) [Clang 20.1.0 ]",
+    "platform": "macOS-27.0-arm64-arm-64bit",
+    "model": "none; deterministic structured target",
+    "prompt": "none at runtime",
+    "randomness": "none; seeds do not apply",
+    "git": {
+      "commit": "f15a30e4068e3af49bd60b4252187404e66b08aa",
+      "dirty": true
+    }
+  },
+  "limitations": [
+    "All scenarios are original synthetic public fixtures visible during candidate authorship. Search/evaluation/adversarial roles are regression and validation organization, not blind held-out sets.",
+    "This target starts from structured fact proposals. Confidence scores are hand-authored fixture values, not calibrated probabilities. It does not measure language extraction, model calibration, or a real assistant's reasoning.",
+    "The frozen consumer returns the first packed fact with the requested key. Its failure modes are inspectable; they do not estimate a language model's behavior.",
+    "Scoped history changes entity and temporal filtering together. Its gain is attributable to the tested bundle; this run does not estimate the isolated effect of each switch.",
+    "Each scenario runs once by default. Repeating these deterministic rules adds no answer-quality evidence; variation across repeats is unavailable for a single run.",
+    "Configuration validation limits what these manifests can change. This same-user process is not an operating-system sandbox against a malicious coding agent with filesystem access.",
+    "The durable-key/source/kind gate rejects the supplied structured attacks. It is not a general prompt-injection defense or a detector for secrets hidden in allowed values.",
+    "Latency is local execution of tiny in-memory scenarios. Context words are not model tokens. Zero provider expenditure excludes authoring, machine and electricity costs.",
+    "Recommendations require human review. Running an experiment does not grant approval, change production, publish a repository, or deploy a service."
+  ],
+  "lab_id": "memory-improvement",
+  "article": 1,
+  "interaction_tier": "artifact-first",
+  "synthetic": true,
+  "entrypoints": {
+    "explorer": "bundle.json",
+    "report": "report.html",
+    "runs": "runs.jsonl"
+  },
+  "files": [
+    {
+      "path": "bundle.json",
+      "sha256": "cbe7dd30d7a7c178193c7d583e7009c2726764bf1a587a2c7c1c675e7dfe7e51"
+    },
+    {
+      "path": "candidates.jsonl",
+      "sha256": "1722d61c4f891fc5d7d2e44e286ca6c553d9088525fa35d29d7566a6b44a2abe"
+    },
+    {
+      "path": "inputs/candidates.json",
+      "sha256": "75a752e1056069161e0c102a32b09d07cee76b55152f7327827508c684f814c5"
+    },
+    {
+      "path": "inputs/scenarios.json",
+      "sha256": "1eae82e424a313c1d3c567126ac99e07f20f960c69c9029e557ff3228d4daa52"
+    },
+    {
+      "path": "metrics.json",
+      "sha256": "8dad06bd579c52e9077c5501609aa355ff5a44cf16bddc804ab111ce4a91b738"
+    },
+    {
+      "path": "report.html",
+      "sha256": "5758707056e36d6c2a527cc4bb99f2bc01db672b7e8b8adf3e6d2bbb73109b43"
+    },
+    {
+      "path": "report.md",
+      "sha256": "2bf8ebb527b10ed6bab8266c4ff8ab42ce98d0ba3d8e30e128eb78e17e107651"
+    },
+    {
+      "path": "runs.jsonl",
+      "sha256": "2eaa95308f8acfcf2c55829c31c4e921a636fce427d552b14b5768b2e1cfee4b"
+    },
+    {
+      "path": "state-diffs/agent-01/clean-abstention.json",
+      "sha256": "6f04451488628029b96d38b37c5c395676c89c9e6ea3b576d6fcb18d64b7b9a7"
+    },
+    {
+      "path": "state-diffs/agent-01/current-update.json",
+      "sha256": "a770391d12286e02015eff21bdea5b68f91d79ab77944fb1370a8391ee7a0e4f"
+    },
+    {
+      "path": "state-diffs/agent-01/delete-then-new-consent.json",
+      "sha256": "9847bbced19c373c20b22e7469c4af73c1e92f4747140f78d2364bc20d8c5d89"
+    },
+    {
+      "path": "state-diffs/agent-01/distractor-retrieval.json",
+      "sha256": "d96bd87135e101b75978069392357d84082c78cc0c5ee0f1eed8947ae913cdb0"
+    },
+    {
+      "path": "state-diffs/agent-01/duplicate-confirmation.json",
+      "sha256": "7091f1fa468dca39c7c62352313fd9c2bba0fcb204249f0fddfb442dc090992a"
+    },
+    {
+      "path": "state-diffs/agent-01/entity-grounding.json",
+      "sha256": "d3c44352759e2b3f93cdc6718d72a0082b2b5edd5aa45216cb4d542eb16b3d8a"
+    },
+    {
+      "path": "state-diffs/agent-01/future-move.json",
+      "sha256": "d83c586348855f98702cbb5c243e306f7aff29575a8e0e0c80a70ad311a082e2"
+    },
+    {
+      "path": "state-diffs/agent-01/historical-address.json",
+      "sha256": "cae18a04be9f2d460de362f5d5650871d8c5ea3edd66752eaf147bc5a3ef7439"
+    },
+    {
+      "path": "state-diffs/agent-01/history-boundary.json",
+      "sha256": "5fdb0f20a20ba04dbbf824b40b1ab7f11fdc3525f074d4b0e7c8f1b016580b36"
+    },
+    {
+      "path": "state-diffs/agent-01/owner-spoof.json",
+      "sha256": "72ea475c819ca7ead433a874dcf38284213abb0b6351285e4fb6adb995edadb8"
+    },
+    {
+      "path": "state-diffs/agent-01/persistent-poison.json",
+      "sha256": "c65d7b0ba6532676597d6dc9a4b543177e8bec6629fb3e734f52f03abfbaf03a"
+    },
+    {
+      "path": "state-diffs/agent-01/prohibited-secret.json",
+      "sha256": "6f04451488628029b96d38b37c5c395676c89c9e6ea3b576d6fcb18d64b7b9a7"
+    },
+    {
+      "path": "state-diffs/agent-01/selective-deletion.json",
+      "sha256": "9c28870b05d1a238c38f8dfad871e53df257513a5353471151bad976e6fd0e72"
+    },
+    {
+      "path": "state-diffs/agent-01/tenant-isolation.json",
+      "sha256": "2c1d08b0530e5dacb4a45768a29c6e0db64b2c697706ac107f2218c2a814692f"
+    },
+    {
+      "path": "state-diffs/agent-01/uncertain-conflict.json",
+      "sha256": "896ae6e82f6a01626e83855ab8b1cb12d3baf2aff5d62cf1949b24a9d7a54978"
+    },
+    {
+      "path": "state-diffs/agent-01/uncertain-timezone.json",
+      "sha256": "c400f0540913938a0d9266b05e408385a9524e22d535060d334c19f2991d481d"
+    },
+    {
+      "path": "state-diffs/agent-01/unnecessary-write.json",
+      "sha256": "8765ef2ca8093c6544c516e06694b521ab6c8d0d1b5135ed5f35af33a17b2286"
+    },
+    {
+      "path": "state-diffs/agent-01/useful-low-confidence.json",
+      "sha256": "6f04451488628029b96d38b37c5c395676c89c9e6ea3b576d6fcb18d64b7b9a7"
+    },
+    {
+      "path": "state-diffs/agent-01/useful-write.json",
+      "sha256": "ed933c2961952222325988043a7c3edfd0a31db59ba0407b428decde4d34ccbb"
+    },
+    {
+      "path": "state-diffs/agent-01/user-isolation.json",
+      "sha256": "21992ea433f8a4c8507ceb30d5bb54417c92d1dd6cac8af589a8d0367d2a3b72"
+    },
+    {
+      "path": "state-diffs/baseline/clean-abstention.json",
+      "sha256": "6f04451488628029b96d38b37c5c395676c89c9e6ea3b576d6fcb18d64b7b9a7"
+    },
+    {
+      "path": "state-diffs/baseline/current-update.json",
+      "sha256": "a770391d12286e02015eff21bdea5b68f91d79ab77944fb1370a8391ee7a0e4f"
+    },
+    {
+      "path": "state-diffs/baseline/delete-then-new-consent.json",
+      "sha256": "9847bbced19c373c20b22e7469c4af73c1e92f4747140f78d2364bc20d8c5d89"
+    },
+    {
+      "path": "state-diffs/baseline/distractor-retrieval.json",
+      "sha256": "d96bd87135e101b75978069392357d84082c78cc0c5ee0f1eed8947ae913cdb0"
+    },
+    {
+      "path": "state-diffs/baseline/duplicate-confirmation.json",
+      "sha256": "7091f1fa468dca39c7c62352313fd9c2bba0fcb204249f0fddfb442dc090992a"
+    },
+    {
+      "path": "state-diffs/baseline/entity-grounding.json",
+      "sha256": "d3c44352759e2b3f93cdc6718d72a0082b2b5edd5aa45216cb4d542eb16b3d8a"
+    },
+    {
+      "path": "state-diffs/baseline/future-move.json",
+      "sha256": "d83c586348855f98702cbb5c243e306f7aff29575a8e0e0c80a70ad311a082e2"
+    },
+    {
+      "path": "state-diffs/baseline/historical-address.json",
+      "sha256": "cae18a04be9f2d460de362f5d5650871d8c5ea3edd66752eaf147bc5a3ef7439"
+    },
+    {
+      "path": "state-diffs/baseline/history-boundary.json",
+      "sha256": "5fdb0f20a20ba04dbbf824b40b1ab7f11fdc3525f074d4b0e7c8f1b016580b36"
+    },
+    {
+      "path": "state-diffs/baseline/owner-spoof.json",
+      "sha256": "72ea475c819ca7ead433a874dcf38284213abb0b6351285e4fb6adb995edadb8"
+    },
+    {
+      "path": "state-diffs/baseline/persistent-poison.json",
+      "sha256": "c65d7b0ba6532676597d6dc9a4b543177e8bec6629fb3e734f52f03abfbaf03a"
+    },
+    {
+      "path": "state-diffs/baseline/prohibited-secret.json",
+      "sha256": "6f04451488628029b96d38b37c5c395676c89c9e6ea3b576d6fcb18d64b7b9a7"
+    },
+    {
+      "path": "state-diffs/baseline/selective-deletion.json",
+      "sha256": "9c28870b05d1a238c38f8dfad871e53df257513a5353471151bad976e6fd0e72"
+    },
+    {
+      "path": "state-diffs/baseline/tenant-isolation.json",
+      "sha256": "2c1d08b0530e5dacb4a45768a29c6e0db64b2c697706ac107f2218c2a814692f"
+    },
+    {
+      "path": "state-diffs/baseline/uncertain-conflict.json",
+      "sha256": "896ae6e82f6a01626e83855ab8b1cb12d3baf2aff5d62cf1949b24a9d7a54978"
+    },
+    {
+      "path": "state-diffs/baseline/uncertain-timezone.json",
+      "sha256": "c400f0540913938a0d9266b05e408385a9524e22d535060d334c19f2991d481d"
+    },
+    {
+      "path": "state-diffs/baseline/unnecessary-write.json",
+      "sha256": "8765ef2ca8093c6544c516e06694b521ab6c8d0d1b5135ed5f35af33a17b2286"
+    },
+    {
+      "path": "state-diffs/baseline/useful-low-confidence.json",
+      "sha256": "6f04451488628029b96d38b37c5c395676c89c9e6ea3b576d6fcb18d64b7b9a7"
+    },
+    {
+      "path": "state-diffs/baseline/useful-write.json",
+      "sha256": "ed933c2961952222325988043a7c3edfd0a31db59ba0407b428decde4d34ccbb"
+    },
+    {
+      "path": "state-diffs/baseline/user-isolation.json",
+      "sha256": "21992ea433f8a4c8507ceb30d5bb54417c92d1dd6cac8af589a8d0367d2a3b72"
+    },
+    {
+      "path": "traces/agent-01/clean-abstention.json",
+      "sha256": "a21a828d948d5afd60029b2518bd43f9b41e7368d0a36b804640d537733aa285"
+    },
+    {
+      "path": "traces/agent-01/current-update.json",
+      "sha256": "084494287a177e3553ec9ae6a71d650cb3709804192978d688b001816b426968"
+    },
+    {
+      "path": "traces/agent-01/delete-then-new-consent.json",
+      "sha256": "62a6481bc1e429c7aff793d7e92ea634aad34177885d3ad9dfae995ff08bdc98"
+    },
+    {
+      "path": "traces/agent-01/distractor-retrieval.json",
+      "sha256": "c7e2034d5e7ca818975281bdb372235bc00694edaf90eb7e9fb267f144c9c3a4"
+    },
+    {
+      "path": "traces/agent-01/duplicate-confirmation.json",
+      "sha256": "6399a1fc680c6b4facc51e8273d1ed7f26f4dc7f9bda9179d7630185a6d4a10b"
+    },
+    {
+      "path": "traces/agent-01/entity-grounding.json",
+      "sha256": "bf31e0f29d41c764ad21c52f7c3b72b3c9db4a444274cf0a15877e905bf15020"
+    },
+    {
+      "path": "traces/agent-01/future-move.json",
+      "sha256": "135582a202c5329dca5c95fc35d8b0a5c531fbc4e249a745e0efb0f9a277478d"
+    },
+    {
+      "path": "traces/agent-01/historical-address.json",
+      "sha256": "14497cd1dea2af07ff24c3c7b6b8fe742961c000aa5b69239444f71f1054f40e"
+    },
+    {
+      "path": "traces/agent-01/history-boundary.json",
+      "sha256": "2b291be2c4e93e1f3573f6ce97abe1331ea5657f452188ecc6d6b4ae4f5a548b"
+    },
+    {
+      "path": "traces/agent-01/owner-spoof.json",
+      "sha256": "f80fad38760318f4f9f5135e8f85321c23e6fdc727d1a02b0ff9b51223e59c5f"
+    },
+    {
+      "path": "traces/agent-01/persistent-poison.json",
+      "sha256": "71b11dd18047edb29bd13bddc9fec402023f4243f905eae61aa13ed715037edc"
+    },
+    {
+      "path": "traces/agent-01/prohibited-secret.json",
+      "sha256": "5c3e212ba60c0004f626524d396f045c115dcee8bf0623546c738f2ac45b76d1"
+    },
+    {
+      "path": "traces/agent-01/selective-deletion.json",
+      "sha256": "b46dac185f36713ae29f658755e4c9aebe2b810e13bafffbd5a3f464e0754a68"
+    },
+    {
+      "path": "traces/agent-01/tenant-isolation.json",
+      "sha256": "eecc0c5c0022a2cdc4ff9ab949f0e9990c30996160b766e7942142503dab68da"
+    },
+    {
+      "path": "traces/agent-01/uncertain-conflict.json",
+      "sha256": "421967d9242c7951081db70ca197e88e297dbb78cfd94bdc84178c8e20cd42fb"
+    },
+    {
+      "path": "traces/agent-01/uncertain-timezone.json",
+      "sha256": "1cfa88bcc7fc51c66dd842f84678c73168ae56dc84ebce5c16c20ee445bb16bd"
+    },
+    {
+      "path": "traces/agent-01/unnecessary-write.json",
+      "sha256": "12b52867777429e332fb5f97ce37f5f50475e20e73875a4499033177e449ffc6"
+    },
+    {
+      "path": "traces/agent-01/useful-low-confidence.json",
+      "sha256": "0fe15711181c6036736a57a98b2a501c355e6c7fe773d6947877e7baf9e92ca7"
+    },
+    {
+      "path": "traces/agent-01/useful-write.json",
+      "sha256": "211f6a91f60698c2466023d87501c28f5fb8d7187257794cdcfd7bf2feed8b9a"
+    },
+    {
+      "path": "traces/agent-01/user-isolation.json",
+      "sha256": "dfc97cd3c34e345a52146116f4257512aa7ab6d17831786f33e3c64a817d6647"
+    },
+    {
+      "path": "traces/baseline/clean-abstention.json",
+      "sha256": "a21a828d948d5afd60029b2518bd43f9b41e7368d0a36b804640d537733aa285"
+    },
+    {
+      "path": "traces/baseline/current-update.json",
+      "sha256": "bcf317ed93df31a019562752194d1b29cdb96f4f45cf3d8ef6827a062ab24221"
+    },
+    {
+      "path": "traces/baseline/delete-then-new-consent.json",
+      "sha256": "62a6481bc1e429c7aff793d7e92ea634aad34177885d3ad9dfae995ff08bdc98"
+    },
+    {
+      "path": "traces/baseline/distractor-retrieval.json",
+      "sha256": "9b046903334eb12cef1719b485596272e75511f5cd75310a3246e36c95180d68"
+    },
+    {
+      "path": "traces/baseline/duplicate-confirmation.json",
+      "sha256": "e81ee428ef0f6eab4c8461d58ee7ae752dd44d246b25f0ee841338ad357316ba"
+    },
+    {
+      "path": "traces/baseline/entity-grounding.json",
+      "sha256": "06b7dbc21482b77c7b29b3b65aef7973991a687308da28cc80fd104713ce99d6"
+    },
+    {
+      "path": "traces/baseline/future-move.json",
+      "sha256": "a3f5fae1cc8ef0e4ddcccf8db5c6e7d931102d5bedd682f622d95b071e51a448"
+    },
+    {
+      "path": "traces/baseline/historical-address.json",
+      "sha256": "3a8cc20d5e9de762d43807036fe52de28b1198ced8147367ae23093a59774bc0"
+    },
+    {
+      "path": "traces/baseline/history-boundary.json",
+      "sha256": "1928e47f0adc75e7637c91159d79cb33c856c2b9cfed486c71c41dfa8171d7d2"
+    },
+    {
+      "path": "traces/baseline/owner-spoof.json",
+      "sha256": "f80fad38760318f4f9f5135e8f85321c23e6fdc727d1a02b0ff9b51223e59c5f"
+    },
+    {
+      "path": "traces/baseline/persistent-poison.json",
+      "sha256": "71b11dd18047edb29bd13bddc9fec402023f4243f905eae61aa13ed715037edc"
+    },
+    {
+      "path": "traces/baseline/prohibited-secret.json",
+      "sha256": "5c3e212ba60c0004f626524d396f045c115dcee8bf0623546c738f2ac45b76d1"
+    },
+    {
+      "path": "traces/baseline/selective-deletion.json",
+      "sha256": "ec92c1263926d97e98c471ba626587da07157396337dc0d04570b7a256967714"
+    },
+    {
+      "path": "traces/baseline/tenant-isolation.json",
+      "sha256": "eecc0c5c0022a2cdc4ff9ab949f0e9990c30996160b766e7942142503dab68da"
+    },
+    {
+      "path": "traces/baseline/uncertain-conflict.json",
+      "sha256": "421967d9242c7951081db70ca197e88e297dbb78cfd94bdc84178c8e20cd42fb"
+    },
+    {
+      "path": "traces/baseline/uncertain-timezone.json",
+      "sha256": "1cfa88bcc7fc51c66dd842f84678c73168ae56dc84ebce5c16c20ee445bb16bd"
+    },
+    {
+      "path": "traces/baseline/unnecessary-write.json",
+      "sha256": "12b52867777429e332fb5f97ce37f5f50475e20e73875a4499033177e449ffc6"
+    },
+    {
+      "path": "traces/baseline/useful-low-confidence.json",
+      "sha256": "0fe15711181c6036736a57a98b2a501c355e6c7fe773d6947877e7baf9e92ca7"
+    },
+    {
+      "path": "traces/baseline/useful-write.json",
+      "sha256": "211f6a91f60698c2466023d87501c28f5fb8d7187257794cdcfd7bf2feed8b9a"
+    },
+    {
+      "path": "traces/baseline/user-isolation.json",
+      "sha256": "dfc97cd3c34e345a52146116f4257512aa7ab6d17831786f33e3c64a817d6647"
+    }
+  ]
+}

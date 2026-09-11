@@ -1,10 +1,30 @@
 # Recorded experiments
 
-- `agent-pilot-01`: one Luna call used to verify API access, Structured Outputs, and evaluation. The model enabled subject/date filtering and reached 19/20. Its provisional cost calculation omitted the cache-write surcharge. Recomputed from preserved usage at the published rates, its estimate is $0.00535395, rather than the earlier $0.0043716. The original request, response, and report are unchanged.
-- `agent-study-01`: three development campaigns before rejection feedback included the complete rejected output. The source includes corrected cache-write cost accounting. Cost estimate: $0.036043. No pilot discovery is provided as a ready-made candidate to these campaigns; each starts from the baseline. This is a development study using the same public task suite, not a blind confirmatory experiment.
-- `agent-study-02`: the final study described in the article, using complete rejection feedback and an explicit current-evidence reference instruction. Three campaigns used 4, 4, and 3 calls; eight proposals were evaluated and each agent then stopped. Cost estimate: $0.03412255. The report rounds this to $0.034123.
-- Combined token-cost estimate for all 24 live calls in this work: $0.0755195, ignoring cache-read discounts. Historical artifacts are never overwritten.
-- `article-01.5`: the four hand-prepared teaching configurations evaluated with the current source. It explains memory behavior separately from the agent study.
-- `article-01.1` through `article-01.4`: earlier deterministic component experiments, preserved with their original source metadata and repeat counts. Use their matching Git tags when checking those historical files against source.
+The article uses `agent-study-03`, recorded September 11, 2026 with validated,
+versioned memory records and the fixed temporal conflict policy. Three campaigns
+each made four model calls: subject/date filters, deduplication, a confidence
+threshold of 0.6, then stop. Nine proposals were evaluated; none failed validation.
+All selected configurations passed 20/20 public scenarios. Estimated provider
+cost: $0.0391774, shown as $0.039177 in the article.
 
-The study manifest records a dirty Git working tree because earlier untracked experiment folders were present. Its source-file hashes identify the tested implementation; `lab verify artifacts/agent-study-02 --source` compares those hashes with the current source. The versioned source commit is also recorded.
+`article-01.6` records the four hand-prepared teaching configurations against the
+same source. Their scores remain 13/20, 19/20, 19/20, and 16/20. These prepared
+answers are not supplied as initial candidates to the live agent.
+
+## Earlier evidence
+
+- `agent-pilot-01`: one API and Structured Outputs smoke call, reaching 19/20. Its provisional cost omitted the cache-write surcharge. Recomputed from saved usage, the estimate is $0.00535395 rather than $0.0043716; the original report remains unchanged.
+- `agent-study-01`: three development campaigns, 12 calls, including three invalid proposals. Rejection feedback did not yet contain the complete rejected output. Estimated cost: $0.036043.
+- `agent-study-02`: three campaigns with complete rejection feedback and current-evidence references, before record schema validation. They used 4, 4, and 3 calls, evaluated eight proposals, and each stopped at 20/20. Estimated cost: $0.03412255.
+- `article-01.1` through `article-01.5`: earlier deterministic evidence with its original source metadata and repeat counts. Use matching source revisions to reproduce it.
+
+All 36 saved live calls together have a token-based cost estimate of $0.1146969.
+The calculation includes cache-write surcharges and ignores cache-read discounts.
+It is not an invoice. Model rates were rechecked against the official model page
+on September 11, 2026 and had not changed.
+
+Historical artifacts are never overwritten. For the current implementation, use
+`lab verify artifacts/agent-study-03 --source` and
+`lab verify artifacts/article-01.6 --source`. Source-file hashes identify exactly
+what ran. The manifests also record the source commit and a dirty working tree
+because documentation changes and new evidence directories were present.
