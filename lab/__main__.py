@@ -22,7 +22,7 @@ from .runner import (
     verify_source,
 )
 
-DEFAULT_RELEASE = ROOT / "artifacts/article-01.3"
+DEFAULT_RELEASE = ROOT / "artifacts/article-01.6"
 
 
 def stamp() -> str:
@@ -36,19 +36,36 @@ def exclusive_json(path: Path, value: dict) -> None:
         stream.write("\n")
 
 
-def export_site(release: Path, output: Path) -> None:
+def export_site(release: Path, output: Path, campaign_release: Path | None = None) -> None:
     """Copy a verified artifact and three browser files into a portable static directory."""
     verify(release)
-    original = (ROOT / "web/index.html").read_text()
-    prefix = "../artifacts/article-01.3/"
+    original = (ROOT / "web/memory.html").read_text()
+    prefix = "../artifacts/article-01.6/"
     if prefix not in original:
         raise ValueError("The explorer's artifact URL contract changed; update the static exporter")
+    if campaign_release is not None:
+        verify(campaign_release)
+        if campaign_release.name == release.name:
+            raise ValueError("Memory and campaign releases need distinct directory names")
     output.mkdir(parents=True, exist_ok=False)
     destination = f"./artifacts/{quote(release.name, safe='')}/"
     (output / "index.html").write_text(original.replace(prefix, destination))
     for name in ("style.css", "app.js"):
         shutil.copyfile(ROOT / "web" / name, output / name)
     shutil.copytree(release, output / "artifacts" / release.name)
+    if campaign_release is not None:
+        (output / "index.html").rename(output / "memory.html")
+        campaign_html = (
+            (ROOT / "web/index.html")
+            .read_text()
+            .replace(
+                "../artifacts/agent-study-03/",
+                f"./artifacts/{quote(campaign_release.name, safe='')}/",
+            )
+        )
+        (output / "index.html").write_text(campaign_html)
+        shutil.copyfile(ROOT / "web/campaign.js", output / "campaign.js")
+        shutil.copytree(campaign_release, output / "artifacts" / campaign_release.name)
 
 
 def proposal_context(release: Path, parent_id: str) -> dict:
@@ -163,9 +180,26 @@ def main() -> int:
     command = sub.add_parser("site", help="Export a portable static explorer and verified evidence")
     command.add_argument("--release", type=Path, default=DEFAULT_RELEASE)
     command.add_argument("--output", type=Path, required=True)
+    command.add_argument("--campaign-release", type=Path, default=ROOT / "artifacts/agent-study-03")
+    command = sub.add_parser("campaign", help="Run the live outer LLM improvement agent")
+    command.add_argument(
+        "--live", action="store_true", required=True, help="Explicitly authorize API calls"
+    )
+    command.add_argument("--output", type=Path, required=True)
+    command.add_argument("--campaigns", type=int, default=3)
+    command.add_argument("--iterations", type=int, default=4)
+    command.add_argument("--budget-usd", type=float, default=0.5)
     args = parser.parse_args()
     try:
-        if args.command in {"run", "evaluate"}:
+        if args.command == "campaign":
+            from .campaign import run_campaigns
+
+            result = run_campaigns(args.output, args.campaigns, args.iterations, args.budget_usd)
+            print(f"Recorded {len(result['campaigns'])} campaigns in {args.output}")
+            print(f"Estimated model cost: ${result['estimated_cost_usd']:.6f}")
+            if result["status"] != "completed":
+                return 1
+        elif args.command in {"run", "evaluate"}:
             output = args.output or ROOT / f"artifacts/local-{stamp()}"
             if output.exists():
                 raise ValueError(f"Refusing to overwrite an existing release: {output}")
@@ -222,7 +256,7 @@ def main() -> int:
             )
             print(f"Recorded operator review in {path}; frozen release remains unchanged")
         elif args.command == "site":
-            export_site(args.release, args.output)
+            export_site(args.release, args.output, args.campaign_release)
             print(f"Portable static site: {args.output}; mount the directory at any URL prefix")
         elif args.command == "serve":
             if not 1024 <= args.port <= 65535:

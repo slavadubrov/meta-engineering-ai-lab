@@ -2,7 +2,7 @@
 .uv-cache/
 .ruff_cache/
 __pycache__/
-artifacts/local-*/
+/artifacts/
 decisions/
 site/
 .env
