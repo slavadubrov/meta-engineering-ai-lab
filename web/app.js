@@ -1,6 +1,6 @@
 const artifactRoot = new URL(
   document.querySelector('meta[name="memory-artifact-base"]')?.content ??
-    "../artifacts/article-01.3/",
+    "../artifacts/article-01.6/",
   document.baseURI,
 );
 const $ = (id) => document.getElementById(id);
@@ -61,6 +61,11 @@ function records(values) {
       element(
         "p",
         `${record.id} · ${record.tenant} / ${record.user}`,
+        "small muted",
+      ),
+      element(
+        "p",
+        `Valid from ${record.valid_from} until ${record.valid_to ?? "no end date"}${record.valid_to ? " (end excluded)" : ""}. Source: ${record.source_event_id}.`,
         "small muted",
       ),
       fields,

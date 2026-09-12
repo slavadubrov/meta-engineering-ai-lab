@@ -1,0 +1,33 @@
+{
+  "url": "https://github.com/slavadubrov/meta-engineering-ai-lab/releases/download/v0.2.1/memory-experiment-evidence.tar.gz",
+  "sha256": "501a623384635e4e6a3abd70868452c4c4b1efe4e69c9540905c74a49414cc84",
+  "archive_bytes": 4126831,
+  "unpacked_bytes": 88107181,
+  "file_count": 5087,
+  "directories": [
+    "agent-pilot-01",
+    "agent-study-01",
+    "agent-study-02",
+    "agent-study-03",
+    "article-01.1",
+    "article-01.2",
+    "article-01.3",
+    "article-01.4",
+    "article-01.5",
+    "article-01.6"
+  ],
+  "examples": [
+    {
+      "path": "reports/examples/first-proposal.json",
+      "source": "agent-study-03/campaign-01/iteration-01/proposal.json"
+    },
+    {
+      "path": "reports/examples/future-move.json",
+      "source": "article-01.6/traces/scoped-history/future-move.json"
+    },
+    {
+      "path": "reports/examples/rejected-response.json",
+      "source": "agent-study-01/campaign-01/iteration-02/response.json"
+    }
+  ]
+}

@@ -3,7 +3,7 @@ name = "closed-loop-ai-lab"
 version = "0.1.0"
 description = "A reproducible, artifact-first experiment loop for synthetic agent memory"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = ["openai==2.41.0", "pydantic==2.13.4"]
 
 [dependency-groups]
 dev = ["ruff==0.15.2"]

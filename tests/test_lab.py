@@ -10,7 +10,7 @@ from pathlib import Path
 from unittest.mock import patch as mock_patch
 
 from lab.__main__ import export_site, proposal_context, propose
-from lab.memory import Config, validate_scenarios
+from lab.memory import Config, Memory, MemoryRecord, validate_scenarios
 from lab.runner import (
     ROOT,
     build_bundle,
@@ -123,6 +123,55 @@ class ExperimentContractTests(unittest.TestCase):
         boundary = next(s for s in self.scenarios if s["id"] == "history-boundary")
         self.assertTrue(run_scenario(boundary, Config(time_aware=True), 0)["success"])
 
+    def test_memory_schema_and_conflicts_cannot_corrupt_history(self):
+        scenario = next(s for s in self.scenarios if s["id"] == "future-move")
+        first, update = deepcopy(scenario["events"][:2])
+        first["source_event_id"], update["source_event_id"] = "event-1", "event-2"
+        memory = Memory(Config())
+        self.assertEqual(memory.write(first)["status"], "stored")
+        before = memory.snapshot()
+        malformed = [
+            {**update, "source_event_id": ""},
+            {**update, "at": "20260103"},
+            {**update, "fact": {**update["fact"], "confidence": float("nan")}},
+            {**update, "fact": {**update["fact"], "confidence": True}},
+            {**update, "fact": {**update["fact"], "extra": "ignored?"}},
+        ]
+        missing_source = deepcopy(update)
+        del missing_source["source_event_id"]
+        malformed.append(missing_source)
+        for event in malformed:
+            with self.subTest(event=event):
+                self.assertEqual(memory.write(event)["reason"], "invalid_schema")
+                self.assertEqual(memory.snapshot(), before)
+                self.assertEqual(memory.next_id, 2)
+        conflict = deepcopy(update)
+        conflict["fact"]["valid_from"] = first["fact"]["valid_from"]
+        self.assertEqual(memory.write(conflict)["reason"], "same_date_conflict")
+        self.assertEqual(memory.snapshot(), before)
+        self.assertEqual(memory.write(first)["reason"], "same_effective_fact")
+        self.assertEqual(memory.snapshot(), before)
+        late = deepcopy(update)
+        late["fact"]["valid_from"] = "2025-12-31"
+        self.assertEqual(memory.write(late)["reason"], "out_of_order_update")
+        self.assertEqual(memory.snapshot(), before)
+        self.assertEqual(memory.write(update)["status"], "stored")
+        records = memory.snapshot()
+        self.assertEqual(records[1]["supersedes_memory_id"], records[0]["id"])
+        for record in records:
+            self.assertEqual(MemoryRecord.model_validate(record).schema_version, 1)
+        self.assertEqual(records[0]["valid_to"], records[1]["valid_from"])
+        self.assertEqual(before[0]["valid_to"], None)
+        for patch in (
+            {"valid_to": records[0]["valid_from"]},
+            {"valid_to": "2025-01-01"},
+            {"schema_version": 2},
+            {"schema_version": True},
+            {"source_event_id": None},
+        ):
+            with self.subTest(patch=patch), self.assertRaises(ValueError):
+                MemoryRecord.model_validate({**records[0], **patch})
+
     def test_delete_removes_history_and_allows_fresh_explicit_consent(self):
         scenario = next(s for s in self.scenarios if s["id"] == "delete-then-new-consent")
         run = run_scenario(scenario, Config(), 0)
@@ -151,7 +200,7 @@ class ExperimentContractTests(unittest.TestCase):
             site = Path(directory) / "site"
             export_site(path, site)
             self.assertIn("./artifacts/release/", (site / "index.html").read_text())
-            self.assertNotIn("../artifacts/article-01.3/", (site / "index.html").read_text())
+            self.assertNotIn("../artifacts/article-01.6/", (site / "index.html").read_text())
             self.assertEqual(verify(site / "artifacts/release"), verify(path))
             with self.assertRaises(FileExistsError):
                 export(path, self.bundle, self.runs)

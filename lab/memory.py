@@ -4,6 +4,9 @@ from copy import deepcopy
 from dataclasses import asdict, dataclass, replace
 from datetime import date
 from math import isfinite
+from typing import Annotated, Literal, Self
+
+from pydantic import BaseModel, ConfigDict, Field, ValidationError, field_validator, model_validator
 
 
 @dataclass(frozen=True)
@@ -46,6 +49,60 @@ def valid_at(item: dict, at: str) -> bool:
     return item["valid_from"] <= at and (item["valid_to"] is None or at < item["valid_to"])
 
 
+Text = Annotated[str, Field(min_length=1, max_length=256)]
+
+
+class FactFields(BaseModel):
+    model_config = ConfigDict(extra="forbid", strict=True, allow_inf_nan=False)
+
+    tenant: Text
+    user: Text
+    entity: Text
+    key: Text
+    value: Text
+    confidence: float = Field(ge=0, le=1)
+    source: Text
+    valid_from: str
+
+    @field_validator("valid_from")
+    @classmethod
+    def check_date(cls, value: str) -> str:
+        canonical_date(value)
+        return value
+
+
+class FactProposal(FactFields):
+    kind: Text
+
+
+class MemoryRecord(FactFields):
+    """Versioned stored fact; malformed records never enter memory."""
+
+    schema_version: int = Field(default=1, ge=1, le=1)
+    memory_type: Literal["fact"] = "fact"
+    source: Literal["user"]
+    id: Text
+    source_event_id: Text
+    observed_at: str
+    valid_to: str | None
+    supersedes_memory_id: Text | None
+
+    @field_validator("observed_at", "valid_to")
+    @classmethod
+    def check_optional_date(cls, value: str | None) -> str | None:
+        if value is not None:
+            canonical_date(value)
+        return value
+
+    @model_validator(mode="after")
+    def check_interval(self) -> Self:
+        if self.valid_to is not None and self.valid_to <= self.valid_from:
+            raise ValueError("valid_to must be later than valid_from")
+        if self.key not in ALLOWED_KEYS:
+            raise ValueError("Unsupported memory key")
+        return self
+
+
 class Memory:
     """Each scenario owns a new in-memory instance; history has half-open validity intervals."""
 
@@ -58,44 +115,48 @@ class Memory:
         return deepcopy(self.records)
 
     def write(self, event: dict) -> dict:
-        proposal = event["fact"]
+        # Validate the entire proposed record before touching existing history.
+        try:
+            proposal = FactProposal.model_validate(event["fact"]).model_dump()
+            record = MemoryRecord.model_validate(
+                {
+                    **{k: v for k, v in proposal.items() if k != "kind"},
+                    "id": f"m{self.next_id:03d}",
+                    "valid_to": None,
+                    "observed_at": event["at"],
+                    "source_event_id": event["source_event_id"],
+                    "supersedes_memory_id": None,
+                }
+            )
+        except (ValidationError, KeyError):
+            return {"status": "rejected", "reason": "invalid_schema", "retained": False}
         owner = event["tenant"], event["user"]
         if (proposal["tenant"], proposal["user"]) != owner:
             return {"status": "rejected", "reason": "owner_mismatch", "retained": False}
-        if (
-            proposal["key"] not in ALLOWED_KEYS
-            or proposal["kind"] != "fact"
-            or proposal["source"] != "user"
-        ):
+        if proposal["kind"] != "fact":
             return {"status": "rejected", "reason": "prohibited_write", "retained": False}
         if proposal["confidence"] < self.config.min_confidence:
             return {"status": "abstained", "reason": "below_threshold", "retained": False}
         active = [r for r in self.records if scope(r) == scope(proposal) and r["valid_to"] is None]
-        if active and proposal["valid_from"] < active[-1]["valid_from"]:
+        previous = active[-1] if active else None
+        if previous and proposal["valid_from"] < previous["valid_from"]:
             return {"status": "rejected", "reason": "out_of_order_update", "retained": False}
-        if self.config.deduplicate and active and active[-1]["value"] == proposal["value"]:
+        if previous and proposal["valid_from"] == previous["valid_from"]:
+            if proposal["value"] != previous["value"]:
+                return {"status": "rejected", "reason": "same_date_conflict", "retained": False}
+            return {"status": "deduplicated", "reason": "same_effective_fact", "retained": True}
+        if self.config.deduplicate and previous and previous["value"] == proposal["value"]:
             return {"status": "deduplicated", "reason": "same_active_value", "retained": True}
-        for record in active:
-            record["valid_to"] = proposal["valid_from"]
-        record = {
-            name: proposal[name]
-            for name in (
-                "tenant",
-                "user",
-                "entity",
-                "key",
-                "value",
-                "valid_from",
-                "confidence",
-                "source",
-            )
+        if previous:
+            record.supersedes_memory_id = previous["id"]
+        closed = {
+            r["id"]: MemoryRecord.model_validate(
+                {**r, "valid_to": proposal["valid_from"]}
+            ).model_dump()
+            for r in active
         }
-        record.update(
-            id=f"m{self.next_id:03d}",
-            valid_to=None,
-            observed_at=event["at"],
-            source_event_id=event["source_event_id"],
-        )
+        record = record.model_dump()
+        self.records = [closed.get(r["id"], r) for r in self.records]
         self.next_id += 1
         self.records.append(record)
         return {
@@ -168,16 +229,7 @@ def validate_scenarios(scenarios: list[dict]) -> None:
                 if not isinstance(event[name], str) or not 1 <= len(event[name]) <= 80:
                     raise ValueError(f"Invalid {name}")
             if event["action"] == "write":
-                fact = event["fact"]
-                for name in ("tenant", "user", "entity", "key", "value", "source", "kind"):
-                    if not isinstance(fact[name], str) or not 1 <= len(fact[name]) <= 256:
-                        raise ValueError(f"Invalid fact {name}")
-                confidence = fact["confidence"]
-                if type(confidence) not in (int, float) or not (
-                    isfinite(confidence) and 0 <= confidence <= 1
-                ):
-                    raise ValueError("Invalid fact confidence")
-                canonical_date(fact["valid_from"])
+                FactProposal.model_validate(event["fact"])
                 if type(event["should_retain"]) is not bool:
                     raise ValueError("should_retain must be a boolean")
             else:

@@ -18,6 +18,7 @@
     "dataset and evaluator",
     "tenant and user isolation",
     "delete-all-versions behavior",
+    "memory record schema and temporal conflict policy",
     "write key/source/kind admission",
     "context word budget",
     "run budget",

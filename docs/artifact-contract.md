@@ -1,7 +1,15 @@
+# Two kinds of recorded evidence
+
+Complete artifacts are distributed as a [checksummed release archive](../reports/evidence.json). Run `uv run --frozen python scripts/fetch_evidence.py` once to restore `artifacts/` before using the browser or verification commands below. Generated and downloaded artifacts are ignored by Git.
+
+The primary page reads `artifacts/agent-study-03/campaigns.json`. This ledger records independent campaigns, every model decision, cost/usage, selected configurations, and links to exact requests, responses, and evaluation releases. Each model request includes the full SGR JSON Schema and instructions. `manifest.json` covers the whole directory and the source-file identities.
+
+Each evaluation nested under a campaign uses the memory-component format below. Parent evidence is reused after verification because this target is deterministic; a new configuration is executed once per scenario. Existing `repeat_count` fields still support explicit low-level reruns and do not measure agent search variability.
+
 # Public artifact contract, version 1.0
 
-Python is authoritative. The browser reads `../artifacts/article-01.3/bundle.json`
-from `web/index.html`; it filters recorded evidence, never evaluates a target.
+Python is authoritative. The browser reads `../artifacts/article-01.6/bundle.json`
+from `web/memory.html`; it filters recorded evidence, never evaluates a target.
 `report.html` is a semantic, standalone no-JavaScript comparison; `report.md`
 contains the same conclusions. `manifest.json` hashes every public artifact.
 The original normalized scenarios and candidate proposals ship with the code.
@@ -37,6 +45,11 @@ bundle
 Memory records contain `id`, `tenant`, `user`, `entity`, `key`, `value`,
 `valid_from`, `valid_to` (null means open), `confidence`, `source`, and
 `observed_at`, and `source_event_id` (scenario ID plus the original write step).
+Records also carry `schema_version: 1`, `memory_type: "fact"`, and
+`supersedes_memory_id` (null for a fact with no predecessor). `MemoryRecord`
+validates these fields before storage. The memory record version is separate
+from the bundle format version. Closed validity intervals require `valid_to >
+valid_from`; conflicting same-date writes are rejected without a state change.
 Trace dates are synthetic calendar dates. Changed state entries
 are `{id,before,after}`; before and after are complete records.
 
