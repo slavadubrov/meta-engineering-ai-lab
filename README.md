@@ -177,10 +177,12 @@ uv run --frozen python -m unittest discover -s tests -v
 uv run --frozen python -m unittest discover -s scripts -v
 uv run --frozen ruff check lab tests scripts
 uv run --frozen ruff format --check lab tests scripts
-uv run --frozen python -m lab verify artifacts/agent-study-03 --source
-uv run --frozen python -m lab verify artifacts/article-01.6 --source
+uv run --frozen python -m lab verify artifacts/agent-study-03
+uv run --frozen python -m lab verify artifacts/article-01.6
 node --check web/campaign.js
 ```
+
+The pinned Part 1 checkout also supports `verify --source` for its complete source inventory. On this branch, CI checks every recorded Part 1 file hash while allowing the added Part 2 modules. Extending a recorded campaign still requires a new baseline after the source inventory changes.
 
 Tests use scripted transport to check the real iteration controller without provider calls. They cover feedback, failed-reference validation, parent selection, a regressing change, budget exhaustion, provider errors, strict schema requirements, cost accounting, and memory record validation, unchanged state after rejected writes, temporal conflicts, isolation, and deletion.
 
@@ -195,3 +197,35 @@ Tests use scripted transport to check the real iteration controller without prov
 | [web/memory.html](web/memory.html), [web/app.js](web/app.js) | Detailed memory-mechanics explorer. |
 
 The [development run log](docs/experiment-notes.md) distinguishes the pilot from the recorded three-campaign study and explains the preserved older deterministic snapshots. Those snapshots are evidence of their own runs, not new LLM measurements.
+
+## Part 2: evaluator exploit experiment
+
+The [evaluator experiment](reports/article-02/report.md) extends the existing memory
+tool with answer-only selection, state checks, separate audit cases, paired
+comparisons and explicit resource policies. Eight configurations demonstrate how
+a perfect development answer score can hide unwanted stored facts.
+
+```bash
+uv sync --frozen
+uv run --frozen python -m lab.evaluator_exploits --output artifacts/my-evaluator-study
+uv run --frozen python -m lab verify artifacts/my-evaluator-study
+uv run --frozen python -m http.server 8000 --bind 127.0.0.1
+```
+
+Open `http://127.0.0.1:8000/web/evaluators.html` for the frozen interactive example,
+or read [all candidate results](reports/article-02/report.md). Audit cases are
+withheld from selection, not blind to the authors. The target is deterministic;
+human/model-judge calibration remains unmeasured. The main experiment needs no API
+key.
+
+An optional model study selects from development scores and compares answer-only
+and state-aware judging. It permits at most three calls, reserves at most USD 0.10,
+and stops on a failed call without retrying. Supply `OPENAI_API_KEY` locally:
+
+```bash
+uv run --frozen --env-file .env.local python -m lab.evaluator_judge \
+  --live --release artifacts/my-evaluator-study --output artifacts/my-judge-study
+```
+
+The synthetic rubric labels are not independently reviewed human judgments.
+No successful live judge comparison or human calibration result is included.

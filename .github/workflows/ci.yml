@@ -30,10 +30,22 @@ jobs:
       - run: uv run --frozen python -m lab verify artifacts/article-01.3
       - run: uv run --frozen python -m lab verify artifacts/article-01.4
       - run: uv run --frozen python -m lab verify artifacts/article-01.5
-      - run: uv run --frozen python -m lab verify artifacts/article-01.6 --source
+      - run: uv run --frozen python -m lab verify artifacts/article-01.6
       - run: uv run --frozen python -m lab verify artifacts/agent-study-01
       - run: uv run --frozen python -m lab verify artifacts/agent-study-02
-      - run: uv run --frozen python -m lab verify artifacts/agent-study-03 --source
+      - run: uv run --frozen python -m lab verify artifacts/agent-study-03
+      # Preserve every recorded Part 1 source; Part 2 adds separate modules.
+      - name: Verify historical source hashes
+        run: |
+          uv run --frozen python - <<'PYTHON'
+          from lab.runner import ROOT, provenance, read_json
+          current = provenance()["source_files"]
+          for release in ("article-01.6", "agent-study-03"):
+              recorded = read_json(ROOT / "artifacts" / release / "manifest.json")["provenance"]["source_files"]
+              for path, digest in recorded.items():
+                  assert current.get(path) == digest, f"Historical source changed: {path}"
+          PYTHON
       - run: uv run --frozen python -m lab site --output site
       - run: node --check web/app.js
       - run: node --check web/campaign.js
+      - run: node --check web/evaluators.js

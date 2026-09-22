@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>When the winning score hides a bad memory</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      main { max-width: 1100px; margin: auto; padding: 2rem 1.25rem 5rem; }
+      h1 { max-width: 22ch; line-height: 1.12; font-size: clamp(2rem, 5vw, 3.5rem); }
+      h2 { margin-top: 2.5rem; }
+      .lead { max-width: 70ch; font-size: 1.1rem; }
+      .verdict { padding: 1.5rem; border-left: 5px solid var(--signal); background: var(--surface); }
+      .table-scroll { overflow-x: auto; }
+      table { width: 100%; border-collapse: collapse; }
+      th, td { padding: .65rem; text-align: left; border-bottom: 1px solid var(--line); }
+      caption { text-align: left; font-weight: 600; padding: .5rem 0; }
+      .controls { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; margin: 1rem 0; }
+      .step { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+      .step > div { padding: 1rem; background: var(--surface); border: 1px solid var(--line); }
+      pre { white-space: pre-wrap; overflow-wrap: anywhere; font-size: .85rem; }
+      .badge { color: var(--signal); font-weight: 700; }
+      button:focus-visible, select:focus-visible, a:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+      @media(max-width: 600px) { .step { grid-template-columns: 1fr; } }
+    </style>
+  </head>
+  <body>
+    <main>
+      <p class="badge">META-ENGINEERING AI SYSTEMS · EXPERIMENT 02</p>
+      <h1>When the winning score hides a bad memory</h1>
+      <p class="lead">Eight configurations answer the same questions. The apparent winner answers all eight correctly—and stores four guesses it should reject. Add evidence to see why the decision changes.</p>
+      <p>Synthetic demonstration using the memory tool from Part 1. Every number comes from a recorded Python run. Browser controls change which checks you inspect; they never run a model or alter the evidence.</p>
+      <noscript>JavaScript is needed for interaction. <a href="../reports/article-02/report.md">Read the complete text report.</a></noscript>
+      <p id="error" role="alert" hidden></p>
+      <section aria-labelledby="decision-title">
+        <h2 id="decision-title">What evidence would you require?</h2>
+        <div class="controls">
+          <label for="layer">Evidence</label>
+          <select id="layer">
+            <option value="proxy">1. Answers only</option>
+            <option value="state">2. Add memory-state checks</option>
+            <option value="audit">3. Add separate audit cases</option>
+            <option value="assurance">4. Add previous tests and hard constraints</option>
+            <option value="all">5. Add context and latency budgets</option>
+          </select>
+          <button id="next" type="button">Add the next check →</button>
+        </div>
+        <div class="verdict" aria-live="polite"><strong id="winner">Loading recorded results…</strong><p id="explanation"></p></div>
+        <div class="table-scroll" tabindex="0" role="region" aria-label="Candidate comparison">
+          <table><caption id="caption">Ranked by eligibility, then development answers. Ties retain the declared candidate order.</caption><thead><tr><th scope="col">Candidate</th><th scope="col">Development</th><th scope="col">State changes</th><th scope="col">Audit</th><th scope="col">Decision</th></tr></thead><tbody id="ranking"></tbody></table>
+        </div>
+        <p>“Eligible” means this local policy permits review. No configuration is deployed. The audit cases were withheld from the selector, but known during authoring; they are <strong>not a blind generalization test</strong>.</p>
+      </section>
+      <section aria-labelledby="trace-title">
+        <h2 id="trace-title">Follow one correct answer into the wrong state</h2>
+        <p>This is the actual <code>dev-01</code> trace of the weak-score winner. A confirmed language preference and an unrelated tentative color arrive before the question.</p>
+        <div class="controls"><button id="previous-event" type="button">← Previous event</button><strong id="event-number"></strong><button id="next-event" type="button">Next event →</button></div>
+        <div class="step" aria-live="polite"><div><h3 id="event-title"></h3><p id="event-text"></p></div><div><h3>Memory after this event</h3><pre id="state"></pre></div></div>
+        <p>The answer checker sees “French.” The state checker also sees an unwanted <code>color = purple</code> record. Changing the target’s status message cannot conceal that state change.</p>
+      </section>
+      <details>
+        <summary>Repeated runs, paired uncertainty, and operational costs</summary>
+        <label><input id="repeats" type="checkbox" /> Show all five fresh-state sweeps</label>
+        <p>All five answer scores are identical. The target is deterministic: these repeats check reset behavior and local timing, not language-model variance. Intervals resample the 12 audit scenarios once each; repeated copies do not increase the sample size.</p>
+        <div class="table-scroll" tabindex="0" role="region" aria-label="Uncertainty and costs"><table><caption>Audit evidence; bootstrap differences relative to threshold 0.6, top-k 3</caption><thead><tr><th scope="col">Candidate</th><th scope="col">Audit runs</th><th scope="col">Paired Δ [95% interval]</th><th scope="col">Context words/query</th><th scope="col">Local p95 ms</th></tr></thead><tbody id="uncertainty"></tbody></table></div>
+        <p>Intervals describe these constructed scenarios and do not establish population generalization or correct for search selection. Latency measures local scenario execution, excluding export. Context words are not model tokens. The deterministic experiment makes zero provider calls; hardware and engineering time are excluded.</p>
+        <p id="frontier"></p>
+      </details>
+      <details>
+        <summary>Which questions need a model judge?</summary>
+        <p>These eight synthetic examples separate answer correctness from acceptable behavior. Reference labels follow the authored rubric; human labels are unfilled. No model-versus-human agreement result is claimed. The optional three-call study records a selector and two judge prompts when provider access is available.</p>
+        <div class="table-scroll" tabindex="0" role="region" aria-label="Judge calibration examples"><table><caption>Calibration review packet: human review pending</caption><thead><tr><th scope="col">Case</th><th scope="col">Answer</th><th scope="col">State evidence</th><th scope="col">Rubric</th><th scope="col">Human</th></tr></thead><tbody id="calibration"></tbody></table></div>
+      </details>
+      <h2>Inspect and reproduce</h2>
+      <p><a href="../reports/article-02/report.md">Result table</a> · <a href="../reports/article-02/bundle.json">Frozen evidence</a> · <a href="../experiments/evaluator-exploits/contract.json">Experiment contract</a></p>
+      <pre>uv sync --frozen
+uv run --frozen python -m lab.evaluator_exploits --output artifacts/my-evaluator-study
+uv run --frozen python -m lab verify artifacts/my-evaluator-study</pre>
+      <p id="provenance"></p>
+    </main>
+    <script type="module" src="evaluators.js"></script>
+  </body>
+</html>
