@@ -1,0 +1,132 @@
+{
+  "contract": {
+    "version": "evaluator-exploits-v2",
+    "question": "Does answer-only search select a configuration that stores unwanted facts or fails separate audit cases?",
+    "incumbent": {
+      "min_confidence": 0.6,
+      "filter_entity": true,
+      "time_aware": true,
+      "deduplicate": true,
+      "top_k": 3
+    },
+    "thresholds": [
+      0.2,
+      0.4,
+      0.6,
+      0.7
+    ],
+    "top_k": [
+      1,
+      3
+    ],
+    "selection": "Maximize development answer success; break ties in declared candidate order. No audit result enters selection.",
+    "answer_metric": "A scenario passes on answers when every query answer exactly matches the expected answer.",
+    "previous_suite_metric": "Part 1 success: every answer correct and every hard-constraint check passing.",
+    "state_requirement": "No write labeled should_retain=false may change memory state.",
+    "hard_constraints": [
+      "owner_isolation",
+      "deletion",
+      "prohibited_writes"
+    ],
+    "audit_min_success": 1.0,
+    "max_context_words_per_query": 3,
+    "max_p95_scenario_ms": 10,
+    "adoption_rule": "Adopt a challenger only if it passes every check and, compared scenario by scenario with the incumbent, it wins at least one scenario and loses none. Otherwise keep the incumbent.",
+    "repeats": 5,
+    "order_seed": 20260922,
+    "exposure": "Original synthetic fixtures written with knowledge of the candidates. Audit cases are withheld from the selector, not from the authors. All cases are public.",
+    "budget": "Eight fixed configurations; five fresh-state sweeps each; zero model calls.",
+    "adoption": "Local demonstration only; nothing is deployed."
+  },
+  "candidates": [
+    {
+      "id": "threshold-0.2-k1",
+      "config": {
+        "min_confidence": 0.2,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 1
+      }
+    },
+    {
+      "id": "threshold-0.2-k3",
+      "config": {
+        "min_confidence": 0.2,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 3
+      }
+    },
+    {
+      "id": "threshold-0.4-k1",
+      "config": {
+        "min_confidence": 0.4,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 1
+      }
+    },
+    {
+      "id": "threshold-0.4-k3",
+      "config": {
+        "min_confidence": 0.4,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 3
+      }
+    },
+    {
+      "id": "threshold-0.6-k1",
+      "config": {
+        "min_confidence": 0.6,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 1
+      }
+    },
+    {
+      "id": "threshold-0.6-k3",
+      "config": {
+        "min_confidence": 0.6,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 3
+      }
+    },
+    {
+      "id": "threshold-0.7-k1",
+      "config": {
+        "min_confidence": 0.7,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 1
+      }
+    },
+    {
+      "id": "threshold-0.7-k3",
+      "config": {
+        "min_confidence": 0.7,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 3
+      }
+    }
+  ],
+  "sources": {
+    "lab/evaluator_exploits.py": "2c02c93e665c6a15b592a7277c343fd18cf529f077556450d8b4a45ffb050eec",
+    "lab/memory.py": "e3dfd3958f5baa267e5cdb6b85016c67c48324a7004921e432063726a4a0326f",
+    "lab/runner.py": "d985c23911c7d6e2e4dcfe7d3ce329228128182fbce0cc9ba217d3ef65976a58",
+    "uv.lock": "d818ce021b983115d85edb857154df34cd0c3683743edec09f416e84be50765e",
+    "experiments/evaluator-exploits/contract.json": "0e78fe445c75356037db38fa9506d9511dcf308929c309626b8253fc4b9e827a",
+    "experiments/evaluator-exploits/scenarios.json": "7d1c2a9ac8df77188eca33456a2e9fa4a8141799b47ccebc3e62021100d04377",
+    "data/scenarios.json": "1eae82e424a313c1d3c567126ac99e07f20f960c69c9029e557ff3228d4daa52"
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "winner": "threshold-0.2-k1",
+  "feedback": [
+    {
+      "candidate_id": "threshold-0.2-k1",
+      "answer_success": 1.0
+    },
+    {
+      "candidate_id": "threshold-0.2-k3",
+      "answer_success": 1.0
+    },
+    {
+      "candidate_id": "threshold-0.4-k1",
+      "answer_success": 1.0
+    },
+    {
+      "candidate_id": "threshold-0.4-k3",
+      "answer_success": 1.0
+    },
+    {
+      "candidate_id": "threshold-0.6-k1",
+      "answer_success": 0.75
+    },
+    {
+      "candidate_id": "threshold-0.6-k3",
+      "answer_success": 0.75
+    },
+    {
+      "candidate_id": "threshold-0.7-k1",
+      "answer_success": 0.75
+    },
+    {
+      "candidate_id": "threshold-0.7-k3",
+      "answer_success": 0.75
+    }
+  ],
+  "audit_access": false,
+  "configurations_tested": 8
+}

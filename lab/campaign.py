@@ -16,7 +16,7 @@ from .agent import (
     usage_cost,
     validate_proposal,
 )
-from .runner import ROOT, build_bundle, dump, export, provenance, read_json, sha256, verify
+from .runner import ROOT, build_bundle, dump, export, provenance, read_json, verify, write_manifest
 
 
 def feedback(candidate: dict) -> dict:
@@ -137,7 +137,12 @@ def run_campaigns(
                 step = path / f"iteration-{iteration:02d}"
                 step.mkdir()
                 context = context_for(bundle, current, history)
-                request = request_for(context)
+                try:
+                    request = request_for(context)
+                except ValueError as error:
+                    campaign["status"] = "request_error"
+                    dump(step / "result.json", {"status": "request_error", "reason": str(error)})
+                    break
                 reservation = reserve_usd(request)
                 if experiment["charged_or_reserved_usd"] + reservation > budget_usd:
                     campaign["status"] = "budget_exhausted"
@@ -233,7 +238,7 @@ def run_campaigns(
                             "selected": selected,
                         }
                     )
-                except (ValueError, TypeError, KeyError) as error:
+                except (ValueError, TypeError, KeyError, TimeoutError) as error:
                     if phase == "evaluation":
                         record.update(status="evaluation_error", reason=str(error)[:1500])
                         campaign["status"] = "evaluation_error"
@@ -261,7 +266,14 @@ def run_campaigns(
         experiment["status"] = (
             "completed_with_errors"
             if any(
-                c["status"] in {"provider_error", "usage_unavailable", "evaluation_error"}
+                c["status"]
+                in {
+                    "provider_error",
+                    "usage_unavailable",
+                    "evaluation_error",
+                    "request_error",
+                    "budget_exhausted",
+                }
                 for c in experiment["campaigns"]
             )
             else "completed"
@@ -272,17 +284,7 @@ def run_campaigns(
     finally:
         dump(output / "campaigns.json", experiment)
         write_campaign_report(output, experiment)
-        dump(
-            output / "manifest.json",
-            {
-                "provenance": identity,
-                "files": [
-                    {"path": str(p.relative_to(output)), "sha256": sha256(p)}
-                    for p in sorted(output.rglob("*"))
-                    if p.is_file() and p != output / "manifest.json"
-                ],
-            },
-        )
+        write_manifest(output, provenance=identity)
     return experiment
 
 
@@ -311,7 +313,8 @@ def write_campaign_report(output: Path, experiment: dict) -> None:
                     f"Status: **{r['status']}**. Parent: `{r['parent_id']}`.",
                     "",
                     f"[Exact request]({r['path']}/request.json) · "
-                    f"[Recorded outcome]({r['path']}/result.json)",
+                    + (f"[Response]({r['path']}/response.json) · " if "usage" in r else "")
+                    + f"[Recorded outcome]({r['path']}/result.json)",
                 ]
             )
             if "patch" in r:

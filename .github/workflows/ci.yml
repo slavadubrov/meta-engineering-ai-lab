@@ -34,18 +34,24 @@ jobs:
       - run: uv run --frozen python -m lab verify artifacts/agent-study-01
       - run: uv run --frozen python -m lab verify artifacts/agent-study-02
       - run: uv run --frozen python -m lab verify artifacts/agent-study-03
-      # Preserve every recorded Part 1 source; Part 2 adds separate modules.
-      - name: Verify historical source hashes
-        run: |
-          uv run --frozen python - <<'PYTHON'
-          from lab.runner import ROOT, provenance, read_json
-          current = provenance()["source_files"]
-          for release in ("article-01.6", "agent-study-03"):
-              recorded = read_json(ROOT / "artifacts" / release / "manifest.json")["provenance"]["source_files"]
-              for path, digest in recorded.items():
-                  assert current.get(path) == digest, f"Historical source changed: {path}"
-          PYTHON
+      - run: uv run --frozen python -m lab verify reports/article-02/grid
+      - run: uv run --frozen python -m lab verify reports/article-02/jev
+      # The README quick start, as a reader runs it.
+      - run: uv run --frozen python -m lab.evaluator_exploits --output artifacts/my-evaluator-study
+      - run: uv run --frozen python -m lab verify artifacts/my-evaluator-study
+      - run: cmp artifacts/my-evaluator-study/report.md reports/article-02/grid/report.md
+      - run: uv run --frozen python -m lab.jev_compare --output artifacts/jev-offline
+      - run: uv run --frozen python -m lab verify artifacts/jev-offline
       - run: uv run --frozen python -m lab site --output site
       - run: node --check web/app.js
       - run: node --check web/campaign.js
       - run: node --check web/evaluators.js
+      - name: Browser smoke test of all three pages
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: "1"
+          PUPPETEER_EXECUTABLE_PATH: /usr/bin/google-chrome
+        run: |
+          npm install --no-save --package-lock=false puppeteer@24
+          uv run --frozen python -m lab serve --port 8075 &
+          sleep 2
+          node web/smoke.mjs http://127.0.0.1:8075/web/

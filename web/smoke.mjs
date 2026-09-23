@@ -1,15 +1,18 @@
-// Run with Puppeteer installed, against the README HTTP server:
-// node web/smoke.mjs http://127.0.0.1:8000/web/
+// Run with Puppeteer installed, against `uv run --frozen python -m lab serve --port 8075`:
+// node web/smoke.mjs http://127.0.0.1:8075/web/
 import assert from "node:assert/strict";
 import { mkdtemp } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import puppeteer from "puppeteer";
 
-const url = process.argv[2];
-assert(url, "Pass the served web/ URL as the first argument.");
+const base = process.argv[2];
+assert(base, "Pass the served web/ URL as the first argument.");
+const url = new URL("memory.html", base).href;
 const browser = await puppeteer.launch({
   headless: true,
+  // Ubuntu 24.04 runners block Chrome's user-namespace sandbox; pages here are local and trusted.
+  ...(process.env.CI ? { args: ["--no-sandbox"] } : {}),
   ...(process.env.PUPPETEER_EXECUTABLE_PATH
     ? { executablePath: process.env.PUPPETEER_EXECUTABLE_PATH }
     : {}),
@@ -236,8 +239,53 @@ try {
     true,
     "Stale evidence is hidden",
   );
+
+  const part2 = await browser.newPage();
+  const part2Errors = [];
+  part2.on("pageerror", (error) => part2Errors.push(error.message));
+  await part2.goto(new URL("evaluators.html", base).href, { waitUntil: "networkidle0" });
+  const winner = () => part2.$eval("#winner", (node) => node.textContent);
+  assert.equal(await winner(), "Answer-only winner: threshold-0.2-k1");
+  for (const expected of ["0.4-k1", "0.6-k1", "0.6-k1", "0.6-k1"]) {
+    await part2.click("#next");
+    assert.equal(await winner(), `First candidate that passes: threshold-${expected}`);
+  }
+  assert(
+    (await part2.$eval("#adoption", (node) => node.textContent)).includes(
+      "keep the incumbent threshold-0.6-k3",
+    ),
+  );
+  assert.equal(await part2.$$eval("#jev-summary tr", (rows) => rows.length), 5);
+  await part2.click("#next-event");
+  assert(
+    (await part2.$eval("#event-text", (node) => node.textContent)).includes("State check: fails"),
+  );
+  await part2.click("#next-event");
+  assert(
+    (await part2.$eval("#event-text", (node) => node.textContent)).includes("Answer check: passes"),
+  );
+  for (const width of [1440, 390, 320]) {
+    await part2.setViewport({ width, height: 844 });
+    assert(
+      await part2.evaluate(() => document.documentElement.scrollWidth <= innerWidth),
+      `Part 2 page overflows at ${width}px`,
+    );
+  }
+  await part2.setViewport({ width: 1280, height: 1000 });
+  await part2.screenshot({ path: join(screenshots, "part2.png"), fullPage: true });
+  assert.deepEqual(part2Errors, [], "No Part 2 runtime errors");
+
+  const part1 = await browser.newPage();
+  const part1Errors = [];
+  part1.on("pageerror", (error) => part1Errors.push(error.message));
+  await part1.goto(new URL("index.html", base).href, { waitUntil: "networkidle0" });
+  await part1.waitForSelector("#explorer:not([hidden])");
+  for (const page of [part1, part2]) {
+    assert.equal(await page.$$eval(".site-nav a", (links) => links.length), 5);
+  }
+  assert.deepEqual(part1Errors, [], "No campaign page runtime errors");
   process.stdout.write(
-    `PASS: ${bundle.candidates.length} candidates × ${bundle.scenarios.length} scenarios; URL history; trace replay; keyboard; 4 responsive widths; no-JS and load-failure fallbacks.\nScreenshots: ${screenshots}\n`,
+    `PASS: Part 2 explorer and campaign page load; ${bundle.candidates.length} candidates × ${bundle.scenarios.length} scenarios; URL history; trace replay; keyboard; 4 responsive widths; no-JS and load-failure fallbacks.\nScreenshots: ${screenshots}\n`,
   );
 } finally {
   await browser.close();

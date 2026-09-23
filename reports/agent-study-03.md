@@ -16,7 +16,7 @@ Model: `gpt-5.6-luna`. Prompt: `memory-improver-sgr-v2`.
 
 Status: **evaluated**. Parent: `baseline`.
 
-[Exact request](https://github.com/slavadubrov/meta-engineering-ai-lab/blob/v0.2.1/artifacts/agent-study-03/campaign-01/iteration-01/request.json) · [Recorded outcome](https://github.com/slavadubrov/meta-engineering-ai-lab/blob/v0.2.1/artifacts/agent-study-03/campaign-01/iteration-01/result.json)
+[Exact request](https://github.com/slavadubrov/meta-engineering-ai-lab/blob/v0.2.1/artifacts/agent-study-03/campaign-01/iteration-01/request.json) · [Response](https://github.com/slavadubrov/meta-engineering-ai-lab/blob/v0.2.1/artifacts/agent-study-03/campaign-01/iteration-01/response.json) · [Recorded outcome](https://github.com/slavadubrov/meta-engineering-ai-lab/blob/v0.2.1/artifacts/agent-study-03/campaign-01/iteration-01/result.json)
 
 Patch: `{"filter_entity": true, "time_aware": true}`.
 
@@ -28,7 +28,7 @@ Success: 95%. Selected for next iteration: True.
 
 Status: **evaluated**. Parent: `agent-01`.
 
-[Exact request](https://github.com/slavadubrov/meta-engineering-ai-lab/blob/v0.2.1/artifacts/agent-study-03/campaign-01/iteration-02/request.json) · [Recorded outcome](https://github.com/slavadubrov/meta-engineering-ai-lab/blob/v0.2.1/artifacts/agent-study-03/campaign-01/iteration-02/result.json)
+[Exact request](https://github.com/slavadubrov/meta-engineering-ai-lab/blob/v0.2.1/artifacts/agent-study-03/campaign-01/iteration-02/request.json) · [Response](https://github.com/slavadubrov/meta-engineering-ai-lab/blob/v0.2.1/artifacts/agent-study-03/campaign-01/iteration-02/response.json) · [Recorded outcome](https://github.com/slavadubrov/meta-engineering-ai-lab/blob/v0.2.1/artifacts/agent-study-03/campaign-01/iteration-02/result.json)
 
 Patch: `{"deduplicate": true}`.
 
@@ -40,7 +40,7 @@ Success: 95%. Selected for next iteration: True.
 
 Status: **evaluated**. Parent: `agent-02`.
 
-[Exact request](https://github.com/slavadubrov/meta-engineering-ai-lab/blob/v0.2.1/artifacts/agent-study-03/campaign-01/iteration-03/request.json) · [Recorded outcome](https://github.com/slavadubrov/meta-engineering-ai-lab/blob/v0.2.1/artifacts/agent-study-03/campaign-01/iteration-03/result.json)
+[Exact request](https://github.com/slavadubrov/meta-engineering-ai-lab/blob/v0.2.1/artifacts/agent-study-03/campaign-01/iteration-03/request.json) · [Response](https://github.com/slavadubrov/meta-engineering-ai-lab/blob/v0.2.1/artifacts/agent-study-03/campaign-01/iteration-03/response.json) · [Recorded outcome](https://github.com/slavadubrov/meta-engineering-ai-lab/blob/v0.2.1/artifacts/agent-study-03/campaign-01/iteration-03/result.json)
 
 Patch: `{"min_confidence": 0.6}`.
 
@@ -52,13 +52,13 @@ Success: 100%. Selected for next iteration: True.
 
 Status: **agent_stopped**. Parent: `agent-03`.
 
-[Exact request](https://github.com/slavadubrov/meta-engineering-ai-lab/blob/v0.2.1/artifacts/agent-study-03/campaign-01/iteration-04/request.json) · [Recorded outcome](https://github.com/slavadubrov/meta-engineering-ai-lab/blob/v0.2.1/artifacts/agent-study-03/campaign-01/iteration-04/result.json)
+[Exact request](https://github.com/slavadubrov/meta-engineering-ai-lab/blob/v0.2.1/artifacts/agent-study-03/campaign-01/iteration-04/request.json) · [Response](https://github.com/slavadubrov/meta-engineering-ai-lab/blob/v0.2.1/artifacts/agent-study-03/campaign-01/iteration-04/response.json) · [Recorded outcome](https://github.com/slavadubrov/meta-engineering-ai-lab/blob/v0.2.1/artifacts/agent-study-03/campaign-01/iteration-04/result.json)
 
 ## campaign-02 / iteration 1
 
 Status: **evaluated**. Parent: `baseline`.
 
-[Exact request](https://github.com/slavadubrov/meta-engineering-ai-lab/blob/v0.2.1/artifacts/agent-study-03/campaign-02/iteration-01/request.json) · [Recorded outcome](https://github.com/slavadubrov/meta-engineering-ai-lab/blob/v0.2.1/artifacts/agent-study-03/campaign-02/iteration-01/result.json)
+[Exact request](https://github.com/slavadubrov/meta-engineering-ai-lab/blob/v0.2.1/artifacts/agent-study-03/campaign-02/iteration-01/request.json) · [Response](https://github.com/slavadubrov/meta-engineering-ai-lab/blob/v0.2.1/artifacts/agent-study-03/campaign-02/iteration-01/response.json) · [Recorded outcome](https://github.com/slavadubrov/meta-engineering-ai-lab/blob/v0.2.1/artifacts/agent-study-03/campaign-02/iteration-01/result.json)
 
 Patch: `{"filter_entity": true, "time_aware": true}`.
 
@@ -70,7 +70,7 @@ Success: 95%. Selected for next iteration: True.
 
 Status: **evaluated**. Parent: `agent-01`.
 
-[Exact request](https://github.com/slavadubrov/meta-engineering-ai-lab/blob/v0.2.1/artifacts/agent-study-03/campaign-02/iteration-02/request.json) · [Recorded outcome](https://github.com/slavadubrov/meta-engineering-ai-lab/blob/v0.2.1/artifacts/agent-study-03/campaign-02/iteration-02/result.json)
+[Exact request](https://github.com/slavadubrov/meta-engineering-ai-lab/blob/v0.2.1/artifacts/agent-study-03/campaign-02/iteration-02/request.json) · [Response](https://github.com/slavadubrov/meta-engineering-ai-lab/blob/v0.2.1/artifacts/agent-study-03/campaign-02/iteration-02/response.json) · [Recorded outcome](https://github.com/slavadubrov/meta-engineering-ai-lab/blob/v0.2.1/artifacts/agent-study-03/campaign-02/iteration-02/result.json)
 
 Patch: `{"deduplicate": true}`.
 
@@ -82,7 +82,7 @@ Success: 95%. Selected for next iteration: True.
 
 Status: **evaluated**. Parent: `agent-02`.
 
-[Exact request](https://github.com/slavadubrov/meta-engineering-ai-lab/blob/v0.2.1/artifacts/agent-study-03/campaign-02/iteration-03/request.json) · [Recorded outcome](https://github.com/slavadubrov/meta-engineering-ai-lab/blob/v0.2.1/artifacts/agent-study-03/campaign-02/iteration-03/result.json)
+[Exact request](https://github.com/slavadubrov/meta-engineering-ai-lab/blob/v0.2.1/artifacts/agent-study-03/campaign-02/iteration-03/request.json) · [Response](https://github.com/slavadubrov/meta-engineering-ai-lab/blob/v0.2.1/artifacts/agent-study-03/campaign-02/iteration-03/response.json) · [Recorded outcome](https://github.com/slavadubrov/meta-engineering-ai-lab/blob/v0.2.1/artifacts/agent-study-03/campaign-02/iteration-03/result.json)
 
 Patch: `{"min_confidence": 0.6}`.
 
@@ -94,13 +94,13 @@ Success: 100%. Selected for next iteration: True.
 
 Status: **agent_stopped**. Parent: `agent-03`.
 
-[Exact request](https://github.com/slavadubrov/meta-engineering-ai-lab/blob/v0.2.1/artifacts/agent-study-03/campaign-02/iteration-04/request.json) · [Recorded outcome](https://github.com/slavadubrov/meta-engineering-ai-lab/blob/v0.2.1/artifacts/agent-study-03/campaign-02/iteration-04/result.json)
+[Exact request](https://github.com/slavadubrov/meta-engineering-ai-lab/blob/v0.2.1/artifacts/agent-study-03/campaign-02/iteration-04/request.json) · [Response](https://github.com/slavadubrov/meta-engineering-ai-lab/blob/v0.2.1/artifacts/agent-study-03/campaign-02/iteration-04/response.json) · [Recorded outcome](https://github.com/slavadubrov/meta-engineering-ai-lab/blob/v0.2.1/artifacts/agent-study-03/campaign-02/iteration-04/result.json)
 
 ## campaign-03 / iteration 1
 
 Status: **evaluated**. Parent: `baseline`.
 
-[Exact request](https://github.com/slavadubrov/meta-engineering-ai-lab/blob/v0.2.1/artifacts/agent-study-03/campaign-03/iteration-01/request.json) · [Recorded outcome](https://github.com/slavadubrov/meta-engineering-ai-lab/blob/v0.2.1/artifacts/agent-study-03/campaign-03/iteration-01/result.json)
+[Exact request](https://github.com/slavadubrov/meta-engineering-ai-lab/blob/v0.2.1/artifacts/agent-study-03/campaign-03/iteration-01/request.json) · [Response](https://github.com/slavadubrov/meta-engineering-ai-lab/blob/v0.2.1/artifacts/agent-study-03/campaign-03/iteration-01/response.json) · [Recorded outcome](https://github.com/slavadubrov/meta-engineering-ai-lab/blob/v0.2.1/artifacts/agent-study-03/campaign-03/iteration-01/result.json)
 
 Patch: `{"filter_entity": true, "time_aware": true}`.
 
@@ -112,7 +112,7 @@ Success: 95%. Selected for next iteration: True.
 
 Status: **evaluated**. Parent: `agent-01`.
 
-[Exact request](https://github.com/slavadubrov/meta-engineering-ai-lab/blob/v0.2.1/artifacts/agent-study-03/campaign-03/iteration-02/request.json) · [Recorded outcome](https://github.com/slavadubrov/meta-engineering-ai-lab/blob/v0.2.1/artifacts/agent-study-03/campaign-03/iteration-02/result.json)
+[Exact request](https://github.com/slavadubrov/meta-engineering-ai-lab/blob/v0.2.1/artifacts/agent-study-03/campaign-03/iteration-02/request.json) · [Response](https://github.com/slavadubrov/meta-engineering-ai-lab/blob/v0.2.1/artifacts/agent-study-03/campaign-03/iteration-02/response.json) · [Recorded outcome](https://github.com/slavadubrov/meta-engineering-ai-lab/blob/v0.2.1/artifacts/agent-study-03/campaign-03/iteration-02/result.json)
 
 Patch: `{"deduplicate": true}`.
 
@@ -124,7 +124,7 @@ Success: 95%. Selected for next iteration: True.
 
 Status: **evaluated**. Parent: `agent-02`.
 
-[Exact request](https://github.com/slavadubrov/meta-engineering-ai-lab/blob/v0.2.1/artifacts/agent-study-03/campaign-03/iteration-03/request.json) · [Recorded outcome](https://github.com/slavadubrov/meta-engineering-ai-lab/blob/v0.2.1/artifacts/agent-study-03/campaign-03/iteration-03/result.json)
+[Exact request](https://github.com/slavadubrov/meta-engineering-ai-lab/blob/v0.2.1/artifacts/agent-study-03/campaign-03/iteration-03/request.json) · [Response](https://github.com/slavadubrov/meta-engineering-ai-lab/blob/v0.2.1/artifacts/agent-study-03/campaign-03/iteration-03/response.json) · [Recorded outcome](https://github.com/slavadubrov/meta-engineering-ai-lab/blob/v0.2.1/artifacts/agent-study-03/campaign-03/iteration-03/result.json)
 
 Patch: `{"min_confidence": 0.6}`.
 
@@ -136,7 +136,7 @@ Success: 100%. Selected for next iteration: True.
 
 Status: **agent_stopped**. Parent: `agent-03`.
 
-[Exact request](https://github.com/slavadubrov/meta-engineering-ai-lab/blob/v0.2.1/artifacts/agent-study-03/campaign-03/iteration-04/request.json) · [Recorded outcome](https://github.com/slavadubrov/meta-engineering-ai-lab/blob/v0.2.1/artifacts/agent-study-03/campaign-03/iteration-04/result.json)
+[Exact request](https://github.com/slavadubrov/meta-engineering-ai-lab/blob/v0.2.1/artifacts/agent-study-03/campaign-03/iteration-04/request.json) · [Response](https://github.com/slavadubrov/meta-engineering-ai-lab/blob/v0.2.1/artifacts/agent-study-03/campaign-03/iteration-04/response.json) · [Recorded outcome](https://github.com/slavadubrov/meta-engineering-ai-lab/blob/v0.2.1/artifacts/agent-study-03/campaign-03/iteration-04/result.json)
 
 ## Limits and cost
 

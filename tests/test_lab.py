@@ -7,9 +7,7 @@ import tempfile
 import unittest
 from copy import deepcopy
 from pathlib import Path
-from unittest.mock import patch as mock_patch
 
-from lab.__main__ import export_site, proposal_context, propose
 from lab.memory import Config, Memory, MemoryRecord, validate_scenarios
 from lab.runner import (
     ROOT,
@@ -20,33 +18,38 @@ from lab.runner import (
     read_json,
     run_scenario,
     verify,
+    verify_source,
 )
+
+# A person-supplied candidate: the same filters the Part 1 agent chose first.
+DIAGNOSED = {
+    "id": "diagnosed-history",
+    "label": "Trace-diagnosed history",
+    "parent_id": "baseline",
+    "hypothesis": "Wrong-entity and out-of-date records answered queries.",
+    "predicted_effect": "Repair the entity and temporal failures.",
+    "patch": {"filter_entity": True, "time_aware": True},
+    "proposer": {"type": "human", "name": "test", "model": "none", "prompt_version": "none"},
+}
 
 
 class ExperimentContractTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.bundle, cls.runs = build_bundle(repeats=2)
+        cls.bundle, cls.runs = build_bundle()
         cls.candidates = {c["id"]: c for c in cls.bundle["candidates"]}
         cls.scenarios = read_json(ROOT / "data/scenarios.json")
 
     def test_default_is_one_run_per_scenario(self):
-        bundle, runs = build_bundle()
+        bundle, runs = self.bundle, self.runs
         self.assertEqual(len(runs), 80)
         self.assertTrue(all(c["summary"]["repeat_count"] == 1 for c in bundle["candidates"]))
-        self.assertTrue(
-            all(
-                c["summary"]["metrics"]["success_repeat_stddev"] is None
-                for c in bundle["candidates"]
-            )
-        )
-        self.assertEqual(read_json(ROOT / "experiments/contract.json")["default_repeats"], 1)
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             parent = root / "parent"
             export(parent, bundle, runs)
             proposal = root / "candidate.json"
-            proposal.write_text(json.dumps(propose(proposal_context(parent, "baseline"))))
+            proposal.write_text(json.dumps(DIAGNOSED))
             for command, extra, expected in (
                 ("run", [], 80),
                 ("evaluate", ["--release", str(parent), "--candidate", str(proposal)], 100),
@@ -100,8 +103,6 @@ class ExperimentContractTests(unittest.TestCase):
         extra["parent_id"] = "missing-parent"
         with self.assertRaises(ValueError):
             load_candidates(extra)
-        with self.assertRaises(ValueError):
-            build_bundle(repeats=6)
 
     def test_dates_are_canonical_before_lexical_comparison(self):
         scenarios = deepcopy(self.scenarios)
@@ -179,37 +180,21 @@ class ExperimentContractTests(unittest.TestCase):
         self.assertEqual(run["after"][0]["id"], "m002")
         self.assertEqual(run["trace"][1]["after"], [])
 
-    def test_repeats_have_identical_state_and_answers(self):
-        first = {(r["candidate_id"], r["scenario_id"]): r for r in self.runs if r["repeat"] == 0}
-        for run in (r for r in self.runs if r["repeat"] == 1):
-            parent = first[run["candidate_id"], run["scenario_id"]]
-            for field in ("trace", "actual", "after", "counts"):
-                self.assertEqual(run[field], parent[field])
-        self.assertTrue(
-            all(
-                c["summary"]["metrics"]["success_repeat_stddev"] == 0
-                for c in self.candidates.values()
-            )
-        )
+    def test_repeated_runs_have_identical_state_and_answers(self):
+        scenario = next(s for s in self.scenarios if s["id"] == "future-move")
+        first, second = (run_scenario(scenario, Config(), repeat) for repeat in (0, 1))
+        for field in ("trace", "actual", "after", "counts"):
+            self.assertEqual(first[field], second[field])
 
-    def test_frozen_release_hashes_and_trace_driven_candidate(self):
+    def test_frozen_release_hashes_and_person_supplied_candidate(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "release"
             export(path, self.bundle, self.runs)
             self.assertGreater(verify(path), 100)
-            site = Path(directory) / "site"
-            export_site(path, site)
-            self.assertIn("./artifacts/release/", (site / "index.html").read_text())
-            self.assertNotIn("../artifacts/article-01.6/", (site / "index.html").read_text())
-            self.assertEqual(verify(site / "artifacts/release"), verify(path))
+            self.assertEqual(verify_source(path)["release_id"], self.bundle["release_id"])
             with self.assertRaises(FileExistsError):
                 export(path, self.bundle, self.runs)
-            context = proposal_context(path, "baseline")
-            self.assertTrue(all(r["role"] == "search" for r in context["failures"]))
-            candidate = propose(context)
-            self.assertEqual(candidate["patch"], {"filter_entity": True, "time_aware": True})
-            self.assertEqual(candidate["proposer"]["type"], "rule_based")
-            bundle, _ = build_bundle(repeats=1, extra=candidate)
+            bundle, _ = build_bundle(extra=DIAGNOSED)
             self.assertEqual(
                 bundle["candidates"][-1]["summary"]["metrics"]["task_success"],
                 self.candidates["scoped-history"]["summary"]["metrics"]["task_success"],
@@ -218,17 +203,53 @@ class ExperimentContractTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 verify(path)
 
+    def test_source_check_compares_only_recorded_files(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "release"
+            export(path, self.bundle, self.runs)
+            manifest = read_json(path / "manifest.json")
+            # A file added after the release does not count as a change.
+            manifest["provenance"]["source_files"].pop("lab/jev_compare.py")
+            (path / "manifest.json").write_text(json.dumps(manifest))
+            verify_source(path)
+            manifest["provenance"]["source_files"]["lab/memory.py"] = "0" * 64
+            (path / "manifest.json").write_text(json.dumps(manifest))
+            with self.assertRaisesRegex(ValueError, "lab/memory.py"):
+                verify_source(path)
+
+    def test_part1_article_numbers_still_reproduce(self):
+        """The current code gives the scores recorded for article 1 (quality only, not timing)."""
+        recorded = ROOT / "artifacts/article-01.6/bundle.json"
+        if not recorded.exists():
+            self.skipTest("Run scripts/fetch_evidence.py to download the Part 1 evidence")
+        frozen = read_json(recorded, max_bytes=64_000_000)
+        timing = {"latency_p50_ms", "latency_p95_ms"}
+        for current, old in zip(self.bundle["candidates"], frozen["candidates"], strict=True):
+            self.assertEqual(current["id"], old["id"])
+            for key, value in old["summary"]["metrics"].items():
+                if key not in timing and key in current["summary"]["metrics"]:
+                    self.assertEqual(current["summary"]["metrics"][key], value, (old["id"], key))
+            self.assertEqual(
+                current["summary"]["hard_constraints"], old["summary"]["hard_constraints"]
+            )
+        campaigns = read_json(ROOT / "artifacts/agent-study-03/campaigns.json")
+        for campaign in campaigns["campaigns"]:
+            config = Config(**campaign["selected"]["config"])
+            runs = [run_scenario(s, config, 0) for s in self.scenarios]
+            self.assertEqual(
+                sum(r["success"] for r in runs) / len(runs),
+                campaign["selected"]["metrics"]["task_success"],
+            )
+
     def test_two_generation_cli_and_eight_candidate_feedback(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             parent = root / "generation-0"
             export(parent, self.bundle, self.runs)
-            proposal = propose(proposal_context(parent, "baseline"))
-            child, runs = build_bundle(repeats=1, extra=proposal, parent_release=parent)
+            proposal = DIAGNOSED
+            child, runs = build_bundle(extra=proposal, parent_release=parent)
             first = root / "generation-1"
             export(first, child, runs)
-            context = proposal_context(first, "diagnosed-history")
-            self.assertEqual(context["parent_config"]["filter_entity"], True)
             second_proposal = {
                 **proposal,
                 "id": "second-generation",
@@ -250,8 +271,6 @@ class ExperimentContractTests(unittest.TestCase):
                     str(proposal_path),
                     "--output",
                     str(second),
-                    "--repeats",
-                    "1",
                 ],
                 cwd=ROOT,
                 capture_output=True,
@@ -273,20 +292,19 @@ class ExperimentContractTests(unittest.TestCase):
                     "parent_id": parent_id,
                     "patch": {"top_k": number},
                 }
-                bundle, runs = build_bundle(repeats=1, extra=candidate, parent_release=parent)
+                bundle, runs = build_bundle(extra=candidate, parent_release=parent)
                 parent = root / next_id
                 export(parent, bundle, runs)
                 parent_id = next_id
             self.assertEqual(len(bundle["candidates"]), 8)
             self.assertGreater((parent / "bundle.json").stat().st_size, 2_000_000)
-            self.assertEqual(proposal_context(parent, parent_id)["parent_id"], parent_id)
             with self.assertRaises(ValueError):
-                build_bundle(repeats=1, extra={**proposal, "id": "ninth"}, parent_release=parent)
-            with mock_patch(
-                "lab.runner.provenance", return_value={"source_files": {"changed": "hash"}}
-            ):
-                with self.assertRaisesRegex(ValueError, "Current source differs"):
-                    build_bundle(repeats=1, extra=proposal, parent_release=parent)
+                build_bundle(extra={**proposal, "id": "ninth"}, parent_release=parent)
+            manifest = read_json(parent / "manifest.json")
+            manifest["provenance"]["source_files"]["lab/runner.py"] = "0" * 64
+            (parent / "manifest.json").write_text(json.dumps(manifest))
+            with self.assertRaisesRegex(ValueError, "Current source differs"):
+                build_bundle(extra=proposal, parent_release=parent)
 
     def test_cli_null_candidate_is_rejected_before_output(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -300,6 +318,8 @@ class ExperimentContractTests(unittest.TestCase):
                     "-m",
                     "lab",
                     "evaluate",
+                    "--release",
+                    str(root),
                     "--candidate",
                     str(path),
                     "--output",

@@ -13,8 +13,8 @@ Python rules and need no API key; the main README shows the LLM choosing its own
 changes and receiving feedback.
 
 [Source on GitHub](https://github.com/slavadubrov/meta-engineering-ai-lab) ·
-[Run locally](#run-it) · [Deployment guide](../DEPLOYMENT.md).
-This is the first target in **Meta-Engineering AI Systems**. The [companion article](https://slavadubrov.com/blog/2026/09/12/from-traces-to-better-memory/) is awaiting publication; it introduces the closed-loop improvement process around it.
+[Run locally](#run-it).
+This is the first target in **Meta-Engineering AI Systems**. The [Part 1 article](https://slavadubrov.com/blog/2026/09/12/from-traces-to-better-memory/) introduces the closed-loop improvement process around it.
 
 ## Start with the city example
 
@@ -249,7 +249,6 @@ run sizes are allowed**. Its larger numbers are maximum limits:
 | Configurations, counting the baseline | 4 | 8 |
 | Scenarios per configuration | 20 | 64 |
 | Events per scenario | Varies; `future-move` has 4 | 64 |
-| Repeats per scenario | 3 | 5 |
 
 There are no four hidden candidates. The limit of eight leaves room to evaluate
 additional configurations, including their earlier parents. The runner also
@@ -307,10 +306,13 @@ candidate’s `summary.counts`.
 Install [uv](https://docs.astral.sh/uv/getting-started/installation/), then run:
 
 ```sh
-git clone --branch v0.2.2 --depth 1 https://github.com/slavadubrov/meta-engineering-ai-lab.git
+git clone https://github.com/slavadubrov/meta-engineering-ai-lab.git
 cd meta-engineering-ai-lab
 uv run --frozen python -m lab run
 ```
+
+The Part 1 article pins tag `v0.2.2`; add `--branch v0.2.2` to the clone to get
+exactly that code.
 
 The command runs the baseline plus three candidates, each on 20 independent
 synthetic scenarios once. It creates a new `artifacts/local-<timestamp>/`
@@ -326,11 +328,12 @@ Open the **saved experiment** in the browser. Download the evidence once; it can
 
 ```sh
 uv run --frozen python scripts/fetch_evidence.py
-uv run --frozen python -m lab serve
+uv run --frozen python -m lab serve --port 8075
 ```
 
-Visit [http://127.0.0.1:8000/web/memory.html](http://127.0.0.1:8000/web/memory.html). It serves on
-loopback only. The explorer initially uses `artifacts/article-01.6/`, the evidence explained above. Fresh runs keep their own directories; open
+Visit [http://127.0.0.1:8075/web/memory.html](http://127.0.0.1:8075/web/memory.html). It serves on
+loopback only, and only the `web/`, `artifacts/`, `reports/` and `experiments/`
+folders. The explorer initially uses `artifacts/article-01.6/`, the evidence explained above. Fresh runs keep their own directories; open
 their `report.html` through the same server to inspect their results. Stop the
 server with Ctrl+C.
 
@@ -353,50 +356,38 @@ no frontend build step or runtime application server.
 
 ## Run the improvement loop
 
-To try an additional configuration, first export the baseline settings and its
-failed tests from the `search` group. This group supplies the examples a proposer
-can inspect; all three groups (`search`, `evaluation`, `adversarial`) are public:
+To try another configuration, write a candidate record in the format of
+[experiments/candidates.json](../experiments/candidates.json), including an
+accurate record of who proposed it. For example, `my-candidate.json`:
 
-```sh
-uv run --frozen python -m lab packet \
-  --release artifacts/article-01.6 --output proposal-packet.json
+```json
+{
+  "id": "my-history",
+  "label": "My scoped history",
+  "parent_id": "baseline",
+  "hypothesis": "Wrong-subject and out-of-date records answered queries.",
+  "predicted_effect": "Subject and date filters repair those answers.",
+  "patch": {"filter_entity": true, "time_aware": true},
+  "proposer": {"type": "human", "name": "Your name", "model": "none", "prompt_version": "none"}
+}
 ```
 
-The packet is a JSON file containing the baseline settings, allowed changes,
-source-file hashes, and the inputs and answers from failed tests. The command
-only exports data; it does not contact an AI provider. You can give the file to a
-coding assistant and ask for a new configuration record in the format shown in
-`experiments/candidates.json`, including an accurate record of who proposed it.
-
-For a fully local demonstration, two deterministic diagnosis rules inspect the
-wrong-answer record: wrong entity enables entity filtering; invalid date enables
-temporal filtering. They generate a new candidate from the actual trace:
+Record a baseline with the current code, then evaluate the candidate against it:
 
 ```sh
-uv run --frozen python -m lab propose \
-  --release artifacts/article-01.6 --output diagnosed-candidate.json
+uv run --frozen python -m lab run --output artifacts/my-baseline
 uv run --frozen python -m lab evaluate \
-  --release artifacts/article-01.6 --candidate diagnosed-candidate.json
+  --release artifacts/my-baseline --candidate my-candidate.json
 ```
 
-These commands add a fifth configuration, `diagnosed-history`, to the original
-four. The new batch runs 5 × 20 = 100 scenario-runs. For the supplied
-failures, the helper enables the same filters as Scoped history; it demonstrates
-how a proposed change reaches evaluation, not a newly discovered strategy.
-
-This is a working failure → diagnosis → candidate → evaluation loop. The
-diagnoser is explicitly **rule based**, not an LLM researcher. `evaluate` also
-accepts other valid patches within the same surface. It evaluates the supplied
-candidate alongside the original lineage and records its manifest in the new
-release. For the next generation, export a packet with `--release` pointing to
-that new directory and `--parent` naming the new candidate. Pass the same release
-to `evaluate --release` when testing its child. The evaluator imports the frozen
-lineage, preserves each ancestor's proposer record, and records the parent
-manifest hash. Source, fixture, contract, and lockfile hashes must match before
-the lineage can be extended; changed code or data require a new baseline.
-The whole batch may contain at most eight configurations, counting the baseline
-and earlier configurations as well as new proposals. Output files
-are created exclusively; choose a new path to repeat an export.
+The second command adds a fifth configuration to the original four and runs
+5 × 20 = 100 scenario-runs. To extend it again, pass the new release to
+`evaluate --release` and set `parent_id` to your candidate. The evaluator
+imports the frozen lineage, keeps each ancestor's proposer record, and records
+the parent manifest hash. The recorded source files, fixtures, contract and
+lockfile must be unchanged before a lineage can be extended; changed code or
+data need a new baseline. A batch holds at most eight configurations, counting
+the baseline. Output directories are created exclusively.
 
 The settings a candidate may change are `min_confidence`, `filter_entity`,
 `time_aware`, `deduplicate`, and `top_k`. Their types and ranges are checked
@@ -405,20 +396,7 @@ and attempts to disable owner isolation, deletion, or prohibited-write rules
 are rejected. `experiments/contract.json` documents the boundary. Each scenario
 starts with new in-memory state; no candidate source code is loaded or executed.
 
-When **you** have reviewed a candidate, this optional command records your
-decision separately from the frozen evidence:
-
-```sh
-uv run --frozen python -m lab decision \
-  --release artifacts/article-01.6 --candidate scoped-history \
-  --verdict accept --reviewer "Your name" --reason "Your evidence-based rationale"
-```
-
-Use `--verdict reject` for rejection. These are explicit operator declarations,
-not independently authenticated identities. The command only appends a review
-record under `decisions/`; it never deploys, changes the running target, or
-rewrites the original bundle. The browser displays the saved recommendation and pending review status; it
-does not record a decision.
+The live LLM agent in the [main README](../README.md) automates this loop.
 
 ## Verify it
 
@@ -426,18 +404,19 @@ does not record a decision.
 uv run --frozen python -m unittest discover -s tests -v
 uv run --frozen ruff check lab tests
 uv run --frozen ruff format --check lab tests
-uv run --frozen python -m lab verify artifacts/article-01.6 --source
+uv run --frozen python -m lab verify artifacts/article-01.6
 ```
 
 Tests cover the observed positive/neutral/regressing outcomes, owner isolation,
 deletion and fresh consent, prohibited writes, canonical dates and validity
 boundaries, proposal validation and run limits, repeat consistency, frozen-file
-integrity, and trace-driven candidate generation. The suite also checks two
-generations through the CLI, feedback export at the eight-candidate budget,
+integrity, and that the current code reproduces the recorded Part 1 scores. The
+suite also checks two generations through the CLI at the eight-candidate budget,
 source drift, and rejection of a null candidate before output creation.
 `verify` checks the artifact
-inventory and content hashes; `--source` also compares the current Python,
-fixtures, manifests, and lockfile to recorded source hashes. Hashes detect
+inventory and content hashes; `--source` also checks that every recorded source
+file is unchanged. The Part 1 evidence was recorded at tag `v0.2.2`, so run
+`--source` from that tag. Hashes detect
 accidental changes relative to the manifest; they are not a digital signature
 against someone who can replace both data and manifest.
 
@@ -445,13 +424,12 @@ Optional browser smoke coverage lives in `web/smoke.mjs`. Install its test-only
 dependency in this directory, keep the local server running, then run:
 
 ```sh
-npm install --no-save --package-lock=false puppeteer
-node web/smoke.mjs http://127.0.0.1:8000/web/memory.html
+npm install --no-save --package-lock=false puppeteer@24
+node web/smoke.mjs http://127.0.0.1:8075/web/
 ```
 
 If using an existing Chrome installation, set `PUPPETEER_EXECUTABLE_PATH` to its
-executable. Running the actual frontend needs no npm dependency. See
-[deployment instructions](../DEPLOYMENT.md) for exact static paths.
+executable. Running the actual frontend needs no npm dependency.
 
 The preserved `article-01.1` evidence predates this standalone repository;
 its Git metadata identifies the original staging checkout. `article-01.2`
@@ -470,7 +448,7 @@ source project. Referenced papers and external projects retain their own terms.
 | ------------------------- | -------------------------------------------------------------------- |
 | `lab/memory.py`           | Writer, version history, immutable gates, retrieval, fixed consumer  |
 | `lab/runner.py`           | Candidate validation, isolated evaluations, metrics, evidence export |
-| `lab/__main__.py`         | CLI, trace diagnosis, proposal packets, explicit review records      |
+| `lab/__main__.py`         | CLI, local server, and static site export                            |
 | `data/scenarios.json`     | Original public normalized events and expected answers               |
 | `experiments/`            | Baseline, candidate lineage, mutation and budget contract            |
 | `tests/test_lab.py`       | Runnable regression and invariant checks                             |
@@ -478,7 +456,6 @@ source project. Referenced papers and external projects retain their own terms.
 | `reports/` | Compact reports, examples, and the archive checksum |
 | `scripts/fetch_evidence.py` | Download and verify the complete recordings |
 | `web/`                    | Small static presentation; no second implementation of the evaluator |
-| `docs/`                   | Research and the public artifact contract                            |
 
 ## What these results do not establish
 
@@ -486,11 +463,10 @@ source project. Referenced papers and external projects retain their own terms.
   public diagnostic/regression groups. All were visible while the candidates
   were authored. A later generalization experiment needs fresh inaccessible
   tasks and a frozen candidate before evaluation.
-- **Deterministic results.** The default is one run per story. Repeating the
-  same inputs adds no answer-quality evidence. `--repeats N` remains available
-  for explicit reruns, but does not add an LLM or simulate model variability.
-  A future model-backed evaluation would need repeated trials if outputs vary,
-  with the model and generation settings recorded.
+- **Deterministic results.** Each story runs once per configuration. Repeating
+  the same inputs adds no answer-quality evidence. A model-backed evaluation
+  would need repeated trials if outputs vary, with the model and generation
+  settings recorded.
 - **No production benchmark.** Exact matching on original synthetic scenarios
   does not measure real-world assistant quality. Context words are whitespace
   counts; model tokens and provider expenditure are zero. CPU timing excludes
@@ -503,5 +479,5 @@ source project. Referenced papers and external projects retain their own terms.
   kind allowlist covers explicit structured cases. It does not classify arbitrary
   text or protect against secrets disguised as an allowed city or language.
 
-The next article should challenge the evaluator and the evidence boundary
-before adding a stronger proposer or more experiments.
+Part 2 challenges the evaluator itself; see the
+[Part 2 section of the README](../README.md#part-2-make-it-scorable-before-you-make-it-autonomous).

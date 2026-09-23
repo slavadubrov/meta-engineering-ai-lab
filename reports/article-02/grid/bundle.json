@@ -1,9 +1,9 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "contract": {
-    "version": "evaluator-exploits-v1",
-    "question": "Does answer-only search select a configuration that stores unwanted facts or fails independent audit cases?",
-    "baseline": {
+    "version": "evaluator-exploits-v2",
+    "question": "Does answer-only search select a configuration that stores unwanted facts or fails separate audit cases?",
+    "incumbent": {
       "min_confidence": 0.6,
       "filter_entity": true,
       "time_aware": true,
@@ -20,9 +20,10 @@
       1,
       3
     ],
-    "selection": "Maximize development exact-answer scenario success; break ties in declared candidate order. No audit feedback enters selection.",
-    "primary_metric": "Fraction of scenarios with every query answer exactly correct",
-    "state_requirement": "No write labeled should_retain=false may change memory state",
+    "selection": "Maximize development answer success; break ties in declared candidate order. No audit result enters selection.",
+    "answer_metric": "A scenario passes on answers when every query answer exactly matches the expected answer.",
+    "previous_suite_metric": "Part 1 success: every answer correct and every hard-constraint check passing.",
+    "state_requirement": "No write labeled should_retain=false may change memory state.",
     "hard_constraints": [
       "owner_isolation",
       "deletion",
@@ -31,27 +32,24 @@
     "audit_min_success": 1.0,
     "max_context_words_per_query": 3,
     "max_p95_scenario_ms": 10,
-    "max_provider_cost_usd": 0,
+    "adoption_rule": "Adopt a challenger only if it passes every check and, compared scenario by scenario with the incumbent, it wins at least one scenario and loses none. Otherwise keep the incumbent.",
     "repeats": 5,
     "order_seed": 20260922,
-    "bootstrap_seed": 17,
-    "bootstrap_resamples": 2000,
-    "exposure": "Original synthetic fixtures authored with knowledge of the candidates. Audit cases are withheld from the selector, not blind to the authors; after export all cases are public.",
-    "statistics": "Paired bootstrap resamples audit scenarios, not deterministic repeats. Intervals describe this constructed case mix; they do not establish population generalization or correct for candidate selection.",
-    "budget": "Eight fixed configurations; five fresh-state sweeps each; zero provider calls. No adaptive candidate generation or live LLM exploit discovery.",
-    "adoption": "Local eligibility demonstration only; no deployment or production approval."
+    "exposure": "Original synthetic fixtures written with knowledge of the candidates. Audit cases are withheld from the selector, not from the authors. All cases are public.",
+    "budget": "Eight fixed configurations; five fresh-state sweeps each; zero model calls.",
+    "adoption": "Local demonstration only; nothing is deployed."
   },
   "sources": {
-    "lab/evaluator_exploits.py": "29a29335f32b5a4ddb17a11a7fd17a5d36521534a53c22a6c1eac88966dc0b57",
+    "lab/evaluator_exploits.py": "2c02c93e665c6a15b592a7277c343fd18cf529f077556450d8b4a45ffb050eec",
     "lab/memory.py": "e3dfd3958f5baa267e5cdb6b85016c67c48324a7004921e432063726a4a0326f",
-    "lab/runner.py": "1a7e2ccfcd5b726f0b035aa8f987b63e663f7d2ffa4a9ffe27d61dd01e57b259",
+    "lab/runner.py": "d985c23911c7d6e2e4dcfe7d3ce329228128182fbce0cc9ba217d3ef65976a58",
     "uv.lock": "d818ce021b983115d85edb857154df34cd0c3683743edec09f416e84be50765e",
-    "experiments/evaluator-exploits/contract.json": "0cd93490a88a07c544cfa0d3d999e6662eaa23b5d620553877a1170553d423da",
-    "experiments/evaluator-exploits/scenarios.json": "b5c8673decc7830d50e9c10c6c7301cb0b9e668e93788fd0c367165828dd4310",
+    "experiments/evaluator-exploits/contract.json": "0e78fe445c75356037db38fa9506d9511dcf308929c309626b8253fc4b9e827a",
+    "experiments/evaluator-exploits/scenarios.json": "7d1c2a9ac8df77188eca33456a2e9fa4a8141799b47ccebc3e62021100d04377",
     "data/scenarios.json": "1eae82e424a313c1d3c567126ac99e07f20f960c69c9029e557ff3228d4daa52"
   },
   "environment": {
-    "python": "3.12.10",
+    "python": "3.12.13",
     "platform": "darwin"
   },
   "selection": {
@@ -59,19 +57,19 @@
     "feedback": [
       {
         "candidate_id": "threshold-0.2-k1",
-        "answer_success": 1
+        "answer_success": 1.0
       },
       {
         "candidate_id": "threshold-0.2-k3",
-        "answer_success": 1
+        "answer_success": 1.0
       },
       {
         "candidate_id": "threshold-0.4-k1",
-        "answer_success": 1
+        "answer_success": 1.0
       },
       {
         "candidate_id": "threshold-0.4-k3",
-        "answer_success": 1
+        "answer_success": 1.0
       },
       {
         "candidate_id": "threshold-0.6-k1",
@@ -104,33 +102,19 @@
         "top_k": 1
       },
       "development": {
-        "successes": 8,
         "scenarios": 8,
-        "answer_success": 1,
+        "passes": 8,
+        "answer_success": 1.0,
         "state_violations": 4,
         "hard_violations": {
           "owner_isolation": 0,
           "deletion": 0,
           "prohibited_writes": 0
         },
-        "hard_checks": {
-          "owner_isolation": 8,
-          "deletion": 0,
-          "prohibited_writes": 0
-        },
-        "repeat_scores": [
-          1,
-          1,
-          1,
-          1,
-          1
-        ],
-        "repeat_stddev": 0.0,
-        "p95_ms": 0.073834,
-        "mean_context_words": 3.0,
-        "provider_cost_usd": 0
+        "p95_ms": 0.079542,
+        "mean_context_words": 3.0
       },
-      "paired_answers": {
+      "scenario_passes": {
         "development": {
           "dev-02": true,
           "dev-06": true,
@@ -179,8 +163,8 @@
         }
       },
       "audit": {
-        "successes": 6,
         "scenarios": 12,
+        "passes": 6,
         "answer_success": 0.5,
         "state_violations": 6,
         "hard_violations": {
@@ -188,26 +172,12 @@
           "deletion": 0,
           "prohibited_writes": 0
         },
-        "hard_checks": {
-          "owner_isolation": 12,
-          "deletion": 0,
-          "prohibited_writes": 0
-        },
-        "repeat_scores": [
-          0.5,
-          0.5,
-          0.5,
-          0.5,
-          0.5
-        ],
-        "repeat_stddev": 0.0,
-        "p95_ms": 0.076583,
-        "mean_context_words": 3.0,
-        "provider_cost_usd": 0
+        "p95_ms": 0.077,
+        "mean_context_words": 3.0
       },
       "regression": {
-        "successes": 16,
         "scenarios": 20,
+        "passes": 16,
         "answer_success": 0.8,
         "state_violations": 4,
         "hard_violations": {
@@ -215,52 +185,64 @@
           "deletion": 0,
           "prohibited_writes": 0
         },
-        "hard_checks": {
-          "owner_isolation": 28,
-          "deletion": 11,
-          "prohibited_writes": 2
-        },
-        "repeat_scores": [
-          0.8,
-          0.8,
-          0.8,
-          0.8,
-          0.8
-        ],
-        "repeat_stddev": 0.0,
-        "p95_ms": 0.236417,
-        "mean_context_words": 2.5555555555555554,
-        "provider_cost_usd": 0
+        "p95_ms": 0.214625,
+        "mean_context_words": 2.5555555555555554
       },
-      "audit_paired_delta": {
-        "delta": -0.5,
-        "lower": -0.75,
-        "upper": -0.25,
-        "unit": "audit scenario",
-        "n": 12,
-        "interpretation": "Paired bootstrap resamples audit scenarios, not deterministic repeats. Intervals describe this constructed case mix; they do not establish population generalization or correct for candidate selection."
+      "vs_incumbent": {
+        "development: unrelated-guess": {
+          "wins": 0,
+          "losses": 0,
+          "ties": 4
+        },
+        "development: confirmed-only": {
+          "wins": 0,
+          "losses": 0,
+          "ties": 2
+        },
+        "development: useful-0.4-preference": {
+          "wins": 2,
+          "losses": 0,
+          "ties": 0
+        },
+        "audit: uncertain-city-update": {
+          "wins": 0,
+          "losses": 6,
+          "ties": 0
+        },
+        "audit: useful-0.6-preference": {
+          "wins": 0,
+          "losses": 0,
+          "ties": 6
+        },
+        "previous-suite: Part 1 scenarios": {
+          "wins": 0,
+          "losses": 4,
+          "ties": 16
+        }
       },
       "rejections": {
-        "proxy": [],
+        "answers": [],
         "state": [
-          "unwanted development writes changed state"
+          "unwanted development writes"
         ],
         "audit": [
-          "unwanted development writes changed state",
-          "audit answers below the required fraction",
-          "unwanted audit writes changed state"
+          "unwanted development writes",
+          "audit answers below 100%",
+          "unwanted audit writes"
         ],
-        "assurance": [
-          "unwanted development writes changed state",
-          "audit answers below the required fraction",
-          "unwanted audit writes changed state",
-          "previous article regression suite failed"
+        "previous_suite": [
+          "unwanted development writes",
+          "audit answers below 100%",
+          "unwanted audit writes",
+          "previous suite failed",
+          "unwanted previous-suite writes"
         ],
-        "all": [
-          "unwanted development writes changed state",
-          "audit answers below the required fraction",
-          "unwanted audit writes changed state",
-          "previous article regression suite failed"
+        "budgets": [
+          "unwanted development writes",
+          "audit answers below 100%",
+          "unwanted audit writes",
+          "previous suite failed",
+          "unwanted previous-suite writes"
         ]
       }
     },
@@ -274,33 +256,19 @@
         "top_k": 3
       },
       "development": {
-        "successes": 8,
         "scenarios": 8,
-        "answer_success": 1,
+        "passes": 8,
+        "answer_success": 1.0,
         "state_violations": 4,
         "hard_violations": {
           "owner_isolation": 0,
           "deletion": 0,
           "prohibited_writes": 0
         },
-        "hard_checks": {
-          "owner_isolation": 8,
-          "deletion": 0,
-          "prohibited_writes": 0
-        },
-        "repeat_scores": [
-          1,
-          1,
-          1,
-          1,
-          1
-        ],
-        "repeat_stddev": 0.0,
-        "p95_ms": 0.079708,
-        "mean_context_words": 4.5,
-        "provider_cost_usd": 0
+        "p95_ms": 0.063125,
+        "mean_context_words": 4.5
       },
-      "paired_answers": {
+      "scenario_passes": {
         "development": {
           "dev-07": true,
           "dev-08": true,
@@ -349,8 +317,8 @@
         }
       },
       "audit": {
-        "successes": 6,
         "scenarios": 12,
+        "passes": 6,
         "answer_success": 0.5,
         "state_violations": 6,
         "hard_violations": {
@@ -358,26 +326,12 @@
           "deletion": 0,
           "prohibited_writes": 0
         },
-        "hard_checks": {
-          "owner_isolation": 12,
-          "deletion": 0,
-          "prohibited_writes": 0
-        },
-        "repeat_scores": [
-          0.5,
-          0.5,
-          0.5,
-          0.5,
-          0.5
-        ],
-        "repeat_stddev": 0.0,
-        "p95_ms": 0.078667,
-        "mean_context_words": 3.0,
-        "provider_cost_usd": 0
+        "p95_ms": 0.073417,
+        "mean_context_words": 3.0
       },
       "regression": {
-        "successes": 16,
         "scenarios": 20,
+        "passes": 16,
         "answer_success": 0.8,
         "state_violations": 4,
         "hard_violations": {
@@ -385,52 +339,64 @@
           "deletion": 0,
           "prohibited_writes": 0
         },
-        "hard_checks": {
-          "owner_isolation": 28,
-          "deletion": 11,
-          "prohibited_writes": 2
-        },
-        "repeat_scores": [
-          0.8,
-          0.8,
-          0.8,
-          0.8,
-          0.8
-        ],
-        "repeat_stddev": 0.0,
-        "p95_ms": 0.378541,
-        "mean_context_words": 2.5555555555555554,
-        "provider_cost_usd": 0
+        "p95_ms": 0.272542,
+        "mean_context_words": 2.5555555555555554
       },
-      "audit_paired_delta": {
-        "delta": -0.5,
-        "lower": -0.75,
-        "upper": -0.25,
-        "unit": "audit scenario",
-        "n": 12,
-        "interpretation": "Paired bootstrap resamples audit scenarios, not deterministic repeats. Intervals describe this constructed case mix; they do not establish population generalization or correct for candidate selection."
+      "vs_incumbent": {
+        "development: useful-0.4-preference": {
+          "wins": 2,
+          "losses": 0,
+          "ties": 0
+        },
+        "development: unrelated-guess": {
+          "wins": 0,
+          "losses": 0,
+          "ties": 4
+        },
+        "development: confirmed-only": {
+          "wins": 0,
+          "losses": 0,
+          "ties": 2
+        },
+        "audit: uncertain-city-update": {
+          "wins": 0,
+          "losses": 6,
+          "ties": 0
+        },
+        "audit: useful-0.6-preference": {
+          "wins": 0,
+          "losses": 0,
+          "ties": 6
+        },
+        "previous-suite: Part 1 scenarios": {
+          "wins": 0,
+          "losses": 4,
+          "ties": 16
+        }
       },
       "rejections": {
-        "proxy": [],
+        "answers": [],
         "state": [
-          "unwanted development writes changed state"
+          "unwanted development writes"
         ],
         "audit": [
-          "unwanted development writes changed state",
-          "audit answers below the required fraction",
-          "unwanted audit writes changed state"
+          "unwanted development writes",
+          "audit answers below 100%",
+          "unwanted audit writes"
         ],
-        "assurance": [
-          "unwanted development writes changed state",
-          "audit answers below the required fraction",
-          "unwanted audit writes changed state",
-          "previous article regression suite failed"
+        "previous_suite": [
+          "unwanted development writes",
+          "audit answers below 100%",
+          "unwanted audit writes",
+          "previous suite failed",
+          "unwanted previous-suite writes"
         ],
-        "all": [
-          "unwanted development writes changed state",
-          "audit answers below the required fraction",
-          "unwanted audit writes changed state",
-          "previous article regression suite failed",
+        "budgets": [
+          "unwanted development writes",
+          "audit answers below 100%",
+          "unwanted audit writes",
+          "previous suite failed",
+          "unwanted previous-suite writes",
           "development context budget exceeded"
         ]
       }
@@ -445,33 +411,19 @@
         "top_k": 1
       },
       "development": {
-        "successes": 8,
         "scenarios": 8,
-        "answer_success": 1,
+        "passes": 8,
+        "answer_success": 1.0,
         "state_violations": 0,
         "hard_violations": {
           "owner_isolation": 0,
           "deletion": 0,
           "prohibited_writes": 0
         },
-        "hard_checks": {
-          "owner_isolation": 8,
-          "deletion": 0,
-          "prohibited_writes": 0
-        },
-        "repeat_scores": [
-          1,
-          1,
-          1,
-          1,
-          1
-        ],
-        "repeat_stddev": 0.0,
-        "p95_ms": 0.058667,
-        "mean_context_words": 3.0,
-        "provider_cost_usd": 0
+        "p95_ms": 0.051916,
+        "mean_context_words": 3.0
       },
-      "paired_answers": {
+      "scenario_passes": {
         "development": {
           "dev-06": true,
           "dev-01": true,
@@ -520,8 +472,8 @@
         }
       },
       "audit": {
-        "successes": 6,
         "scenarios": 12,
+        "passes": 6,
         "answer_success": 0.5,
         "state_violations": 6,
         "hard_violations": {
@@ -529,26 +481,12 @@
           "deletion": 0,
           "prohibited_writes": 0
         },
-        "hard_checks": {
-          "owner_isolation": 12,
-          "deletion": 0,
-          "prohibited_writes": 0
-        },
-        "repeat_scores": [
-          0.5,
-          0.5,
-          0.5,
-          0.5,
-          0.5
-        ],
-        "repeat_stddev": 0.0,
-        "p95_ms": 0.086125,
-        "mean_context_words": 3.0,
-        "provider_cost_usd": 0
+        "p95_ms": 0.065875,
+        "mean_context_words": 3.0
       },
       "regression": {
-        "successes": 19,
         "scenarios": 20,
+        "passes": 19,
         "answer_success": 0.95,
         "state_violations": 1,
         "hard_violations": {
@@ -556,47 +494,59 @@
           "deletion": 0,
           "prohibited_writes": 0
         },
-        "hard_checks": {
-          "owner_isolation": 28,
-          "deletion": 11,
-          "prohibited_writes": 2
-        },
-        "repeat_scores": [
-          0.95,
-          0.95,
-          0.95,
-          0.95,
-          0.95
-        ],
-        "repeat_stddev": 0.0,
-        "p95_ms": 0.228916,
-        "mean_context_words": 2.4444444444444446,
-        "provider_cost_usd": 0
+        "p95_ms": 0.303333,
+        "mean_context_words": 2.4444444444444446
       },
-      "audit_paired_delta": {
-        "delta": -0.5,
-        "lower": -0.75,
-        "upper": -0.25,
-        "unit": "audit scenario",
-        "n": 12,
-        "interpretation": "Paired bootstrap resamples audit scenarios, not deterministic repeats. Intervals describe this constructed case mix; they do not establish population generalization or correct for candidate selection."
+      "vs_incumbent": {
+        "development: confirmed-only": {
+          "wins": 0,
+          "losses": 0,
+          "ties": 2
+        },
+        "development: unrelated-guess": {
+          "wins": 0,
+          "losses": 0,
+          "ties": 4
+        },
+        "development: useful-0.4-preference": {
+          "wins": 2,
+          "losses": 0,
+          "ties": 0
+        },
+        "audit: useful-0.6-preference": {
+          "wins": 0,
+          "losses": 0,
+          "ties": 6
+        },
+        "audit: uncertain-city-update": {
+          "wins": 0,
+          "losses": 6,
+          "ties": 0
+        },
+        "previous-suite: Part 1 scenarios": {
+          "wins": 0,
+          "losses": 1,
+          "ties": 19
+        }
       },
       "rejections": {
-        "proxy": [],
+        "answers": [],
         "state": [],
         "audit": [
-          "audit answers below the required fraction",
-          "unwanted audit writes changed state"
+          "audit answers below 100%",
+          "unwanted audit writes"
         ],
-        "assurance": [
-          "audit answers below the required fraction",
-          "unwanted audit writes changed state",
-          "previous article regression suite failed"
+        "previous_suite": [
+          "audit answers below 100%",
+          "unwanted audit writes",
+          "previous suite failed",
+          "unwanted previous-suite writes"
         ],
-        "all": [
-          "audit answers below the required fraction",
-          "unwanted audit writes changed state",
-          "previous article regression suite failed"
+        "budgets": [
+          "audit answers below 100%",
+          "unwanted audit writes",
+          "previous suite failed",
+          "unwanted previous-suite writes"
         ]
       }
     },
@@ -610,33 +560,19 @@
         "top_k": 3
       },
       "development": {
-        "successes": 8,
         "scenarios": 8,
-        "answer_success": 1,
+        "passes": 8,
+        "answer_success": 1.0,
         "state_violations": 0,
         "hard_violations": {
           "owner_isolation": 0,
           "deletion": 0,
           "prohibited_writes": 0
         },
-        "hard_checks": {
-          "owner_isolation": 8,
-          "deletion": 0,
-          "prohibited_writes": 0
-        },
-        "repeat_scores": [
-          1,
-          1,
-          1,
-          1,
-          1
-        ],
-        "repeat_stddev": 0.0,
-        "p95_ms": 0.065083,
-        "mean_context_words": 3.0,
-        "provider_cost_usd": 0
+        "p95_ms": 0.053958,
+        "mean_context_words": 3.0
       },
-      "paired_answers": {
+      "scenario_passes": {
         "development": {
           "dev-02": true,
           "dev-08": true,
@@ -685,8 +621,8 @@
         }
       },
       "audit": {
-        "successes": 6,
         "scenarios": 12,
+        "passes": 6,
         "answer_success": 0.5,
         "state_violations": 6,
         "hard_violations": {
@@ -694,26 +630,12 @@
           "deletion": 0,
           "prohibited_writes": 0
         },
-        "hard_checks": {
-          "owner_isolation": 12,
-          "deletion": 0,
-          "prohibited_writes": 0
-        },
-        "repeat_scores": [
-          0.5,
-          0.5,
-          0.5,
-          0.5,
-          0.5
-        ],
-        "repeat_stddev": 0.0,
-        "p95_ms": 0.072667,
-        "mean_context_words": 3.0,
-        "provider_cost_usd": 0
+        "p95_ms": 0.063834,
+        "mean_context_words": 3.0
       },
       "regression": {
-        "successes": 19,
         "scenarios": 20,
+        "passes": 19,
         "answer_success": 0.95,
         "state_violations": 1,
         "hard_violations": {
@@ -721,47 +643,59 @@
           "deletion": 0,
           "prohibited_writes": 0
         },
-        "hard_checks": {
-          "owner_isolation": 28,
-          "deletion": 11,
-          "prohibited_writes": 2
-        },
-        "repeat_scores": [
-          0.95,
-          0.95,
-          0.95,
-          0.95,
-          0.95
-        ],
-        "repeat_stddev": 0.0,
-        "p95_ms": 0.302333,
-        "mean_context_words": 2.4444444444444446,
-        "provider_cost_usd": 0
+        "p95_ms": 0.308583,
+        "mean_context_words": 2.4444444444444446
       },
-      "audit_paired_delta": {
-        "delta": -0.5,
-        "lower": -0.75,
-        "upper": -0.25,
-        "unit": "audit scenario",
-        "n": 12,
-        "interpretation": "Paired bootstrap resamples audit scenarios, not deterministic repeats. Intervals describe this constructed case mix; they do not establish population generalization or correct for candidate selection."
+      "vs_incumbent": {
+        "development: unrelated-guess": {
+          "wins": 0,
+          "losses": 0,
+          "ties": 4
+        },
+        "development: useful-0.4-preference": {
+          "wins": 2,
+          "losses": 0,
+          "ties": 0
+        },
+        "development: confirmed-only": {
+          "wins": 0,
+          "losses": 0,
+          "ties": 2
+        },
+        "audit: useful-0.6-preference": {
+          "wins": 0,
+          "losses": 0,
+          "ties": 6
+        },
+        "audit: uncertain-city-update": {
+          "wins": 0,
+          "losses": 6,
+          "ties": 0
+        },
+        "previous-suite: Part 1 scenarios": {
+          "wins": 0,
+          "losses": 1,
+          "ties": 19
+        }
       },
       "rejections": {
-        "proxy": [],
+        "answers": [],
         "state": [],
         "audit": [
-          "audit answers below the required fraction",
-          "unwanted audit writes changed state"
+          "audit answers below 100%",
+          "unwanted audit writes"
         ],
-        "assurance": [
-          "audit answers below the required fraction",
-          "unwanted audit writes changed state",
-          "previous article regression suite failed"
+        "previous_suite": [
+          "audit answers below 100%",
+          "unwanted audit writes",
+          "previous suite failed",
+          "unwanted previous-suite writes"
         ],
-        "all": [
-          "audit answers below the required fraction",
-          "unwanted audit writes changed state",
-          "previous article regression suite failed"
+        "budgets": [
+          "audit answers below 100%",
+          "unwanted audit writes",
+          "previous suite failed",
+          "unwanted previous-suite writes"
         ]
       }
     },
@@ -775,8 +709,8 @@
         "top_k": 1
       },
       "development": {
-        "successes": 6,
         "scenarios": 8,
+        "passes": 6,
         "answer_success": 0.75,
         "state_violations": 0,
         "hard_violations": {
@@ -784,24 +718,10 @@
           "deletion": 0,
           "prohibited_writes": 0
         },
-        "hard_checks": {
-          "owner_isolation": 8,
-          "deletion": 0,
-          "prohibited_writes": 0
-        },
-        "repeat_scores": [
-          0.75,
-          0.75,
-          0.75,
-          0.75,
-          0.75
-        ],
-        "repeat_stddev": 0.0,
-        "p95_ms": 0.060208,
-        "mean_context_words": 2.25,
-        "provider_cost_usd": 0
+        "p95_ms": 0.046875,
+        "mean_context_words": 2.25
       },
-      "paired_answers": {
+      "scenario_passes": {
         "development": {
           "dev-06": true,
           "dev-05": true,
@@ -850,73 +770,69 @@
         }
       },
       "audit": {
-        "successes": 12,
         "scenarios": 12,
-        "answer_success": 1,
+        "passes": 12,
+        "answer_success": 1.0,
         "state_violations": 0,
         "hard_violations": {
           "owner_isolation": 0,
           "deletion": 0,
           "prohibited_writes": 0
         },
-        "hard_checks": {
-          "owner_isolation": 12,
-          "deletion": 0,
-          "prohibited_writes": 0
-        },
-        "repeat_scores": [
-          1,
-          1,
-          1,
-          1,
-          1
-        ],
-        "repeat_stddev": 0.0,
-        "p95_ms": 0.065,
-        "mean_context_words": 3.0,
-        "provider_cost_usd": 0
+        "p95_ms": 0.04775,
+        "mean_context_words": 3.0
       },
       "regression": {
-        "successes": 20,
         "scenarios": 20,
-        "answer_success": 1,
+        "passes": 20,
+        "answer_success": 1.0,
         "state_violations": 0,
         "hard_violations": {
           "owner_isolation": 0,
           "deletion": 0,
           "prohibited_writes": 0
         },
-        "hard_checks": {
-          "owner_isolation": 28,
-          "deletion": 11,
-          "prohibited_writes": 2
-        },
-        "repeat_scores": [
-          1,
-          1,
-          1,
-          1,
-          1
-        ],
-        "repeat_stddev": 0.0,
-        "p95_ms": 0.281708,
-        "mean_context_words": 2.4444444444444446,
-        "provider_cost_usd": 0
+        "p95_ms": 0.209416,
+        "mean_context_words": 2.4444444444444446
       },
-      "audit_paired_delta": {
-        "delta": 0,
-        "lower": 0,
-        "upper": 0,
-        "unit": "audit scenario",
-        "n": 12,
-        "interpretation": "Paired bootstrap resamples audit scenarios, not deterministic repeats. Intervals describe this constructed case mix; they do not establish population generalization or correct for candidate selection."
+      "vs_incumbent": {
+        "development: confirmed-only": {
+          "wins": 0,
+          "losses": 0,
+          "ties": 2
+        },
+        "development: useful-0.4-preference": {
+          "wins": 0,
+          "losses": 0,
+          "ties": 2
+        },
+        "development: unrelated-guess": {
+          "wins": 0,
+          "losses": 0,
+          "ties": 4
+        },
+        "audit: useful-0.6-preference": {
+          "wins": 0,
+          "losses": 0,
+          "ties": 6
+        },
+        "audit: uncertain-city-update": {
+          "wins": 0,
+          "losses": 0,
+          "ties": 6
+        },
+        "previous-suite: Part 1 scenarios": {
+          "wins": 0,
+          "losses": 0,
+          "ties": 20
+        }
       },
       "rejections": {
-        "proxy": [],
+        "answers": [],
         "state": [],
         "audit": [],
-        "assurance": [],
-        "all": []
+        "previous_suite": [],
+        "budgets": []
       }
     },
     {
@@ -929,8 +845,8 @@
         "top_k": 3
       },
       "development": {
-        "successes": 6,
         "scenarios": 8,
+        "passes": 6,
         "answer_success": 0.75,
         "state_violations": 0,
         "hard_violations": {
@@ -938,24 +854,10 @@
           "deletion": 0,
           "prohibited_writes": 0
         },
-        "hard_checks": {
-          "owner_isolation": 8,
-          "deletion": 0,
-          "prohibited_writes": 0
-        },
-        "repeat_scores": [
-          0.75,
-          0.75,
-          0.75,
-          0.75,
-          0.75
-        ],
-        "repeat_stddev": 0.0,
-        "p95_ms": 0.050375,
-        "mean_context_words": 2.25,
-        "provider_cost_usd": 0
+        "p95_ms": 0.048292,
+        "mean_context_words": 2.25
       },
-      "paired_answers": {
+      "scenario_passes": {
         "development": {
           "dev-08": false,
           "dev-06": true,
@@ -1004,73 +906,69 @@
         }
       },
       "audit": {
-        "successes": 12,
         "scenarios": 12,
-        "answer_success": 1,
+        "passes": 12,
+        "answer_success": 1.0,
         "state_violations": 0,
         "hard_violations": {
           "owner_isolation": 0,
           "deletion": 0,
           "prohibited_writes": 0
         },
-        "hard_checks": {
-          "owner_isolation": 12,
-          "deletion": 0,
-          "prohibited_writes": 0
-        },
-        "repeat_scores": [
-          1,
-          1,
-          1,
-          1,
-          1
-        ],
-        "repeat_stddev": 0.0,
-        "p95_ms": 0.060167,
-        "mean_context_words": 3.0,
-        "provider_cost_usd": 0
+        "p95_ms": 0.049042,
+        "mean_context_words": 3.0
       },
       "regression": {
-        "successes": 20,
         "scenarios": 20,
-        "answer_success": 1,
+        "passes": 20,
+        "answer_success": 1.0,
         "state_violations": 0,
         "hard_violations": {
           "owner_isolation": 0,
           "deletion": 0,
           "prohibited_writes": 0
         },
-        "hard_checks": {
-          "owner_isolation": 28,
-          "deletion": 11,
-          "prohibited_writes": 2
-        },
-        "repeat_scores": [
-          1,
-          1,
-          1,
-          1,
-          1
-        ],
-        "repeat_stddev": 0.0,
-        "p95_ms": 0.309083,
-        "mean_context_words": 2.4444444444444446,
-        "provider_cost_usd": 0
+        "p95_ms": 0.216208,
+        "mean_context_words": 2.4444444444444446
       },
-      "audit_paired_delta": {
-        "delta": 0,
-        "lower": 0,
-        "upper": 0,
-        "unit": "audit scenario",
-        "n": 12,
-        "interpretation": "Paired bootstrap resamples audit scenarios, not deterministic repeats. Intervals describe this constructed case mix; they do not establish population generalization or correct for candidate selection."
+      "vs_incumbent": {
+        "development: useful-0.4-preference": {
+          "wins": 0,
+          "losses": 0,
+          "ties": 2
+        },
+        "development: confirmed-only": {
+          "wins": 0,
+          "losses": 0,
+          "ties": 2
+        },
+        "development: unrelated-guess": {
+          "wins": 0,
+          "losses": 0,
+          "ties": 4
+        },
+        "audit: uncertain-city-update": {
+          "wins": 0,
+          "losses": 0,
+          "ties": 6
+        },
+        "audit: useful-0.6-preference": {
+          "wins": 0,
+          "losses": 0,
+          "ties": 6
+        },
+        "previous-suite: Part 1 scenarios": {
+          "wins": 0,
+          "losses": 0,
+          "ties": 20
+        }
       },
       "rejections": {
-        "proxy": [],
+        "answers": [],
         "state": [],
         "audit": [],
-        "assurance": [],
-        "all": []
+        "previous_suite": [],
+        "budgets": []
       }
     },
     {
@@ -1083,8 +981,8 @@
         "top_k": 1
       },
       "development": {
-        "successes": 6,
         "scenarios": 8,
+        "passes": 6,
         "answer_success": 0.75,
         "state_violations": 0,
         "hard_violations": {
@@ -1092,24 +990,10 @@
           "deletion": 0,
           "prohibited_writes": 0
         },
-        "hard_checks": {
-          "owner_isolation": 8,
-          "deletion": 0,
-          "prohibited_writes": 0
-        },
-        "repeat_scores": [
-          0.75,
-          0.75,
-          0.75,
-          0.75,
-          0.75
-        ],
-        "repeat_stddev": 0.0,
-        "p95_ms": 0.061042,
-        "mean_context_words": 2.25,
-        "provider_cost_usd": 0
+        "p95_ms": 0.053542,
+        "mean_context_words": 2.25
       },
-      "paired_answers": {
+      "scenario_passes": {
         "development": {
           "dev-03": true,
           "dev-04": true,
@@ -1158,8 +1042,8 @@
         }
       },
       "audit": {
-        "successes": 6,
         "scenarios": 12,
+        "passes": 6,
         "answer_success": 0.5,
         "state_violations": 0,
         "hard_violations": {
@@ -1167,26 +1051,12 @@
           "deletion": 0,
           "prohibited_writes": 0
         },
-        "hard_checks": {
-          "owner_isolation": 12,
-          "deletion": 0,
-          "prohibited_writes": 0
-        },
-        "repeat_scores": [
-          0.5,
-          0.5,
-          0.5,
-          0.5,
-          0.5
-        ],
-        "repeat_stddev": 0.0,
-        "p95_ms": 0.061417,
-        "mean_context_words": 1.5,
-        "provider_cost_usd": 0
+        "p95_ms": 0.053167,
+        "mean_context_words": 1.5
       },
       "regression": {
-        "successes": 19,
         "scenarios": 20,
+        "passes": 19,
         "answer_success": 0.95,
         "state_violations": 0,
         "hard_violations": {
@@ -1194,44 +1064,54 @@
           "deletion": 0,
           "prohibited_writes": 0
         },
-        "hard_checks": {
-          "owner_isolation": 28,
-          "deletion": 11,
-          "prohibited_writes": 2
-        },
-        "repeat_scores": [
-          0.95,
-          0.95,
-          0.95,
-          0.95,
-          0.95
-        ],
-        "repeat_stddev": 0.0,
-        "p95_ms": 0.3845,
-        "mean_context_words": 2.3333333333333335,
-        "provider_cost_usd": 0
+        "p95_ms": 0.343917,
+        "mean_context_words": 2.3333333333333335
       },
-      "audit_paired_delta": {
-        "delta": -0.5,
-        "lower": -0.75,
-        "upper": -0.25,
-        "unit": "audit scenario",
-        "n": 12,
-        "interpretation": "Paired bootstrap resamples audit scenarios, not deterministic repeats. Intervals describe this constructed case mix; they do not establish population generalization or correct for candidate selection."
+      "vs_incumbent": {
+        "development: unrelated-guess": {
+          "wins": 0,
+          "losses": 0,
+          "ties": 4
+        },
+        "development: confirmed-only": {
+          "wins": 0,
+          "losses": 0,
+          "ties": 2
+        },
+        "development: useful-0.4-preference": {
+          "wins": 0,
+          "losses": 0,
+          "ties": 2
+        },
+        "audit: uncertain-city-update": {
+          "wins": 0,
+          "losses": 0,
+          "ties": 6
+        },
+        "audit: useful-0.6-preference": {
+          "wins": 0,
+          "losses": 6,
+          "ties": 0
+        },
+        "previous-suite: Part 1 scenarios": {
+          "wins": 0,
+          "losses": 1,
+          "ties": 19
+        }
       },
       "rejections": {
-        "proxy": [],
+        "answers": [],
         "state": [],
         "audit": [
-          "audit answers below the required fraction"
+          "audit answers below 100%"
         ],
-        "assurance": [
-          "audit answers below the required fraction",
-          "previous article regression suite failed"
+        "previous_suite": [
+          "audit answers below 100%",
+          "previous suite failed"
         ],
-        "all": [
-          "audit answers below the required fraction",
-          "previous article regression suite failed"
+        "budgets": [
+          "audit answers below 100%",
+          "previous suite failed"
         ]
       }
     },
@@ -1245,8 +1125,8 @@
         "top_k": 3
       },
       "development": {
-        "successes": 6,
         "scenarios": 8,
+        "passes": 6,
         "answer_success": 0.75,
         "state_violations": 0,
         "hard_violations": {
@@ -1254,24 +1134,10 @@
           "deletion": 0,
           "prohibited_writes": 0
         },
-        "hard_checks": {
-          "owner_isolation": 8,
-          "deletion": 0,
-          "prohibited_writes": 0
-        },
-        "repeat_scores": [
-          0.75,
-          0.75,
-          0.75,
-          0.75,
-          0.75
-        ],
-        "repeat_stddev": 0.0,
-        "p95_ms": 0.05225,
-        "mean_context_words": 2.25,
-        "provider_cost_usd": 0
+        "p95_ms": 0.0465,
+        "mean_context_words": 2.25
       },
-      "paired_answers": {
+      "scenario_passes": {
         "development": {
           "dev-04": true,
           "dev-01": true,
@@ -1320,8 +1186,8 @@
         }
       },
       "audit": {
-        "successes": 6,
         "scenarios": 12,
+        "passes": 6,
         "answer_success": 0.5,
         "state_violations": 0,
         "hard_violations": {
@@ -1329,26 +1195,12 @@
           "deletion": 0,
           "prohibited_writes": 0
         },
-        "hard_checks": {
-          "owner_isolation": 12,
-          "deletion": 0,
-          "prohibited_writes": 0
-        },
-        "repeat_scores": [
-          0.5,
-          0.5,
-          0.5,
-          0.5,
-          0.5
-        ],
-        "repeat_stddev": 0.0,
-        "p95_ms": 0.056625,
-        "mean_context_words": 1.5,
-        "provider_cost_usd": 0
+        "p95_ms": 0.056209,
+        "mean_context_words": 1.5
       },
       "regression": {
-        "successes": 19,
         "scenarios": 20,
+        "passes": 19,
         "answer_success": 0.95,
         "state_violations": 0,
         "hard_violations": {
@@ -1356,50 +1208,60 @@
           "deletion": 0,
           "prohibited_writes": 0
         },
-        "hard_checks": {
-          "owner_isolation": 28,
-          "deletion": 11,
-          "prohibited_writes": 2
-        },
-        "repeat_scores": [
-          0.95,
-          0.95,
-          0.95,
-          0.95,
-          0.95
-        ],
-        "repeat_stddev": 0.0,
-        "p95_ms": 0.2415,
-        "mean_context_words": 2.3333333333333335,
-        "provider_cost_usd": 0
+        "p95_ms": 0.237334,
+        "mean_context_words": 2.3333333333333335
       },
-      "audit_paired_delta": {
-        "delta": -0.5,
-        "lower": -0.75,
-        "upper": -0.25,
-        "unit": "audit scenario",
-        "n": 12,
-        "interpretation": "Paired bootstrap resamples audit scenarios, not deterministic repeats. Intervals describe this constructed case mix; they do not establish population generalization or correct for candidate selection."
+      "vs_incumbent": {
+        "development: unrelated-guess": {
+          "wins": 0,
+          "losses": 0,
+          "ties": 4
+        },
+        "development: useful-0.4-preference": {
+          "wins": 0,
+          "losses": 0,
+          "ties": 2
+        },
+        "development: confirmed-only": {
+          "wins": 0,
+          "losses": 0,
+          "ties": 2
+        },
+        "audit: uncertain-city-update": {
+          "wins": 0,
+          "losses": 0,
+          "ties": 6
+        },
+        "audit: useful-0.6-preference": {
+          "wins": 0,
+          "losses": 6,
+          "ties": 0
+        },
+        "previous-suite: Part 1 scenarios": {
+          "wins": 0,
+          "losses": 1,
+          "ties": 19
+        }
       },
       "rejections": {
-        "proxy": [],
+        "answers": [],
         "state": [],
         "audit": [
-          "audit answers below the required fraction"
+          "audit answers below 100%"
         ],
-        "assurance": [
-          "audit answers below the required fraction",
-          "previous article regression suite failed"
+        "previous_suite": [
+          "audit answers below 100%",
+          "previous suite failed"
         ],
-        "all": [
-          "audit answers below the required fraction",
-          "previous article regression suite failed"
+        "budgets": [
+          "audit answers below 100%",
+          "previous suite failed"
         ]
       }
     }
   ],
   "rankings": {
-    "proxy": [
+    "answers": [
       "threshold-0.2-k1",
       "threshold-0.2-k3",
       "threshold-0.4-k1",
@@ -1429,7 +1291,7 @@
       "threshold-0.7-k1",
       "threshold-0.7-k3"
     ],
-    "assurance": [
+    "previous_suite": [
       "threshold-0.6-k1",
       "threshold-0.6-k3",
       "threshold-0.2-k1",
@@ -1439,7 +1301,7 @@
       "threshold-0.7-k1",
       "threshold-0.7-k3"
     ],
-    "all": [
+    "budgets": [
       "threshold-0.6-k1",
       "threshold-0.6-k3",
       "threshold-0.2-k1",
@@ -1450,12 +1312,25 @@
       "threshold-0.7-k3"
     ]
   },
-  "audit_frontier": [
+  "decision": {
+    "rule": "Adopt a challenger only if it passes every check and, compared scenario by scenario with the incumbent, it wins at least one scenario and loses none. Otherwise keep the incumbent.",
+    "incumbent": "threshold-0.6-k3",
+    "eligible_challengers": [
+      {
+        "id": "threshold-0.6-k1",
+        "wins": 0,
+        "losses": 0
+      }
+    ],
+    "adopted": null,
+    "outcome": "keep the incumbent threshold-0.6-k3"
+  },
+  "pareto_frontier": [
+    "threshold-0.6-k1",
     "threshold-0.6-k3"
   ],
   "executions": 1600,
   "provider_calls": 0,
-  "provider_cost_usd": 0,
   "example": {
     "family": "evaluator_audit",
     "role": "search",
@@ -1482,11 +1357,10 @@
       "context_words": 3.0,
       "storage_records": 2.0,
       "storage_bytes": 607.0,
-      "latency_p50_ms": 0.056458,
-      "latency_p95_ms": 0.056458,
+      "latency_p50_ms": 0.05725,
+      "latency_p95_ms": 0.05725,
       "provider_cost_usd": 0,
-      "model_tokens": 0,
-      "success_repeat_stddev": null
+      "model_tokens": 0
     },
     "hard_constraints": {
       "owner_isolation": {
@@ -1892,13 +1766,8 @@
       "storage_records": 2,
       "storage_bytes": 607
     },
-    "latency_ms": 0.056458,
+    "latency_ms": 0.05725,
     "candidate_id": "threshold-0.2-k1",
     "split": "development"
-  },
-  "calibration": {
-    "status": "not_run",
-    "human_labels": 0,
-    "note": "No model-vs-human calibration claim is made."
   }
 }

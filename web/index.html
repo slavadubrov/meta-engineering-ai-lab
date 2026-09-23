@@ -88,6 +88,13 @@
     <script src="campaign.js" defer></script>
   </head>
   <body>
+    <nav class="site-nav" aria-label="Lab pages">
+      <a href="index.html" aria-current="page">Part 1: agent campaigns</a>
+      <a href="memory.html">Part 1: memory tool</a>
+      <a href="evaluators.html">Part 2: evaluators</a>
+      <a href="https://slavadubrov.com/blog/2026/09/12/from-traces-to-better-memory/">Part 1 article</a>
+      <a href="https://github.com/slavadubrov/meta-engineering-ai-lab">Code</a>
+    </nav>
     <main>
       <header>
         <p class="eyebrow">Edge of Context · Meta-Engineering AI Systems</p>
@@ -115,7 +122,7 @@
             href="https://github.com/slavadubrov/meta-engineering-ai-lab/tree/v0.2.2"
             >Code and README</a
           ><a href="memory.html">Understand the memory tool</a
-          ><a href="https://slavadubrov.com/blog/2026/09/12/from-traces-to-better-memory/">Companion article (publication pending)</a>
+          ><a href="https://slavadubrov.com/blog/2026/09/12/from-traces-to-better-memory/">Part 1 article</a>
         </nav>
       </header>
       <section class="panel" aria-labelledby="guide">
@@ -208,9 +215,9 @@
           <label>Campaign<select id="campaign"></select></label
           ><label>Iteration<select id="iteration"></select></label>
         </div>
-        <section class="panel" aria-live="polite">
+        <section class="panel">
           <h2 id="iteration-title"></h2>
-          <p id="status"></p>
+          <p id="status" aria-live="polite"></p>
           <p id="parent"></p>
           <div class="decision-grid">
             <div>

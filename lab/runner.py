@@ -3,6 +3,7 @@
 import hashlib
 import html
 import json
+import math
 import platform
 import statistics
 import subprocess
@@ -17,7 +18,6 @@ from pathlib import Path
 from .memory import ALLOWED_KEYS, Config, Memory, scope, valid_at, validate_scenarios
 
 ROOT = Path(__file__).resolve().parents[1]
-MAX_REPEATS = 5
 MAX_CANDIDATES = 8
 MAX_WALL_SECONDS = 30
 MAX_ARTIFACT_JSON_BYTES = 64_000_000
@@ -112,19 +112,13 @@ METRICS = {
         "Zero: normalized proposals and a deterministic consumer",
         "lower",
     ),
-    "success_repeat_stddev": (
-        "Repeat success stddev",
-        "fraction",
-        "Population standard deviation across repeated deterministic sweeps; not statistical generalization",
-        "lower",
-    ),
 }
 LIMITATIONS = [
     "All scenarios are original synthetic public fixtures visible during candidate authorship. Search/evaluation/adversarial roles are regression and validation organization, not blind held-out sets.",
     "This target starts from structured fact proposals. Confidence scores are hand-authored fixture values, not calibrated probabilities. It does not measure language extraction, model calibration, or a real assistant's reasoning.",
     "The frozen consumer returns the first packed fact with the requested key. Its failure modes are inspectable; they do not estimate a language model's behavior.",
     "Scoped history changes entity and temporal filtering together. Its gain is attributable to the tested bundle; this run does not estimate the isolated effect of each switch.",
-    "Each scenario runs once by default. Repeating these deterministic rules adds no answer-quality evidence; variation across repeats is unavailable for a single run.",
+    "Each scenario runs once. Repeating these deterministic rules adds no answer-quality evidence.",
     "Configuration validation limits what these manifests can change. This same-user process is not an operating-system sandbox against a malicious coding agent with filesystem access.",
     "The durable-key/source/kind gate rejects the supplied structured attacks. It is not a general prompt-injection defense or a detector for secrets hidden in allowed values.",
     "Latency is local execution of tiny in-memory scenarios. Context words are not model tokens. Zero provider expenditure excludes authoring, machine and electricity costs.",
@@ -164,12 +158,10 @@ def ratio(numerator: int, denominator: int) -> float | None:
     return numerator / denominator if denominator else None
 
 
-def metrics(counts: Counter, latencies: list[float], repeat_scores: list[float]) -> dict:
+def metrics(counts: Counter, latencies: list[float]) -> dict:
     sorted_times = sorted(latencies)
 
     def percentile(p: float) -> float:
-        import math
-
         return sorted_times[max(0, math.ceil(p * len(sorted_times)) - 1)]
 
     return {
@@ -190,9 +182,6 @@ def metrics(counts: Counter, latencies: list[float], repeat_scores: list[float])
         "latency_p95_ms": percentile(0.95),
         "provider_cost_usd": 0,
         "model_tokens": 0,
-        "success_repeat_stddev": statistics.pstdev(repeat_scores)
-        if len(repeat_scores) > 1
-        else None,
     }
 
 
@@ -296,7 +285,7 @@ def run_scenario(scenario: dict, config: Config, repeat: int) -> dict:
         "success": success,
         "expected": expected,
         "actual": actual,
-        "metrics": metrics(counts, [elapsed_ms], []),
+        "metrics": metrics(counts, [elapsed_ms]),
         "hard_constraints": constraints,
         "trace": trace,
         "before": [],
@@ -371,22 +360,18 @@ def load_candidates(extra: dict | None = None, lineage: list[dict] | None = None
     return resolved
 
 
-def aggregate(runs: list[dict], repeats: int) -> dict:
+def aggregate(runs: list[dict]) -> dict:
     counts = sum((Counter(run["counts"]) for run in runs), Counter())
-    repeat_scores = [
-        statistics.mean(r["success"] for r in runs if r["repeat"] == repeat)
-        for repeat in range(repeats)
-    ]
     constraints = {}
     for name in runs[0]["hard_constraints"]:
         checks = sum(run["hard_constraints"][name]["checks"] for run in runs)
         violations = sum(run["hard_constraints"][name]["violations"] for run in runs)
         constraints[name] = dict(passed=violations == 0, checks=checks, violations=violations)
     return dict(
-        metrics=metrics(counts, [r["latency_ms"] for r in runs], repeat_scores),
+        metrics=metrics(counts, [r["latency_ms"] for r in runs]),
         counts=dict(counts),
-        repeat_count=repeats,
-        task_count=len(runs) // repeats,
+        repeat_count=1,
+        task_count=len(runs),
         hard_constraints=constraints,
     )
 
@@ -419,7 +404,7 @@ def provenance() -> dict:
             ROOT / ".python-version",
         ]
     )
-    files = {str(path.relative_to(ROOT)): sha256(path) for path in paths if path.exists()}
+    files = {path.relative_to(ROOT).as_posix(): sha256(path) for path in paths if path.exists()}
     return {
         "target_version": "structured-memory-v1",
         "evaluator_version": "exact-state-v1",
@@ -437,14 +422,11 @@ def provenance() -> dict:
 
 
 def build_bundle(
-    repeats: int = 1,
     extra: dict | None = None,
     parent_release: Path | None = None,
     *,
     lineage: list[dict] | None = None,
 ) -> tuple[dict, list[dict]]:
-    if type(repeats) is not int or not 1 <= repeats <= MAX_REPEATS:
-        raise ValueError(f"Repeats must be between 1 and {MAX_REPEATS}")
     scenarios = read_json(ROOT / "data/scenarios.json")
     validate_scenarios(scenarios)
     parent_manifest = verify_source(parent_release) if parent_release is not None else None
@@ -455,7 +437,7 @@ def build_bundle(
     candidates = load_candidates(extra, lineage)
     # Reuse verified deterministic parent evidence; only the new candidate needs execution.
     recorded = {}
-    if parent_release is not None and repeats == 1:
+    if parent_release is not None:
         previous = read_json(parent_release / "bundle.json", MAX_ARTIFACT_JSON_BYTES)
         if all(c["summary"]["repeat_count"] == 1 for c in previous["candidates"]):
             recorded = {c["id"]: c["runs"] for c in previous["candidates"]}
@@ -464,32 +446,21 @@ def build_bundle(
     for candidate in candidates:
         runs = deepcopy(recorded.get(candidate["id"], []))
         if not runs:
-            for repeat in range(repeats):
-                for scenario in scenarios:
-                    if time.monotonic() > deadline:
-                        raise TimeoutError(f"Campaign exceeded {MAX_WALL_SECONDS} seconds")
-                    run = run_scenario(scenario, Config(**candidate["config"]), repeat)
-                    run["candidate_id"] = candidate["id"]
-                    runs.append(run)
-        summary = aggregate(runs, repeats)
+            for scenario in scenarios:
+                if time.monotonic() > deadline:
+                    raise TimeoutError(f"Campaign exceeded {MAX_WALL_SECONDS} seconds")
+                run = run_scenario(scenario, Config(**candidate["config"]), 0)
+                run["candidate_id"] = candidate["id"]
+                runs.append(run)
+        summary = aggregate(runs)
         summary["role_metrics"] = {
-            role: aggregate([r for r in runs if r["role"] == role], repeats)["metrics"]
+            role: aggregate([r for r in runs if r["role"] == role])["metrics"]
             for role in ("search", "evaluation", "adversarial")
         }
         parent = by_id.get(candidate["parent_id"])
-        parent_runs = parent["runs"] if parent else runs[: len(scenarios)]
+        parent_runs = parent["runs"] if parent else runs
         parent_success = {r["scenario_id"]: int(r["success"]) for r in parent_runs}
-        differences = [
-            int(r["success"]) - parent_success[r["scenario_id"]] for r in runs if r["repeat"] == 0
-        ]
-        repeat_deltas = [
-            statistics.mean(
-                int(r["success"]) - parent_success[r["scenario_id"]]
-                for r in runs
-                if r["repeat"] == i
-            )
-            for i in range(repeats)
-        ]
+        differences = [int(r["success"]) - parent_success[r["scenario_id"]] for r in runs]
         summary["paired"] = dict(
             parent_id=candidate["parent_id"],
             task_count=len(scenarios),
@@ -497,7 +468,6 @@ def build_bundle(
             ties=differences.count(0),
             losses=differences.count(-1),
             mean_delta=statistics.mean(differences),
-            repeat_deltas=repeat_deltas,
         )
         bad_constraints = any(not c["passed"] for c in summary["hard_constraints"].values())
         delta = summary["paired"]["mean_delta"]
@@ -530,9 +500,8 @@ def build_bundle(
             )
         candidate.update(
             summary=summary,
-            runs=[r for r in runs if r["repeat"] == 0],
+            runs=runs,
             budget=dict(
-                repeats=repeats,
                 scenario_runs=len(runs),
                 max_wall_seconds=MAX_WALL_SECONDS,
                 provider_calls=0,
@@ -610,10 +579,6 @@ def write_reports(output: Path, bundle: dict) -> None:
     labels = [c["label"] for c in candidates]
     rows = []
     for key, definition in bundle["metric_definitions"].items():
-        if key == "success_repeat_stddev" and all(
-            c["summary"]["repeat_count"] == 1 for c in candidates
-        ):
-            continue
         rows.append(
             [definition["label"] + f" ({definition['unit']})"]
             + [format_metric(c["summary"]["metrics"][key], definition["unit"]) for c in candidates]
@@ -657,10 +622,6 @@ def write_reports(output: Path, bundle: dict) -> None:
             + ".",
         ]
     lines += [
-        "",
-        "## Interpretation",
-        "",
-        "Scoped history bundles entity filtering and time validity. Deduplication is neutral on downstream answers and reduces duplicate storage. Lowering the write threshold recovers one useful low-confidence fact, but also retains uncertain conflicts: a useful-write-recall win can accompany a downstream regression.",
         "",
         "Counts and denominators are in each candidate's summary.counts and per-run counts. Role metrics are reported separately in bundle.json; none is held out from authorship.",
         "",
@@ -750,23 +711,28 @@ def export(output: Path, bundle: dict, all_runs: list[dict]) -> None:
             dump(output / "traces" / name, run["trace"])
             dump(output / "state-diffs" / name, run["state_diff"])
     write_reports(output, bundle)
-    manifest = {
-        key: bundle[key]
-        for key in ("schema_version", "release_id", "generated_at", "provenance", "limitations")
-    }
-    manifest.update(
+    write_manifest(
+        output,
+        **{
+            key: bundle[key]
+            for key in ("schema_version", "release_id", "generated_at", "provenance", "limitations")
+        },
         lab_id="memory-improvement",
         article=1,
         interaction_tier="artifact-first",
         synthetic=True,
         entrypoints=dict(explorer="bundle.json", report="report.html", runs="runs.jsonl"),
-        files=[
-            dict(path=str(path.relative_to(output)), sha256=sha256(path))
-            for path in sorted(output.rglob("*"))
-            if path.is_file()
-        ],
     )
-    dump(output / "manifest.json", manifest)
+
+
+def write_manifest(output: Path, **fields) -> None:
+    """Hash every file already in the directory; verify() later checks the same inventory."""
+    files = [
+        dict(path=path.relative_to(output).as_posix(), sha256=sha256(path))
+        for path in sorted(output.rglob("*"))
+        if path.is_file() and path != output / "manifest.json"
+    ]
+    dump(output / "manifest.json", {**fields, "files": files})
 
 
 def verify(output: Path) -> int:
@@ -783,7 +749,7 @@ def verify(output: Path) -> int:
         if not path.is_file() or sha256(path) != item["sha256"]:
             raise ValueError(f"Artifact hash mismatch: {item['path']}")
         expected.add(item["path"])
-    actual = {str(p.relative_to(output)) for p in output.rglob("*") if p.is_file()} - {
+    actual = {p.relative_to(output).as_posix() for p in output.rglob("*") if p.is_file()} - {
         "manifest.json"
     }
     if actual != expected:
@@ -792,12 +758,16 @@ def verify(output: Path) -> int:
 
 
 def verify_source(output: Path) -> dict:
-    """A descendant reuses the same engine, evaluator, fixtures and contract as its parent."""
+    """Check that every recorded source file is unchanged; files added later are not compared."""
     verify(output)
     manifest = read_json(output / "manifest.json")
-    if manifest["provenance"]["source_files"] != provenance()["source_files"]:
+    recorded = manifest["provenance"]["source_files"]
+    current = {path: sha256(ROOT / path) if (ROOT / path).is_file() else None for path in recorded}
+    if current != recorded:
+        changed = sorted(path for path in recorded if current[path] != recorded[path])
         raise ValueError(
-            "Current source differs from the parent release; run a new baseline before extending it"
+            f"Current source differs from the recorded release ({', '.join(changed)}); "
+            "run a new baseline before extending it"
         )
     return manifest
 

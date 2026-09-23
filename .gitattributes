@@ -1,1 +1,4 @@
 artifacts/** linguist-generated=true
+* text=auto eol=lf
+*.gz binary
+*.png binary
