@@ -18,6 +18,35 @@ function cells(values) {
 }
 function ratio(row) { return `${row.successes}/${row.scenarios}`; }
 function percent(value) { return `${(100 * value).toFixed(1)} pp`; }
+$("jev-file").addEventListener("change", async (event) => {
+  $("jev-summary").replaceChildren();
+  $("jev-cases").replaceChildren();
+  $("jev-costs").textContent = "";
+  try {
+    const file = event.target.files[0];
+    if (!file) return;
+    if (file.size > 1_000_000) throw new Error("Comparison exceeds 1 MB.");
+    const study = JSON.parse(await file.text());
+    if (study.version !== "jev-comparison-v1" || !Array.isArray(study.cases) || study.cases.length > 100 || !study.arms) throw new Error("Unsupported comparison format.");
+    const methods = {exact: "Exact — semantic", exact_with_constraints: "Exact + constraints — behavior", jev_answer_only: "Jev — semantic", jev_with_constraints: "Jev + constraints — behavior", jev_state_aware: "Jev state-aware — behavior"};
+    const rows = Object.entries(methods).filter(([id]) => study.arms[id]).map(([id, label]) => {
+      const arm = study.arms[id];
+      const m = arm.semantic ?? arm.behavior ?? arm.agreement;
+      return cells([label, `${m.agreement}/${m.total}`, `${m.false_accepts}/${m.negative_cases}`, `${m.false_rejects}/${m.positive_cases}`]);
+    });
+    const verdict = (value) => value === true ? "Accept" : value === false ? "Reject" : "Not measured";
+    const cases = study.cases.map((c) => cells([
+      c.id, verdict(c.semantic_accept), verdict(c.reference_accept),
+      ...["exact", "jev_answer_only", "jev_with_constraints", "jev_state_aware"].map((id) => verdict(study.arms[id]?.predictions?.[c.id])),
+    ]));
+    $("jev-summary").replaceChildren(...rows);
+    $("jev-cases").replaceChildren(...cases);
+    $("jev-costs").textContent = (study.calls ?? []).map((c) => `${c.name}: ${c.status}, ${typeof c.elapsed_s === "number" ? c.elapsed_s.toFixed(3) + " s/request" : "time unmeasured"}, ${c.cost_usd == null ? "cost unknown" : "$" + c.cost_usd}`).join(" · ");
+    $("jev-status").textContent = `${study.model}: ${study.status}. Reported cost: ${study.cost_usd == null ? "unknown / unmeasured" : `$${study.cost_usd}`}. Local artifact; provenance and labels require review.`;
+  } catch (error) {
+    $("jev-status").textContent = error.message;
+  }
+});
 try {
   const responses = await Promise.all([
     fetch("../reports/article-02/bundle.json"),

@@ -68,9 +68,20 @@
       </details>
       <details>
         <summary>Which questions need a model judge?</summary>
-        <p>These eight synthetic examples separate answer correctness from acceptable behavior. Reference labels follow the authored rubric; human labels are unfilled. No model-versus-human agreement result is claimed. The optional three-call study records a selector and two judge prompts when provider access is available.</p>
+        <p>These ten synthetic examples separate answer correctness from acceptable behavior, including two valid paraphrases. Reference labels follow the authored rubric; human labels are unfilled. No model-versus-human agreement result is claimed. The optional OpenAI study records a selector and two judge prompts; the separate OpenRouter study compares Jev with exact matching.</p>
         <div class="table-scroll" tabindex="0" role="region" aria-label="Judge calibration examples"><table><caption>Calibration review packet: human review pending</caption><thead><tr><th scope="col">Case</th><th scope="col">Answer</th><th scope="col">State evidence</th><th scope="col">Rubric</th><th scope="col">Human</th></tr></thead><tbody id="calibration"></tbody></table></div>
       </details>
+      <section aria-labelledby="jev-title">
+        <h2 id="jev-title">Compare Jev with exact matching</h2>
+        <p>Run <code>python -m lab.jev_compare</code> locally and open its <code>study.json</code> here. Add <code>--live</code> to make two OpenRouter requests. The API key stays in your local Python environment. This page reads the selected file locally and makes no model calls.</p>
+        <label for="jev-file">Comparison study (JSON, at most 1 MB)</label>
+        <input id="jev-file" type="file" accept=".json,application/json" />
+        <p id="jev-status" role="status">No Jev results loaded. An offline run records exact-match baselines and marks Jev as not run.</p>
+        <p id="jev-costs"></p>
+        <div class="table-scroll" tabindex="0" role="region" aria-label="Jev comparison"><table><caption>Authored rubric agreement; not human calibration</caption><thead><tr><th scope="col">Method</th><th scope="col">Agreement</th><th scope="col">False accepts / negatives</th><th scope="col">False rejects / positives</th></tr></thead><tbody id="jev-summary"></tbody></table></div>
+        <div class="table-scroll" tabindex="0" role="region" aria-label="Per-case Jev decisions"><table><caption>Inspect disagreements and mandatory rejection</caption><thead><tr><th scope="col">Case</th><th scope="col">Semantic reference</th><th scope="col">Behavior reference</th><th scope="col">Exact</th><th scope="col">Jev answer</th><th scope="col">Jev + constraints</th><th scope="col">Jev state-aware</th></tr></thead><tbody id="jev-cases"></tbody></table></div>
+        <p>Answer-only methods see the same question, answer and reference. The state-aware Jev arm receives additional evidence and requirements. The constraints in this small comparison are injected fixture observations; the main experiment above checks real target traces and state. These illustrative decisions do not authorize promotion. Probabilities from Jev are not calibrated safety guarantees.</p>
+      </section>
       <h2>Inspect and reproduce</h2>
       <p><a href="../reports/article-02/report.md">Result table</a> · <a href="../reports/article-02/bundle.json">Frozen evidence</a> · <a href="../experiments/evaluator-exploits/contract.json">Experiment contract</a></p>
       <pre>uv sync --frozen

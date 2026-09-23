@@ -7,5 +7,6 @@ decisions/
 site/
 .env
 .env.*
+!.env.example
 .DS_Store
 node_modules/

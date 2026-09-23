@@ -229,3 +229,61 @@ uv run --frozen --env-file .env.local python -m lab.evaluator_judge \
 
 The synthetic rubric labels are not independently reviewed human judgments.
 No successful live judge comparison or human calibration result is included.
+
+### Compare Jev through OpenRouter
+
+[Jev 1.13](https://openrouter.ai/typesafe/jev-1.13) returns typed decisions rather
+than chat text. This comparison uses the official
+[Decisions API](https://github.com/OpenRouterTeam/typescript-sdk/blob/main/src/funcs/alphaDecisionsCreate.ts)
+at `https://openrouter.ai/api/alpha/decisions`, pinned to `typesafe/jev-1.13`.
+It is an alpha API; a schema or model change requires a reviewed protocol update.
+
+Start without a key or network calls:
+
+```bash
+uv run --frozen python -m lab.jev_compare --output artifacts/jev-offline
+uv run --frozen python -m lab verify artifacts/jev-offline
+```
+
+This records the exact-match baselines, requests and source hashes; Jev is marked
+`not_run`. In the evaluator explorer, choose **Compare Jev with exact matching**
+and load `artifacts/jev-offline/study.json`. The file is read locally, not uploaded.
+
+For the optional live comparison, copy `.env.example` to `.env`, fill in
+`OPENROUTER_API_KEY` with an editor, and run:
+
+```bash
+cp .env.example .env
+# Fill OPENROUTER_API_KEY in .env before the next command.
+uv run --frozen --env-file .env python -m lab.jev_compare \
+  --live --output artifacts/jev-live
+uv run --frozen python -m lab verify artifacts/jev-live
+```
+
+Both `.env` and generated `artifacts/` are ignored by Git. Never put the key in a
+browser, command argument, artifact or commit. Use a new output directory for each
+attempt: evidence is never overwritten. The live runner makes at most two requests,
+each capped at 24 KB, with a 60-second timeout and no retries. These are execution
+limits, not a provider-enforced dollar cap; set a spending limit on the OpenRouter
+key for that. The model page lists USD 0.042/M input tokens and zero output-token
+price as of 2026-09-22. Actual returned usage and billed cost are recorded; missing
+cost, including failed-call billing, remains unknown.
+
+The ten authored cases include two valid paraphrases. **Exact matching scores 8/10
+against the semantic labels** because it rejects both paraphrases. Adding the
+fixture constraints also gives 8/10 against the behavior labels, with the same two
+false rejections. These are deterministic fixture results, not measured Jev scores.
+
+| Comparison | Evidence and decision |
+| --- | --- |
+| Exact versus Jev answer-only | Same question, answer and reference; equivalent paraphrases are valid. |
+| Exact + constraints versus Jev + constraints | Compose the semantic verdict with mandatory rejection for recorded violations. |
+| Jev state-aware | Additional state evidence and rubric; an information intervention, not an isolated model-quality comparison. |
+
+The comparison's `hard_failures` are injected synthetic observations, not fresh
+checks of a running target. They test that a model cannot override a recorded
+violation. The main eight-candidate experiment still obtains violations from real
+memory traces and state snapshots. Neither a correct choice nor a high returned
+confidence authorizes promotion. Labels are authored and public, human labels are
+unfilled, and these related cases are not independent calibration samples. The
+OpenAI three-call study above is a separate protocol, not a matched Jev/LLM benchmark.
