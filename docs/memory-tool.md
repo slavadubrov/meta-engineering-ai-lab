@@ -14,7 +14,7 @@ changes and receiving feedback.
 
 [Source on GitHub](https://github.com/slavadubrov/meta-engineering-ai-lab) ·
 [Run locally](#run-it) · [Deployment guide](../DEPLOYMENT.md).
-This is the first target in **Meta-Engineering AI Systems**. The [companion article](https://slavadubrov.com/blog/2026/09/12/from-traces-to-better-memory/) is awaiting publication; it introduces the closed-loop improvement process around it.
+This is the first target in **Meta-Engineering AI Systems**. The [companion article](https://slavadubrov.com/blog/2026/09/12/from-traces-to-better-memory/) introduces the closed-loop improvement process around it.
 
 ## Start with the city example
 
@@ -503,5 +503,6 @@ source project. Referenced papers and external projects retain their own terms.
   kind allowlist covers explicit structured cases. It does not classify arbitrary
   text or protect against secrets disguised as an allowed city or language.
 
-The next article should challenge the evaluator and the evidence boundary
-before adding a stronger proposer or more experiments.
+Before a stronger proposer writes code, the evaluator needs its own process
+and the evidence boundary needs a test. Later parts of the series build both
+around a LangChain agent harness instead of this memory tool.

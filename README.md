@@ -22,7 +22,9 @@ The recorded study contains **actual saved OpenAI requests and responses**. Comp
 
 [Recorded study](reports/agent-study-03.md) · [Memory-tool walkthrough](docs/memory-tool.md) · [Deployment](DEPLOYMENT.md)
 
-Read the [companion article: Meta-engineering AI systems — from traces to better memory](https://slavadubrov.com/blog/2026/09/12/from-traces-to-better-memory/). It is awaiting publication and introduces the whole improvement process before walking through this experiment.
+Read the [companion article: Meta-engineering AI systems — from traces to better memory](https://slavadubrov.com/blog/2026/09/12/from-traces-to-better-memory/). It introduces the whole improvement process before walking through this experiment.
+
+**Series plan, updated September 26, 2026.** The code in `lab/` and tag `v0.2.2` stay as Part 1 published them. Later parts add an improver agent to this repository. It edits a LangChain agent harness from the companion series *Building and Evaluating Agent Harnesses* and tests each edit with that series' evaluator, which runs outside the harness. The memory tool is no longer the target after Part 1.
 
 ## Inspect the saved campaigns without a key
 
