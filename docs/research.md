@@ -191,6 +191,8 @@ boundary. No new vector database, orchestration framework, trained model, or
 live backend is necessary to answer article 1's question. These are extension
 choices to evaluate against the same contract later.
 
-The ending should hand one concrete question to article 2: after the loop has
-made more experiments easy to run, what prevents it from optimizing an
-incomplete evaluator?
+The evaluator question carries into **Building and Evaluating Agent Harnesses**:
+how do we stop candidate code from changing the checks or the execution records
+used to judge it? That series will build the target harness and evaluation
+framework before **Meta-Engineering AI Systems** continues with a coding agent
+that improves the harness. See [where this lab fits](../README.md#where-this-lab-fits).

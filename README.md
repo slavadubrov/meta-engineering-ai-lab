@@ -24,7 +24,13 @@ The recorded study contains **actual saved OpenAI requests and responses**. Comp
 
 Read the [companion article: Meta-engineering AI systems — from traces to better memory](https://slavadubrov.com/blog/2026/09/12/from-traces-to-better-memory/). It introduces the whole improvement process before walking through this experiment.
 
-**Series plan, updated September 26, 2026.** The code in `lab/` and tag `v0.2.2` stay as Part 1 published them. Later parts add an improver agent to this repository. It edits a LangChain agent harness from the companion series *Building and Evaluating Agent Harnesses* and tests each edit with that series' evaluator, which runs outside the harness. The memory tool is no longer the target after Part 1.
+## Where this lab fits
+
+The runnable experiment here is Part 1: an LLM searches five settings of a deterministic memory tool. Tag `v0.2.2` pins its implementation and reports; the commands below reproduce that version.
+
+The next articles will build a LangChain harness, a LangGraph workflow, and an evaluator in **Building and Evaluating Agent Harnesses**. That harness and its evaluator will have a separate companion repository. **Agent Security: Model and Harness** will use the same target to test model defenses and harness controls separately and together.
+
+**Meta-Engineering AI Systems** will return to this repository with a coding agent that improves the target harness. That work depends on an isolated evaluator and repeated measurements from the harness series. The improver, comparisons with Optuna and a human, and experiments across generations are planned work. They are not implemented in this checkout. The memory code, recorded results, evidence archive, and `v0.2.2` tag remain unchanged.
 
 ## Inspect the saved campaigns without a key
 
