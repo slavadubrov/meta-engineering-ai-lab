@@ -70,7 +70,7 @@ The author's existing articles supply the bridge:
 
 - [AI Agent Memory: Schema-Guided State and Provenance](https://slavadubrov.com/blog/2026/06/20/schema-guided-agent-memory/) separates model-proposed state from application-owned lifecycle rules.
 - [AI Agent Evaluation in Production: Traces to Test Suites](https://slavadubrov.com/blog/2026/06/10/agent-evals-traces-to-test-suites/) turns observed failures into versioned cases with outcome and trajectory checks.
-- [Harness Engineering for AI Agents: Designing Control Loops](https://slavadubrov.com/blog/2026/07/22/ai-agent-harness-engineering/) assigns authority to the code that enforces acceptance and measures one intervention at a time.
+- [Harness Engineering for AI Agents: Verifying Completion](https://slavadubrov.com/blog/2026/07/22/ai-agent-harness-engineering/) assigns authority to the code that enforces acceptance and measures one intervention at a time.
 
 These connections were checked against the current local source articles. They
 are narrative continuity, not independent evidence that this lab works.
@@ -193,6 +193,7 @@ choices to evaluate against the same contract later.
 
 The evaluator question carries into **Building and Evaluating Agent Harnesses**:
 how do we stop candidate code from changing the checks or the execution records
-used to judge it? That series will build the target harness and evaluation
-framework before **Meta-Engineering AI Systems** continues with a coding agent
+used to judge it? That series builds the target harness, in
+[agent-harness-lab-public](https://github.com/slavadubrov/agent-harness-lab-public),
+and its evaluation framework before **Meta-Engineering AI Systems** continues with a coding agent
 that improves the harness. See [where this lab fits](../README.md#where-this-lab-fits).

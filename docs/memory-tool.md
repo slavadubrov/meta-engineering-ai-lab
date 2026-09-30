@@ -503,9 +503,11 @@ source project. Referenced papers and external projects retain their own terms.
   kind allowlist covers explicit structured cases. It does not classify arbitrary
   text or protect against secrets disguised as an allowed city or language.
 
-This walkthrough completes the memory case. The planned **Building and
-Evaluating Agent Harnesses** series will build a LangChain harness, a workflow,
-and an evaluator that owns the execution records and checks. It will also add
-repeated trials. **Meta-Engineering AI Systems** then returns to a coding agent
+This walkthrough completes the memory case. **Building and Evaluating Agent
+Harnesses** builds a LangChain harness in
+[agent-harness-lab-public](https://github.com/slavadubrov/agent-harness-lab-public),
+then adds a workflow, an evaluator that owns the execution records and checks,
+and repeated trials. For whether this five-setting search needed an LLM, see the
+[settings grid](../reports/settings-grid.md). **Meta-Engineering AI Systems** then returns to a coding agent
 that improves that harness. See [where this lab fits](../README.md#where-this-lab-fits)
 for the repository split and what is implemented today.
