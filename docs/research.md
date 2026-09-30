@@ -190,10 +190,3 @@ database choice as a lifecycle implementation. This article should retain that
 boundary. No new vector database, orchestration framework, trained model, or
 live backend is necessary to answer article 1's question. These are extension
 choices to evaluate against the same contract later.
-
-The evaluator question carries into **Building and Evaluating Agent Harnesses**:
-how do we stop candidate code from changing the checks or the execution records
-used to judge it? That series builds the target harness, in
-[agent-harness-lab-public](https://github.com/slavadubrov/agent-harness-lab-public),
-and its evaluation framework before **Meta-Engineering AI Systems** continues with a coding agent
-that improves the harness. See [where this lab fits](../README.md#where-this-lab-fits).

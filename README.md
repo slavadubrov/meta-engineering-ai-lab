@@ -24,28 +24,10 @@ The recorded study contains **actual saved OpenAI requests and responses**. Comp
 
 Read the [companion article: Meta-engineering AI systems — from traces to better memory](https://slavadubrov.com/blog/2026/09/12/from-traces-to-better-memory/). It introduces the whole improvement process before walking through this experiment.
 
-## Where this lab fits
-
-The runnable experiment here is Part 1: an LLM searches five settings of a deterministic memory tool. Tag `v0.2.2` pins its implementation and reports; the commands below reproduce that version.
-
-**Building and Evaluating Agent Harnesses** builds the target: a LangChain customer-support harness in [agent-harness-lab-public](https://github.com/slavadubrov/agent-harness-lab-public). Its first release, tag `v0.1.1-a1`, has 12 custom support tasks, a small τ³-bench adapter, and two recorded specs (`plain` and `base`). Its evaluator still runs in the same process as the agent; a separate evaluator, repeated trials, and an adoption rule are later parts of that series. **Agent Security: Model and Harness** will use the same target to test model defenses and harness controls separately and together.
-
-**Meta-Engineering AI Systems** will return to this repository with a coding agent that improves that harness. That work depends on the separate evaluator and repeated measurements from the harness series. The improver, comparisons with Optuna and a human, and experiments across generations are planned work. They are not implemented in this checkout. The memory code, recorded results, evidence archive, and `v0.2.2` tag remain unchanged.
-
-## Did this search need an LLM?
-
-The campaigns show the loop working; they do not show that an LLM was needed. [`scripts/settings_grid.py`](scripts/settings_grid.py) reruns the memory tool with one setting changed at a time, then with every distinct combination. It makes no model calls and finishes in about a second:
-
-```sh
-uv run --frozen python scripts/settings_grid.py --check
-```
-
-The fixture facts have six distinct confidence scores, so six thresholds cover every write behaviour. With three on/off settings and `top_k` from 1 to 8, that is 384 configurations and 7,680 scenario runs. Sixteen pass 20/20, `top_k` never changes the result, and the best configuration under the selection rule has the same settings the agent chose. The grid uses knowledge of the fixture scores and ignores the campaigns' four-decision budget, so it is a diagnostic of this small search space, not a comparison of proposers. Results: [`reports/settings-grid.md`](reports/settings-grid.md) and [`reports/settings-grid.json`](reports/settings-grid.json).
-
 ## Inspect the saved campaigns without a key
 
 ```sh
-git clone --branch v0.2.2 --depth 1 https://github.com/slavadubrov/meta-engineering-ai-lab.git
+git clone --branch v0.2.3 --depth 1 https://github.com/slavadubrov/meta-engineering-ai-lab.git
 cd meta-engineering-ai-lab
 uv sync --frozen
 uv run --frozen python scripts/fetch_evidence.py
@@ -81,6 +63,16 @@ All three agents chose to stop within the four-decision limit. They chose the sa
 The estimated cost of the 12 model calls was **$0.039177**, against a **$0.50** budget. This estimate uses recorded usage and the published Luna rates checked on September 11, 2026. It includes cache-write surcharges and ignores cache-read discounts; it is not an invoice. Local CPU, hardware, and development costs are separate.
 
 **20/20 is a result on these public development stories.** It does not establish production quality, unseen-task performance, or an advantage over human or classical search.
+
+## Did this search need an LLM?
+
+The campaigns show the loop working; they do not show that an LLM was needed. [`scripts/settings_grid.py`](scripts/settings_grid.py) reruns the memory tool with one setting changed at a time, then with every distinct combination. It makes no model calls and finishes in about a second:
+
+```sh
+uv run --frozen python scripts/settings_grid.py --check
+```
+
+The fixture facts have six distinct confidence scores, so six thresholds cover every write behaviour. With three on/off settings and `top_k` from 1 to 8, that is 384 configurations and 7,680 scenario runs. Sixteen pass 20/20, `top_k` never changes the result, and the best configuration under the selection rule has the same settings the agent chose. The grid uses knowledge of the fixture scores and ignores the campaigns' four-decision budget, so it is a diagnostic of this small search space, not a comparison of proposers. Results: [`reports/settings-grid.md`](reports/settings-grid.md) and [`reports/settings-grid.json`](reports/settings-grid.json).
 
 ## What is a campaign, an iteration, or a scenario?
 
