@@ -204,4 +204,4 @@ Tests use scripted transport to check the real iteration controller without prov
 | [web/index.html](web/index.html), [web/campaign.js](web/campaign.js) | Agent-campaign explorer. |
 | [web/memory.html](web/memory.html), [web/app.js](web/app.js) | Detailed memory-mechanics explorer. |
 
-The [development run log](docs/experiment-notes.md) distinguishes the pilot from the recorded three-campaign study and explains the preserved older deterministic snapshots. Those snapshots are evidence of their own runs, not new LLM measurements.
+The evidence archive also keeps earlier development runs (`agent-study-01`, `agent-study-02`, and `article-01.1` to `article-01.5`). They are records of those runs, not part of the article's results.
