@@ -22,12 +22,12 @@ The recorded study contains **actual saved OpenAI requests and responses**. Comp
 
 [Recorded study](reports/agent-study-03.md) · [Memory-tool walkthrough](docs/memory-tool.md) · [Deployment](DEPLOYMENT.md)
 
-Read the [companion article: Meta-engineering AI systems — from traces to better memory](https://slavadubrov.com/blog/2026/09/12/from-traces-to-better-memory/). It is awaiting publication and introduces the whole improvement process before walking through this experiment.
+Read the [companion article: Meta-engineering AI systems — from traces to better memory](https://slavadubrov.com/blog/2026/09/12/from-traces-to-better-memory/). It introduces the whole improvement process before walking through this experiment.
 
 ## Inspect the saved campaigns without a key
 
 ```sh
-git clone --branch v0.2.2 --depth 1 https://github.com/slavadubrov/meta-engineering-ai-lab.git
+git clone --branch v0.2.3 --depth 1 https://github.com/slavadubrov/meta-engineering-ai-lab.git
 cd meta-engineering-ai-lab
 uv sync --frozen
 uv run --frozen python scripts/fetch_evidence.py
@@ -63,6 +63,16 @@ All three agents chose to stop within the four-decision limit. They chose the sa
 The estimated cost of the 12 model calls was **$0.039177**, against a **$0.50** budget. This estimate uses recorded usage and the published Luna rates checked on September 11, 2026. It includes cache-write surcharges and ignores cache-read discounts; it is not an invoice. Local CPU, hardware, and development costs are separate.
 
 **20/20 is a result on these public development stories.** It does not establish production quality, unseen-task performance, or an advantage over human or classical search.
+
+## Did this search need an LLM?
+
+The campaigns show the loop working; they do not show that an LLM was needed. [`scripts/settings_grid.py`](scripts/settings_grid.py) reruns the memory tool with one setting changed at a time, then with every distinct combination. It makes no model calls and finishes in about a second:
+
+```sh
+uv run --frozen python scripts/settings_grid.py --check
+```
+
+The fixture facts have six distinct confidence scores, so six thresholds cover every write behaviour. With three on/off settings and `top_k` from 1 to 8, that is 384 configurations and 7,680 scenario runs. Sixteen pass 20/20, `top_k` never changes the result, and the best configuration under the selection rule has the same settings the agent chose. The grid uses knowledge of the fixture scores and ignores the campaigns' four-decision budget, so it is a diagnostic of this small search space, not a comparison of proposers. Results: [`reports/settings-grid.md`](reports/settings-grid.md) and [`reports/settings-grid.json`](reports/settings-grid.json).
 
 ## What is a campaign, an iteration, or a scenario?
 
@@ -194,4 +204,4 @@ Tests use scripted transport to check the real iteration controller without prov
 | [web/index.html](web/index.html), [web/campaign.js](web/campaign.js) | Agent-campaign explorer. |
 | [web/memory.html](web/memory.html), [web/app.js](web/app.js) | Detailed memory-mechanics explorer. |
 
-The [development run log](docs/experiment-notes.md) distinguishes the pilot from the recorded three-campaign study and explains the preserved older deterministic snapshots. Those snapshots are evidence of their own runs, not new LLM measurements.
+The evidence archive also keeps earlier development runs (`agent-study-01`, `agent-study-02`, and `article-01.1` to `article-01.5`). They are records of those runs, not part of the article's results.

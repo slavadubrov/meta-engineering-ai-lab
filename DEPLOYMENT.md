@@ -5,7 +5,7 @@ The browser displays saved experiment results. It is static HTML, CSS, JavaScrip
 ## Build the portable site
 
 ```sh
-git clone --branch v0.2.2 --depth 1 https://github.com/slavadubrov/meta-engineering-ai-lab.git
+git clone --branch v0.2.3 --depth 1 https://github.com/slavadubrov/meta-engineering-ai-lab.git
 cd meta-engineering-ai-lab
 uv sync --frozen
 uv run --frozen python scripts/fetch_evidence.py

@@ -1,0 +1,4332 @@
+{
+  "label": "Retrospective diagnostic on the 20 public development scenarios. It uses the fixture confidence scores and ignores the campaigns' decision budget; it is not a budget-matched optimizer comparison.",
+  "source_sha256": "e29a92de7497dff9e97d07de7aba37ebf30c26f9d7c55ec8f515dced8ce0418a",
+  "scenario_count": 20,
+  "threshold_classes": [
+    {
+      "min_confidence": 0.25,
+      "stores_confidence_above": null
+    },
+    {
+      "min_confidence": 0.3,
+      "stores_confidence_above": 0.25
+    },
+    {
+      "min_confidence": 0.4,
+      "stores_confidence_above": 0.3
+    },
+    {
+      "min_confidence": 0.6,
+      "stores_confidence_above": 0.4
+    },
+    {
+      "min_confidence": 0.95,
+      "stores_confidence_above": 0.6
+    },
+    {
+      "min_confidence": 1,
+      "stores_confidence_above": 0.95
+    }
+  ],
+  "single_settings": [
+    {
+      "label": "Baseline",
+      "patch": {},
+      "passed": 13,
+      "mean_storage_records": 1.7
+    },
+    {
+      "label": "Subject filter only",
+      "patch": {
+        "filter_entity": true
+      },
+      "passed": 16,
+      "mean_storage_records": 1.7
+    },
+    {
+      "label": "Date filter only",
+      "patch": {
+        "time_aware": true
+      },
+      "passed": 16,
+      "mean_storage_records": 1.7
+    },
+    {
+      "label": "Deduplication only",
+      "patch": {
+        "deduplicate": true
+      },
+      "passed": 13,
+      "mean_storage_records": 1.6
+    },
+    {
+      "label": "min_confidence = 0.6 only",
+      "patch": {
+        "min_confidence": 0.6
+      },
+      "passed": 14,
+      "mean_storage_records": 1.75
+    },
+    {
+      "label": "Both filters",
+      "patch": {
+        "filter_entity": true,
+        "time_aware": true
+      },
+      "passed": 19,
+      "mean_storage_records": 1.7
+    },
+    {
+      "label": "Agent's final configuration",
+      "patch": {
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": true,
+        "min_confidence": 0.6
+      },
+      "passed": 20,
+      "mean_storage_records": 1.65
+    }
+  ],
+  "grid": {
+    "configurations": 384,
+    "scenario_runs": 7680,
+    "passing_all": 16,
+    "top_k_changes_result": false,
+    "best_settings": {
+      "min_confidence": 0.6,
+      "filter_entity": true,
+      "time_aware": true,
+      "deduplicate": true
+    },
+    "best_matches_agent_final": true,
+    "best_passed": 20,
+    "best_mean_storage_records": 1.65
+  },
+  "results": [
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 1
+      },
+      "passed": 10,
+      "mean_storage_records": 1.95
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 2
+      },
+      "passed": 10,
+      "mean_storage_records": 1.95
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 3
+      },
+      "passed": 10,
+      "mean_storage_records": 1.95
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 4
+      },
+      "passed": 10,
+      "mean_storage_records": 1.95
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 5
+      },
+      "passed": 10,
+      "mean_storage_records": 1.95
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 6
+      },
+      "passed": 10,
+      "mean_storage_records": 1.95
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 7
+      },
+      "passed": 10,
+      "mean_storage_records": 1.95
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 8
+      },
+      "passed": 10,
+      "mean_storage_records": 1.95
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 1
+      },
+      "passed": 10,
+      "mean_storage_records": 1.85
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 2
+      },
+      "passed": 10,
+      "mean_storage_records": 1.85
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 3
+      },
+      "passed": 10,
+      "mean_storage_records": 1.85
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 4
+      },
+      "passed": 10,
+      "mean_storage_records": 1.85
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 5
+      },
+      "passed": 10,
+      "mean_storage_records": 1.85
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 6
+      },
+      "passed": 10,
+      "mean_storage_records": 1.85
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 7
+      },
+      "passed": 10,
+      "mean_storage_records": 1.85
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 8
+      },
+      "passed": 10,
+      "mean_storage_records": 1.85
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 1
+      },
+      "passed": 13,
+      "mean_storage_records": 1.95
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 2
+      },
+      "passed": 13,
+      "mean_storage_records": 1.95
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 3
+      },
+      "passed": 13,
+      "mean_storage_records": 1.95
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 4
+      },
+      "passed": 13,
+      "mean_storage_records": 1.95
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 5
+      },
+      "passed": 13,
+      "mean_storage_records": 1.95
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 6
+      },
+      "passed": 13,
+      "mean_storage_records": 1.95
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 7
+      },
+      "passed": 13,
+      "mean_storage_records": 1.95
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 8
+      },
+      "passed": 13,
+      "mean_storage_records": 1.95
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 1
+      },
+      "passed": 13,
+      "mean_storage_records": 1.85
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 2
+      },
+      "passed": 13,
+      "mean_storage_records": 1.85
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 3
+      },
+      "passed": 13,
+      "mean_storage_records": 1.85
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 4
+      },
+      "passed": 13,
+      "mean_storage_records": 1.85
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 5
+      },
+      "passed": 13,
+      "mean_storage_records": 1.85
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 6
+      },
+      "passed": 13,
+      "mean_storage_records": 1.85
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 7
+      },
+      "passed": 13,
+      "mean_storage_records": 1.85
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 8
+      },
+      "passed": 13,
+      "mean_storage_records": 1.85
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 1
+      },
+      "passed": 13,
+      "mean_storage_records": 1.95
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 2
+      },
+      "passed": 13,
+      "mean_storage_records": 1.95
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 3
+      },
+      "passed": 13,
+      "mean_storage_records": 1.95
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 4
+      },
+      "passed": 13,
+      "mean_storage_records": 1.95
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 5
+      },
+      "passed": 13,
+      "mean_storage_records": 1.95
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 6
+      },
+      "passed": 13,
+      "mean_storage_records": 1.95
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 7
+      },
+      "passed": 13,
+      "mean_storage_records": 1.95
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 8
+      },
+      "passed": 13,
+      "mean_storage_records": 1.95
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 1
+      },
+      "passed": 13,
+      "mean_storage_records": 1.85
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 2
+      },
+      "passed": 13,
+      "mean_storage_records": 1.85
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 3
+      },
+      "passed": 13,
+      "mean_storage_records": 1.85
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 4
+      },
+      "passed": 13,
+      "mean_storage_records": 1.85
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 5
+      },
+      "passed": 13,
+      "mean_storage_records": 1.85
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 6
+      },
+      "passed": 13,
+      "mean_storage_records": 1.85
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 7
+      },
+      "passed": 13,
+      "mean_storage_records": 1.85
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 8
+      },
+      "passed": 13,
+      "mean_storage_records": 1.85
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 1
+      },
+      "passed": 16,
+      "mean_storage_records": 1.95
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 2
+      },
+      "passed": 16,
+      "mean_storage_records": 1.95
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 3
+      },
+      "passed": 16,
+      "mean_storage_records": 1.95
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 4
+      },
+      "passed": 16,
+      "mean_storage_records": 1.95
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 5
+      },
+      "passed": 16,
+      "mean_storage_records": 1.95
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 6
+      },
+      "passed": 16,
+      "mean_storage_records": 1.95
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 7
+      },
+      "passed": 16,
+      "mean_storage_records": 1.95
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 8
+      },
+      "passed": 16,
+      "mean_storage_records": 1.95
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 1
+      },
+      "passed": 16,
+      "mean_storage_records": 1.85
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 2
+      },
+      "passed": 16,
+      "mean_storage_records": 1.85
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 3
+      },
+      "passed": 16,
+      "mean_storage_records": 1.85
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 4
+      },
+      "passed": 16,
+      "mean_storage_records": 1.85
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 5
+      },
+      "passed": 16,
+      "mean_storage_records": 1.85
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 6
+      },
+      "passed": 16,
+      "mean_storage_records": 1.85
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 7
+      },
+      "passed": 16,
+      "mean_storage_records": 1.85
+    },
+    {
+      "patch": {
+        "min_confidence": 0.25,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 8
+      },
+      "passed": 16,
+      "mean_storage_records": 1.85
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 1
+      },
+      "passed": 11,
+      "mean_storage_records": 1.9
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 2
+      },
+      "passed": 11,
+      "mean_storage_records": 1.9
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 3
+      },
+      "passed": 11,
+      "mean_storage_records": 1.9
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 4
+      },
+      "passed": 11,
+      "mean_storage_records": 1.9
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 5
+      },
+      "passed": 11,
+      "mean_storage_records": 1.9
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 6
+      },
+      "passed": 11,
+      "mean_storage_records": 1.9
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 7
+      },
+      "passed": 11,
+      "mean_storage_records": 1.9
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 8
+      },
+      "passed": 11,
+      "mean_storage_records": 1.9
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 1
+      },
+      "passed": 11,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 2
+      },
+      "passed": 11,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 3
+      },
+      "passed": 11,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 4
+      },
+      "passed": 11,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 5
+      },
+      "passed": 11,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 6
+      },
+      "passed": 11,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 7
+      },
+      "passed": 11,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 8
+      },
+      "passed": 11,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 1
+      },
+      "passed": 14,
+      "mean_storage_records": 1.9
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 2
+      },
+      "passed": 14,
+      "mean_storage_records": 1.9
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 3
+      },
+      "passed": 14,
+      "mean_storage_records": 1.9
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 4
+      },
+      "passed": 14,
+      "mean_storage_records": 1.9
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 5
+      },
+      "passed": 14,
+      "mean_storage_records": 1.9
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 6
+      },
+      "passed": 14,
+      "mean_storage_records": 1.9
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 7
+      },
+      "passed": 14,
+      "mean_storage_records": 1.9
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 8
+      },
+      "passed": 14,
+      "mean_storage_records": 1.9
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 1
+      },
+      "passed": 14,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 2
+      },
+      "passed": 14,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 3
+      },
+      "passed": 14,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 4
+      },
+      "passed": 14,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 5
+      },
+      "passed": 14,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 6
+      },
+      "passed": 14,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 7
+      },
+      "passed": 14,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 8
+      },
+      "passed": 14,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 1
+      },
+      "passed": 14,
+      "mean_storage_records": 1.9
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 2
+      },
+      "passed": 14,
+      "mean_storage_records": 1.9
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 3
+      },
+      "passed": 14,
+      "mean_storage_records": 1.9
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 4
+      },
+      "passed": 14,
+      "mean_storage_records": 1.9
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 5
+      },
+      "passed": 14,
+      "mean_storage_records": 1.9
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 6
+      },
+      "passed": 14,
+      "mean_storage_records": 1.9
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 7
+      },
+      "passed": 14,
+      "mean_storage_records": 1.9
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 8
+      },
+      "passed": 14,
+      "mean_storage_records": 1.9
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 1
+      },
+      "passed": 14,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 2
+      },
+      "passed": 14,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 3
+      },
+      "passed": 14,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 4
+      },
+      "passed": 14,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 5
+      },
+      "passed": 14,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 6
+      },
+      "passed": 14,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 7
+      },
+      "passed": 14,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 8
+      },
+      "passed": 14,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 1
+      },
+      "passed": 17,
+      "mean_storage_records": 1.9
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 2
+      },
+      "passed": 17,
+      "mean_storage_records": 1.9
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 3
+      },
+      "passed": 17,
+      "mean_storage_records": 1.9
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 4
+      },
+      "passed": 17,
+      "mean_storage_records": 1.9
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 5
+      },
+      "passed": 17,
+      "mean_storage_records": 1.9
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 6
+      },
+      "passed": 17,
+      "mean_storage_records": 1.9
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 7
+      },
+      "passed": 17,
+      "mean_storage_records": 1.9
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 8
+      },
+      "passed": 17,
+      "mean_storage_records": 1.9
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 1
+      },
+      "passed": 17,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 2
+      },
+      "passed": 17,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 3
+      },
+      "passed": 17,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 4
+      },
+      "passed": 17,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 5
+      },
+      "passed": 17,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 6
+      },
+      "passed": 17,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 7
+      },
+      "passed": 17,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.3,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 8
+      },
+      "passed": 17,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 1
+      },
+      "passed": 13,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 2
+      },
+      "passed": 13,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 3
+      },
+      "passed": 13,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 4
+      },
+      "passed": 13,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 5
+      },
+      "passed": 13,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 6
+      },
+      "passed": 13,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 7
+      },
+      "passed": 13,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 8
+      },
+      "passed": 13,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 1
+      },
+      "passed": 13,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 2
+      },
+      "passed": 13,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 3
+      },
+      "passed": 13,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 4
+      },
+      "passed": 13,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 5
+      },
+      "passed": 13,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 6
+      },
+      "passed": 13,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 7
+      },
+      "passed": 13,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 8
+      },
+      "passed": 13,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 1
+      },
+      "passed": 16,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 2
+      },
+      "passed": 16,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 3
+      },
+      "passed": 16,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 4
+      },
+      "passed": 16,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 5
+      },
+      "passed": 16,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 6
+      },
+      "passed": 16,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 7
+      },
+      "passed": 16,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 8
+      },
+      "passed": 16,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 1
+      },
+      "passed": 16,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 2
+      },
+      "passed": 16,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 3
+      },
+      "passed": 16,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 4
+      },
+      "passed": 16,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 5
+      },
+      "passed": 16,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 6
+      },
+      "passed": 16,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 7
+      },
+      "passed": 16,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 8
+      },
+      "passed": 16,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 1
+      },
+      "passed": 16,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 2
+      },
+      "passed": 16,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 3
+      },
+      "passed": 16,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 4
+      },
+      "passed": 16,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 5
+      },
+      "passed": 16,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 6
+      },
+      "passed": 16,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 7
+      },
+      "passed": 16,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 8
+      },
+      "passed": 16,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 1
+      },
+      "passed": 16,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 2
+      },
+      "passed": 16,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 3
+      },
+      "passed": 16,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 4
+      },
+      "passed": 16,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 5
+      },
+      "passed": 16,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 6
+      },
+      "passed": 16,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 7
+      },
+      "passed": 16,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 8
+      },
+      "passed": 16,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 1
+      },
+      "passed": 19,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 2
+      },
+      "passed": 19,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 3
+      },
+      "passed": 19,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 4
+      },
+      "passed": 19,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 5
+      },
+      "passed": 19,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 6
+      },
+      "passed": 19,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 7
+      },
+      "passed": 19,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 8
+      },
+      "passed": 19,
+      "mean_storage_records": 1.8
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 1
+      },
+      "passed": 19,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 2
+      },
+      "passed": 19,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 3
+      },
+      "passed": 19,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 4
+      },
+      "passed": 19,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 5
+      },
+      "passed": 19,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 6
+      },
+      "passed": 19,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 7
+      },
+      "passed": 19,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.4,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 8
+      },
+      "passed": 19,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 1
+      },
+      "passed": 14,
+      "mean_storage_records": 1.75
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 2
+      },
+      "passed": 14,
+      "mean_storage_records": 1.75
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 3
+      },
+      "passed": 14,
+      "mean_storage_records": 1.75
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 4
+      },
+      "passed": 14,
+      "mean_storage_records": 1.75
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 5
+      },
+      "passed": 14,
+      "mean_storage_records": 1.75
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 6
+      },
+      "passed": 14,
+      "mean_storage_records": 1.75
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 7
+      },
+      "passed": 14,
+      "mean_storage_records": 1.75
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 8
+      },
+      "passed": 14,
+      "mean_storage_records": 1.75
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 1
+      },
+      "passed": 14,
+      "mean_storage_records": 1.65
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 2
+      },
+      "passed": 14,
+      "mean_storage_records": 1.65
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 3
+      },
+      "passed": 14,
+      "mean_storage_records": 1.65
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 4
+      },
+      "passed": 14,
+      "mean_storage_records": 1.65
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 5
+      },
+      "passed": 14,
+      "mean_storage_records": 1.65
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 6
+      },
+      "passed": 14,
+      "mean_storage_records": 1.65
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 7
+      },
+      "passed": 14,
+      "mean_storage_records": 1.65
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 8
+      },
+      "passed": 14,
+      "mean_storage_records": 1.65
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 1
+      },
+      "passed": 17,
+      "mean_storage_records": 1.75
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 2
+      },
+      "passed": 17,
+      "mean_storage_records": 1.75
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 3
+      },
+      "passed": 17,
+      "mean_storage_records": 1.75
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 4
+      },
+      "passed": 17,
+      "mean_storage_records": 1.75
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 5
+      },
+      "passed": 17,
+      "mean_storage_records": 1.75
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 6
+      },
+      "passed": 17,
+      "mean_storage_records": 1.75
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 7
+      },
+      "passed": 17,
+      "mean_storage_records": 1.75
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 8
+      },
+      "passed": 17,
+      "mean_storage_records": 1.75
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 1
+      },
+      "passed": 17,
+      "mean_storage_records": 1.65
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 2
+      },
+      "passed": 17,
+      "mean_storage_records": 1.65
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 3
+      },
+      "passed": 17,
+      "mean_storage_records": 1.65
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 4
+      },
+      "passed": 17,
+      "mean_storage_records": 1.65
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 5
+      },
+      "passed": 17,
+      "mean_storage_records": 1.65
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 6
+      },
+      "passed": 17,
+      "mean_storage_records": 1.65
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 7
+      },
+      "passed": 17,
+      "mean_storage_records": 1.65
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 8
+      },
+      "passed": 17,
+      "mean_storage_records": 1.65
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 1
+      },
+      "passed": 17,
+      "mean_storage_records": 1.75
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 2
+      },
+      "passed": 17,
+      "mean_storage_records": 1.75
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 3
+      },
+      "passed": 17,
+      "mean_storage_records": 1.75
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 4
+      },
+      "passed": 17,
+      "mean_storage_records": 1.75
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 5
+      },
+      "passed": 17,
+      "mean_storage_records": 1.75
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 6
+      },
+      "passed": 17,
+      "mean_storage_records": 1.75
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 7
+      },
+      "passed": 17,
+      "mean_storage_records": 1.75
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 8
+      },
+      "passed": 17,
+      "mean_storage_records": 1.75
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 1
+      },
+      "passed": 17,
+      "mean_storage_records": 1.65
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 2
+      },
+      "passed": 17,
+      "mean_storage_records": 1.65
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 3
+      },
+      "passed": 17,
+      "mean_storage_records": 1.65
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 4
+      },
+      "passed": 17,
+      "mean_storage_records": 1.65
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 5
+      },
+      "passed": 17,
+      "mean_storage_records": 1.65
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 6
+      },
+      "passed": 17,
+      "mean_storage_records": 1.65
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 7
+      },
+      "passed": 17,
+      "mean_storage_records": 1.65
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 8
+      },
+      "passed": 17,
+      "mean_storage_records": 1.65
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 1
+      },
+      "passed": 20,
+      "mean_storage_records": 1.75
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 2
+      },
+      "passed": 20,
+      "mean_storage_records": 1.75
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 3
+      },
+      "passed": 20,
+      "mean_storage_records": 1.75
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 4
+      },
+      "passed": 20,
+      "mean_storage_records": 1.75
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 5
+      },
+      "passed": 20,
+      "mean_storage_records": 1.75
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 6
+      },
+      "passed": 20,
+      "mean_storage_records": 1.75
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 7
+      },
+      "passed": 20,
+      "mean_storage_records": 1.75
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 8
+      },
+      "passed": 20,
+      "mean_storage_records": 1.75
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 1
+      },
+      "passed": 20,
+      "mean_storage_records": 1.65
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 2
+      },
+      "passed": 20,
+      "mean_storage_records": 1.65
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 3
+      },
+      "passed": 20,
+      "mean_storage_records": 1.65
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 4
+      },
+      "passed": 20,
+      "mean_storage_records": 1.65
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 5
+      },
+      "passed": 20,
+      "mean_storage_records": 1.65
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 6
+      },
+      "passed": 20,
+      "mean_storage_records": 1.65
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 7
+      },
+      "passed": 20,
+      "mean_storage_records": 1.65
+    },
+    {
+      "patch": {
+        "min_confidence": 0.6,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 8
+      },
+      "passed": 20,
+      "mean_storage_records": 1.65
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 1
+      },
+      "passed": 13,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 2
+      },
+      "passed": 13,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 3
+      },
+      "passed": 13,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 4
+      },
+      "passed": 13,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 5
+      },
+      "passed": 13,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 6
+      },
+      "passed": 13,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 7
+      },
+      "passed": 13,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 8
+      },
+      "passed": 13,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 1
+      },
+      "passed": 13,
+      "mean_storage_records": 1.6
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 2
+      },
+      "passed": 13,
+      "mean_storage_records": 1.6
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 3
+      },
+      "passed": 13,
+      "mean_storage_records": 1.6
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 4
+      },
+      "passed": 13,
+      "mean_storage_records": 1.6
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 5
+      },
+      "passed": 13,
+      "mean_storage_records": 1.6
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 6
+      },
+      "passed": 13,
+      "mean_storage_records": 1.6
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 7
+      },
+      "passed": 13,
+      "mean_storage_records": 1.6
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 8
+      },
+      "passed": 13,
+      "mean_storage_records": 1.6
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 1
+      },
+      "passed": 16,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 2
+      },
+      "passed": 16,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 3
+      },
+      "passed": 16,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 4
+      },
+      "passed": 16,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 5
+      },
+      "passed": 16,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 6
+      },
+      "passed": 16,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 7
+      },
+      "passed": 16,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 8
+      },
+      "passed": 16,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 1
+      },
+      "passed": 16,
+      "mean_storage_records": 1.6
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 2
+      },
+      "passed": 16,
+      "mean_storage_records": 1.6
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 3
+      },
+      "passed": 16,
+      "mean_storage_records": 1.6
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 4
+      },
+      "passed": 16,
+      "mean_storage_records": 1.6
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 5
+      },
+      "passed": 16,
+      "mean_storage_records": 1.6
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 6
+      },
+      "passed": 16,
+      "mean_storage_records": 1.6
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 7
+      },
+      "passed": 16,
+      "mean_storage_records": 1.6
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 8
+      },
+      "passed": 16,
+      "mean_storage_records": 1.6
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 1
+      },
+      "passed": 16,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 2
+      },
+      "passed": 16,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 3
+      },
+      "passed": 16,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 4
+      },
+      "passed": 16,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 5
+      },
+      "passed": 16,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 6
+      },
+      "passed": 16,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 7
+      },
+      "passed": 16,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 8
+      },
+      "passed": 16,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 1
+      },
+      "passed": 16,
+      "mean_storage_records": 1.6
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 2
+      },
+      "passed": 16,
+      "mean_storage_records": 1.6
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 3
+      },
+      "passed": 16,
+      "mean_storage_records": 1.6
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 4
+      },
+      "passed": 16,
+      "mean_storage_records": 1.6
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 5
+      },
+      "passed": 16,
+      "mean_storage_records": 1.6
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 6
+      },
+      "passed": 16,
+      "mean_storage_records": 1.6
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 7
+      },
+      "passed": 16,
+      "mean_storage_records": 1.6
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 8
+      },
+      "passed": 16,
+      "mean_storage_records": 1.6
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 1
+      },
+      "passed": 19,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 2
+      },
+      "passed": 19,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 3
+      },
+      "passed": 19,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 4
+      },
+      "passed": 19,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 5
+      },
+      "passed": 19,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 6
+      },
+      "passed": 19,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 7
+      },
+      "passed": 19,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 8
+      },
+      "passed": 19,
+      "mean_storage_records": 1.7
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 1
+      },
+      "passed": 19,
+      "mean_storage_records": 1.6
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 2
+      },
+      "passed": 19,
+      "mean_storage_records": 1.6
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 3
+      },
+      "passed": 19,
+      "mean_storage_records": 1.6
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 4
+      },
+      "passed": 19,
+      "mean_storage_records": 1.6
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 5
+      },
+      "passed": 19,
+      "mean_storage_records": 1.6
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 6
+      },
+      "passed": 19,
+      "mean_storage_records": 1.6
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 7
+      },
+      "passed": 19,
+      "mean_storage_records": 1.6
+    },
+    {
+      "patch": {
+        "min_confidence": 0.95,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 8
+      },
+      "passed": 19,
+      "mean_storage_records": 1.6
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 1
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 2
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 3
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 4
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 5
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 6
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 7
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 8
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 1
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 2
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 3
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 4
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 5
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 6
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 7
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": false,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 8
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 1
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 2
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 3
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 4
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 5
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 6
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 7
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 8
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 1
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 2
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 3
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 4
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 5
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 6
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 7
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": false,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 8
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 1
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 2
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 3
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 4
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 5
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 6
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 7
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": false,
+        "top_k": 8
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 1
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 2
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 3
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 4
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 5
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 6
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 7
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": true,
+        "time_aware": false,
+        "deduplicate": true,
+        "top_k": 8
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 1
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 2
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 3
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 4
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 5
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 6
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 7
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": false,
+        "top_k": 8
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 1
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 2
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 3
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 4
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 5
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 6
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 7
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    },
+    {
+      "patch": {
+        "min_confidence": 1,
+        "filter_entity": true,
+        "time_aware": true,
+        "deduplicate": true,
+        "top_k": 8
+      },
+      "passed": 2,
+      "mean_storage_records": 0.0
+    }
+  ]
+}

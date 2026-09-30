@@ -14,7 +14,7 @@ changes and receiving feedback.
 
 [Source on GitHub](https://github.com/slavadubrov/meta-engineering-ai-lab) ·
 [Run locally](#run-it) · [Deployment guide](../DEPLOYMENT.md).
-This is the first target in **Meta-Engineering AI Systems**. The [companion article](https://slavadubrov.com/blog/2026/09/12/from-traces-to-better-memory/) is awaiting publication; it introduces the closed-loop improvement process around it.
+This is the first target in **Meta-Engineering AI Systems**. The [companion article](https://slavadubrov.com/blog/2026/09/12/from-traces-to-better-memory/) introduces the closed-loop improvement process around it.
 
 ## Start with the city example
 
@@ -307,7 +307,7 @@ candidate’s `summary.counts`.
 Install [uv](https://docs.astral.sh/uv/getting-started/installation/), then run:
 
 ```sh
-git clone --branch v0.2.2 --depth 1 https://github.com/slavadubrov/meta-engineering-ai-lab.git
+git clone --branch v0.2.3 --depth 1 https://github.com/slavadubrov/meta-engineering-ai-lab.git
 cd meta-engineering-ai-lab
 uv run --frozen python -m lab run
 ```
@@ -502,6 +502,3 @@ source project. Referenced papers and external projects retain their own terms.
 - **No general poisoning/secret detector.** The target's durable key, source and
   kind allowlist covers explicit structured cases. It does not classify arbitrary
   text or protect against secrets disguised as an allowed city or language.
-
-The next article should challenge the evaluator and the evidence boundary
-before adding a stronger proposer or more experiments.
